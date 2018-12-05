@@ -64,8 +64,6 @@ public class Terrain {
     {
         Sprite sprite = null;
 
-        System.out.println(hexCode);
-
         switch (hexCode.substring(4, 6))
         {
             case "fe":
@@ -75,7 +73,7 @@ public class Terrain {
                 sprite = new Sprite("rock", true);
                 break;
             case "fc":
-                sprite = new Sprite("lake_center", true);
+                sprite = new Sprite("lake_center");
                 break;
             case "fb":
                 sprite = new Sprite("lake_right", true);

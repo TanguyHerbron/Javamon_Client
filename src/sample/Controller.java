@@ -1,5 +1,6 @@
 package sample;
 
+import fr.ensim.lemeeherbron.Pokemon;
 import fr.ensim.lemeeherbron.Sprite;
 import fr.ensim.lemeeherbron.Terrain;
 import javafx.animation.AnimationTimer;
@@ -20,7 +21,7 @@ public class Controller implements Initializable {
 
     @FXML private Canvas mainCanvas;
     private Sprite playerSprite;
-    private Sprite lokSprite;
+    private Pokemon lokSprite;
     private Terrain terrain;
     private GraphicsContext graphicsContext;
 
@@ -31,15 +32,14 @@ public class Controller implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         graphicsContext = mainCanvas.getGraphicsContext2D();
         playerSprite = new Sprite("player");
-        lokSprite = new Sprite("lokhlass");
+        lokSprite = new Pokemon("lokhlass", true);
         terrain = new Terrain(0, 0);
+        terrain.prepare();
 
         sprites = new ArrayList<>();
 
         playerSprite.setPosition(mainCanvas.getWidth() / 2, mainCanvas.getHeight() / 2);
         lokSprite.setPosition(mainCanvas.getWidth() / 4, mainCanvas.getHeight() / 4);
-
-        terrain.prepare();
 
         sprites.add(lokSprite);
         sprites.add(playerSprite);
@@ -59,16 +59,16 @@ public class Controller implements Initializable {
                 switch (event.getCode())
                 {
                     case Z:
-                        playerSprite.up();
+                        playerSprite.up(terrain);
                         break;
                     case S:
-                        playerSprite.down();
+                        playerSprite.down(terrain);
                         break;
                     case Q:
-                        playerSprite.left();
+                        playerSprite.left(terrain);
                         break;
                     case D:
-                        playerSprite.right();
+                        playerSprite.right(terrain);
                         break;
                 }
             }
@@ -81,6 +81,52 @@ public class Controller implements Initializable {
                 renderObjects();
             }
         }.start();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while(true)
+                {
+                    movePokemons();
+
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
+    }
+
+    private void movePokemons()
+    {
+        for(Sprite sprite : sprites)
+        {
+            if(sprite instanceof Pokemon)
+            {
+                Pokemon pokemon = (Pokemon) sprite;
+
+                if(pokemon.hasBehavior())
+                {
+                    switch ((int) Math.round(Math.random() * 3))
+                    {
+                        case 0:
+                            pokemon.up(terrain);
+                            break;
+                        case 1:
+                            pokemon.down(terrain);
+                            break;
+                        case 2:
+                            pokemon.left(terrain);
+                            break;
+                        default:
+                            pokemon.right(terrain);
+                            break;
+                    }
+                }
+            }
+        }
     }
 
     private void drawBackground()
