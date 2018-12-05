@@ -1,5 +1,6 @@
 package sample;
 
+import fr.ensim.lemeeherbron.AnimatedSprite;
 import fr.ensim.lemeeherbron.Pokemon;
 import fr.ensim.lemeeherbron.Sprite;
 import fr.ensim.lemeeherbron.Terrain;
@@ -11,6 +12,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -25,6 +27,8 @@ public class Controller implements Initializable {
     private Terrain terrain;
     private GraphicsContext graphicsContext;
 
+    private List<AnimatedSprite> animatedSprites;
+
     private List<Sprite> sprites;
     private List<Image> backImage;
 
@@ -33,10 +37,12 @@ public class Controller implements Initializable {
         graphicsContext = mainCanvas.getGraphicsContext2D();
         playerSprite = new Sprite("player");
         lokSprite = new Pokemon("lokhlass", true);
+
         terrain = new Terrain(0, 0);
         terrain.prepare();
 
         sprites = new ArrayList<>();
+        animatedSprites = new ArrayList<>();
 
         playerSprite.setPosition(mainCanvas.getWidth() / 2, mainCanvas.getHeight() / 2);
         lokSprite.setPosition(mainCanvas.getWidth() / 4, mainCanvas.getHeight() / 4);
@@ -71,6 +77,16 @@ public class Controller implements Initializable {
                         playerSprite.right(terrain);
                         break;
                 }
+            }
+        });
+
+        mainCanvas.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                AnimatedSprite animatedSprite = new AnimatedSprite("explo", 6, event.getX(), event.getY());
+                animatedSprite.start();
+
+                animatedSprites.add(animatedSprite);
             }
         });
 
@@ -144,6 +160,11 @@ public class Controller implements Initializable {
         for(Sprite sprite : terrain.getObstacleList())
         {
             playerSprite.intersects(sprite);
+        }
+
+        for(AnimatedSprite animatedSprite : animatedSprites)
+        {
+            animatedSprite.render(graphicsContext);
         }
     }
 }
