@@ -2,6 +2,7 @@ package sample;
 
 import com.sun.javafx.geom.Vec2d;
 import fr.ensim.lemeeherbron.Sprite;
+import fr.ensim.lemeeherbron.Terrain;
 import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -24,8 +25,8 @@ public class Controller implements Initializable {
     @FXML private Canvas mainCanvas;
     private Sprite playerSprite;
     private Sprite pikaSprite;
+    private Terrain terrain;
     private GraphicsContext graphicsContext;
-    private int[][] backGrid;
 
     private List<Sprite> sprites;
     private List<Image> backImage;
@@ -35,32 +36,23 @@ public class Controller implements Initializable {
         graphicsContext = mainCanvas.getGraphicsContext2D();
         playerSprite = new Sprite("player");
         pikaSprite = new Sprite("pikachu");
+        terrain = new Terrain(0, 0);
 
         sprites = new ArrayList<>();
 
         playerSprite.setPosition(mainCanvas.getWidth() / 2, mainCanvas.getHeight() / 2);
         pikaSprite.setPosition(mainCanvas.getWidth() / 4, mainCanvas.getHeight() / 4);
 
+        terrain.prepare();
+
         sprites.add(pikaSprite);
         sprites.add(playerSprite);
-
-        generateEnvironment();
 
         backImage = new ArrayList<>();
 
         for(int i = 0; i < 4; i++)
         {
             backImage.add(new Image("/sprite/grass_" + i + ".png"));
-        }
-
-        backGrid = new int[32][32];
-
-        for(int i = 0; i < backGrid.length; i++)
-        {
-            for(int j = 0; j < backGrid[i].length; j++)
-            {
-                backGrid[i][j] = (int) Math.round(Math.random() * 3);
-            }
         }
 
         mainCanvas.setFocusTraversable(true);
@@ -95,30 +87,9 @@ public class Controller implements Initializable {
         }.start();
     }
 
-    private void generateEnvironment()
-    {
-        for(int i = 0; i < 10; i++)
-        {
-            Sprite sprite = new Sprite("big_tree", true);
-            sprite.setPosition(Math.round(Math.random() * 500), Math.round(Math.random() * 500));
-
-            sprites.add(sprite);
-        }
-    }
-
     private void drawBackground()
     {
-        Image backImg = backImage.get(backGrid[0][0]);
-
-        for(int i = 0; backImg.getHeight() * i < mainCanvas.getHeight(); i++)
-        {
-            for(int j = 0; backImg.getHeight() * j < mainCanvas.getWidth(); j++)
-            {
-                graphicsContext.drawImage(backImg, backImg.getWidth() * i, backImg.getHeight() * j);
-
-                backImg = backImage.get(backGrid[i][j]);
-            }
-        }
+        terrain.render(graphicsContext);
     }
 
     private void renderObjects()
@@ -128,18 +99,9 @@ public class Controller implements Initializable {
             sprite.render(graphicsContext);
         }
 
-        for(int i = 0; i < sprites.size(); i++)
+        for(Sprite sprite : terrain.getObstacleList())
         {
-            for(int j = i + 1; j < sprites.size(); j++)
-            {
-                if(sprites.get(i).intersects(sprites.get(j)))
-                {
-                    Sprite pi = new Sprite("pikachu");
-                    pi.setPosition(Math.round(Math.random() * 500), Math.round(Math.random() * 500));
-
-                    sprites.add(pi);
-                }
-            }
+            playerSprite.intersects(sprite);
         }
     }
 }

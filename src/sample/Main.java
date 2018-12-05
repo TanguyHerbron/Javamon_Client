@@ -1,5 +1,6 @@
 package sample;
 
+import fr.ensim.lemeeherbron.Terrain;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
