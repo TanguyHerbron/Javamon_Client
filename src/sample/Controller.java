@@ -15,13 +15,13 @@ import javafx.scene.input.KeyEvent;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
 
     @FXML private Canvas mainCanvas;
     private Sprite playerSprite;
-    private Pokemon lokSprite;
     private Terrain terrain;
     private GraphicsContext graphicsContext;
 
@@ -32,7 +32,8 @@ public class Controller implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         graphicsContext = mainCanvas.getGraphicsContext2D();
         playerSprite = new Sprite("player");
-        lokSprite = new Pokemon("lokhlass", true);
+        Pokemon lokSprite = new Pokemon("lokhlass", true);
+        Pokemon pikaSprite = new Pokemon("pikachu", true);
         terrain = new Terrain(0, 0);
         terrain.prepare();
 
@@ -40,7 +41,9 @@ public class Controller implements Initializable {
 
         playerSprite.setPosition(mainCanvas.getWidth() / 2, mainCanvas.getHeight() / 2);
         lokSprite.setPosition(mainCanvas.getWidth() / 4, mainCanvas.getHeight() / 4);
+        pikaSprite.setPosition(mainCanvas.getWidth() / 1.5, mainCanvas.getHeight() / 1.5);
 
+        sprites.add(pikaSprite);
         sprites.add(lokSprite);
         sprites.add(playerSprite);
 
@@ -101,29 +104,28 @@ public class Controller implements Initializable {
 
     private void movePokemons()
     {
-        for(Sprite sprite : sprites)
-        {
-            if(sprite instanceof Pokemon)
-            {
-                Pokemon pokemon = (Pokemon) sprite;
+        Sprite sprite = sprites.get((int) Math.round(Math.random() * (sprites.size() - 1)));
 
-                if(pokemon.hasBehavior())
+        if(sprite instanceof Pokemon)
+        {
+            Pokemon pokemon = (Pokemon) sprite;
+
+            if(pokemon.hasBehavior())
+            {
+                switch ((int) Math.round(Math.random() * 3))
                 {
-                    switch ((int) Math.round(Math.random() * 3))
-                    {
-                        case 0:
-                            pokemon.up(terrain);
-                            break;
-                        case 1:
-                            pokemon.down(terrain);
-                            break;
-                        case 2:
-                            pokemon.left(terrain);
-                            break;
-                        default:
-                            pokemon.right(terrain);
-                            break;
-                    }
+                    case 0:
+                        pokemon.up(terrain);
+                        break;
+                    case 1:
+                        pokemon.down(terrain);
+                        break;
+                    case 2:
+                        pokemon.left(terrain);
+                        break;
+                    default:
+                        pokemon.right(terrain);
+                        break;
                 }
             }
         }
