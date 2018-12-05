@@ -4,7 +4,6 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
-import java.nio.Buffer;
 import java.util.*;
 
 public class Sprite {
@@ -30,8 +29,6 @@ public class Sprite {
         try {
             image = new Image("/sprite/" + spriteName + "_f.png");
         } catch (IllegalArgumentException e) {
-            System.out.println("Loading default sprite texture");
-
             image = new Image("/sprite/" + spriteName + ".png");
         }
 
@@ -57,36 +54,74 @@ public class Sprite {
         pet.setPosition(x, y);
     }
 
-    public void up()
+    public boolean checkMove(Terrain terrain)
+    {
+        int index = 0;
+        boolean found = false;
+
+        while(index < terrain.getObstacleList().size() && !found)
+        {
+            if(intersects(terrain.getObstacleList().get(index)))
+            {
+                found = true;
+            }
+
+            index++;
+        }
+
+        return found;
+    }
+
+    public void up(Terrain terrain)
     {
         y -= speed;
         image = new Image("/sprite/" + spriteName + "_b.png");
 
         lastMove = 'u';
+
+        if(checkMove(terrain))
+        {
+            y += speed;
+        }
     }
 
-    public void down()
+    public void down(Terrain terrain)
     {
         y += speed;
         image = new Image("/sprite/" + spriteName + "_f.png");
 
         lastMove = 'd';
+
+        if(checkMove(terrain))
+        {
+            y -= speed;
+        }
     }
 
-    public void left()
+    public void left(Terrain terrain)
     {
         x -= speed;
         image = new Image("/sprite/" + spriteName + "_l.png");
 
         lastMove = 'l';
+
+        if(checkMove(terrain))
+        {
+            x += speed;
+        }
     }
 
-    public void right()
+    public void right(Terrain terrain)
     {
         x += speed;
         image = new Image("/sprite/" + spriteName + "_r.png");
 
         lastMove = 'r';
+
+        if(checkMove(terrain))
+        {
+            x -= speed;
+        }
     }
 
     public void setPosition(double x, double y)
@@ -148,18 +183,13 @@ public class Sprite {
                 {
                     touchingSprites.add(spr);
 
-                    System.out.println("I'm touching");
-
                     return true;
                 }
             }
         }
         else
         {
-            if(touchingSprites.remove(spr))
-            {
-                System.out.println("I stopped touching");
-            }
+            touchingSprites.remove(spr);
         }
 
         return false;
