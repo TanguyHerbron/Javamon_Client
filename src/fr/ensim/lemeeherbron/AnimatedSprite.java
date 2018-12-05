@@ -36,8 +36,7 @@ public class AnimatedSprite extends Thread {
     public void run() {
         super.run();
 
-        while(repeat)
-        {
+        do {
             state = (state + 1) % size;
 
             try {
@@ -45,7 +44,12 @@ public class AnimatedSprite extends Thread {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }
+        } while (repeat || state != 0);
+    }
+
+    public int getAnimationState()
+    {
+        return state;
     }
 
     public void render(GraphicsContext graphicsContext)

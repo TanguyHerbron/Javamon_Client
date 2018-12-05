@@ -5,6 +5,7 @@ import fr.ensim.lemeeherbron.Pokemon;
 import fr.ensim.lemeeherbron.Sprite;
 import fr.ensim.lemeeherbron.Terrain;
 import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -162,9 +163,20 @@ public class Controller implements Initializable {
             playerSprite.intersects(sprite);
         }
 
-        for(AnimatedSprite animatedSprite : animatedSprites)
+        int index = 0;
+
+        while(index < animatedSprites.size())
         {
-            animatedSprite.render(graphicsContext);
+            if(animatedSprites.get(index).getAnimationState() == 0)
+            {
+                animatedSprites.remove(animatedSprites.get(index));
+            }
+            else
+            {
+                animatedSprites.get(index).render(graphicsContext);
+            }
+
+            index++;
         }
     }
 }
