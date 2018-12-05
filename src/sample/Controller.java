@@ -1,10 +1,8 @@
 package sample;
 
-import com.sun.javafx.geom.Vec2d;
 import fr.ensim.lemeeherbron.Sprite;
 import fr.ensim.lemeeherbron.Terrain;
 import javafx.animation.AnimationTimer;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -12,19 +10,17 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.paint.Color;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
 
     @FXML private Canvas mainCanvas;
     private Sprite playerSprite;
-    private Sprite pikaSprite;
+    private Sprite lokSprite;
     private Terrain terrain;
     private GraphicsContext graphicsContext;
 
@@ -35,17 +31,17 @@ public class Controller implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         graphicsContext = mainCanvas.getGraphicsContext2D();
         playerSprite = new Sprite("player");
-        pikaSprite = new Sprite("pikachu");
+        lokSprite = new Sprite("lokhlass");
         terrain = new Terrain(0, 0);
 
         sprites = new ArrayList<>();
 
         playerSprite.setPosition(mainCanvas.getWidth() / 2, mainCanvas.getHeight() / 2);
-        pikaSprite.setPosition(mainCanvas.getWidth() / 4, mainCanvas.getHeight() / 4);
+        lokSprite.setPosition(mainCanvas.getWidth() / 4, mainCanvas.getHeight() / 4);
 
         terrain.prepare();
 
-        sprites.add(pikaSprite);
+        sprites.add(lokSprite);
         sprites.add(playerSprite);
 
         backImage = new ArrayList<>();

@@ -74,6 +74,33 @@ public class Terrain {
             case "fd":
                 sprite = new Sprite("rock", true);
                 break;
+            case "fc":
+                sprite = new Sprite("lake_center", true);
+                break;
+            case "fb":
+                sprite = new Sprite("lake_right", true);
+                break;
+            case "fa":
+                sprite = new Sprite("lake_left", true);
+                break;
+            case "f9":
+                sprite = new Sprite("lake_top", true);
+                break;
+            case "f8":
+                sprite = new Sprite("lake_bot", true);
+                break;
+            case "f7":
+                sprite = new Sprite("lake_bot_right", true);
+                break;
+            case "f6":
+                sprite = new Sprite("lake_bot_left", true);
+                break;
+            case "f5":
+                sprite = new Sprite("lake_top_right", true);
+                break;
+            case "f4":
+                sprite = new Sprite("lake_top_left", true);
+                break;
         }
 
         return sprite;
