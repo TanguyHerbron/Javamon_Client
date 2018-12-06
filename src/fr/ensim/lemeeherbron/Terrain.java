@@ -67,37 +67,37 @@ public class Terrain {
         switch (hexCode.substring(4, 6))
         {
             case "fe":
-                sprite = new Sprite("big_tree", true);
+                sprite = new Sprite("big_tree", 512, 512, true);
                 break;
             case "fd":
-                sprite = new Sprite("rock", true);
+                sprite = new Sprite("rock", 512, 512, true);
                 break;
             case "fc":
-                sprite = new Sprite("lake_center");
+                sprite = new Sprite("lake_center", 512, 512);
                 break;
             case "fb":
-                sprite = new Sprite("lake_right", true);
+                sprite = new Sprite("lake_right", 512, 512, true);
                 break;
             case "fa":
-                sprite = new Sprite("lake_left", true);
+                sprite = new Sprite("lake_left", 512, 512, true);
                 break;
             case "f9":
-                sprite = new Sprite("lake_top", true);
+                sprite = new Sprite("lake_top", 512, 512, true);
                 break;
             case "f8":
-                sprite = new Sprite("lake_bot", true);
+                sprite = new Sprite("lake_bot", 512, 512, true);
                 break;
             case "f7":
-                sprite = new Sprite("lake_bot_right", true);
+                sprite = new Sprite("lake_bot_right", 512, 512, true);
                 break;
             case "f6":
-                sprite = new Sprite("lake_bot_left", true);
+                sprite = new Sprite("lake_bot_left", 512, 512, true);
                 break;
             case "f5":
-                sprite = new Sprite("lake_top_right", true);
+                sprite = new Sprite("lake_top_right", 512, 512, true);
                 break;
             case "f4":
-                sprite = new Sprite("lake_top_left", true);
+                sprite = new Sprite("lake_top_left", 512, 512, true);
                 break;
         }
 

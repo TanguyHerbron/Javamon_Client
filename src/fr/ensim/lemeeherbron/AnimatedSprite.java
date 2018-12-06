@@ -9,13 +9,13 @@ public class AnimatedSprite extends Thread {
     private int state;
     private boolean repeat;
 
-    public AnimatedSprite(String spritePath, int size, double x, double y)
+    public AnimatedSprite(String spritePath, double borderX, double borderY, int size, double x, double y)
     {
         sprites = new Sprite[size];
 
         for(int i = 0; i < sprites.length; i++)
         {
-            sprites[i] = new Sprite(spritePath + "_" + i);
+            sprites[i] = new Sprite(spritePath + "_" + i, borderX, borderY);
             sprites[i].setPosition(x, y);
         }
 

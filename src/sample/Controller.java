@@ -35,8 +35,8 @@ public class Controller implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         graphicsContext = mainCanvas.getGraphicsContext2D();
-        playerSprite = new Sprite("player");
-        Pokemon lokSprite = new Pokemon("lokhlass", true);
+        playerSprite = new Sprite("player", 512, 512);
+        Pokemon lokSprite = new Pokemon("lokhlass", 512, 512, true);
 
         terrain = new Terrain(0, 0);
         terrain.prepare();
@@ -83,7 +83,7 @@ public class Controller implements Initializable {
         mainCanvas.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                AnimatedSprite animatedSprite = new AnimatedSprite("explo", 6, event.getX(), event.getY());
+                AnimatedSprite animatedSprite = new AnimatedSprite("explo", 512, 512, 6, event.getX(), event.getY());
                 animatedSprite.start();
 
                 animatedSprites.add(animatedSprite);

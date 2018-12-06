@@ -18,11 +18,14 @@ public class Sprite {
     private List<Sprite> touchingSprites;
     private Sprite pet;
 
+    private double borderX;
+    private double borderY;
+
     private boolean obstable;
 
     private char lastMove;
 
-    public Sprite(String spriteName)
+    public Sprite(String spriteName, double borderX, double borderY)
     {
         touchingSprites = new ArrayList<>();
 
@@ -32,25 +35,28 @@ public class Sprite {
             image = new Image("/sprite/" + spriteName + ".png");
         }
 
-        width = image.getWidth();
-        height = image.getHeight();
+        this.width = image.getWidth();
+        this.height = image.getHeight();
 
         x = 0;
         y = 0;
 
         this.spriteName = spriteName;
+
+        this.borderX = borderX;
+        this.borderY = borderY;
     }
 
-    public Sprite(String spriteName, boolean obstable)
+    public Sprite(String spriteName, double borderX, double borderY, boolean obstable)
     {
-        this(spriteName);
+        this(spriteName, borderX, borderY);
 
         this.obstable = obstable;
     }
 
     public void givePet()
     {
-        pet = new Sprite("pikachu");
+        pet = new Sprite("pikachu", borderX, borderY);
         pet.setPosition(x, y);
     }
 
@@ -59,14 +65,21 @@ public class Sprite {
         int index = 0;
         boolean found = false;
 
-        while(index < terrain.getObstacleList().size() && !found)
+        if(x + width > borderX || x < 0 || y + height > borderY || y < 0)
         {
-            if(intersects(terrain.getObstacleList().get(index)))
+            found = true;
+        }
+        else
+        {
+            while(index < terrain.getObstacleList().size() && !found)
             {
-                found = true;
-            }
+                if(intersects(terrain.getObstacleList().get(index)))
+                {
+                    found = true;
+                }
 
-            index++;
+                index++;
+            }
         }
 
         return found;
