@@ -99,6 +99,9 @@ public class Terrain {
             case "f4":
                 sprite = new Sprite("lake_top_left", 512, 512, true);
                 break;
+            case "f3":
+                sprite = new Sprite("building", 512, 512, true);
+                break;
         }
 
         return sprite;
