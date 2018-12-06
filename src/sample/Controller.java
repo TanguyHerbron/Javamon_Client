@@ -24,7 +24,6 @@ public class Controller implements Initializable {
 
     @FXML private Canvas mainCanvas;
     private Sprite playerSprite;
-    private Pokemon lokSprite;
     private Terrain terrain;
     private GraphicsContext graphicsContext;
 
@@ -37,7 +36,7 @@ public class Controller implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         graphicsContext = mainCanvas.getGraphicsContext2D();
         playerSprite = new Sprite("player");
-        lokSprite = new Pokemon("lokhlass", true);
+        Pokemon lokSprite = new Pokemon("lokhlass", true);
 
         terrain = new Terrain(0, 0);
         terrain.prepare();
@@ -156,11 +155,11 @@ public class Controller implements Initializable {
         for(Sprite sprite : sprites)
         {
             sprite.render(graphicsContext);
-        }
 
-        for(Sprite sprite : terrain.getObstacleList())
-        {
-            playerSprite.intersects(sprite);
+            for(Sprite obs : terrain.getObstacleList())
+            {
+                sprite.intersects(obs);
+            }
         }
 
         int index = 0;
