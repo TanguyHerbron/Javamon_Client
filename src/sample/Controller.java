@@ -141,11 +141,13 @@ public class Controller implements Initializable {
         for(Sprite sprite : sprites)
         {
             sprite.render(graphicsContext);
-        }
 
-        for(Sprite sprite : terrain.getObstacleList())
-        {
-            playerSprite.intersects(sprite);
+
+            for(Sprite obs : terrain.getObstacleList())
+            {
+                sprite.intersects(obs);
+
+            }
         }
     }
 }
