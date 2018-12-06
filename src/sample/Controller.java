@@ -36,7 +36,6 @@ public class Controller implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         graphicsContext = mainCanvas.getGraphicsContext2D();
         playerSprite = new Sprite("player", 512, 512);
-        Pokemon lokSprite = new Pokemon("lokhlass", 512, 512, true);
 
         terrain = new Terrain(0, 0);
         terrain.prepare();
@@ -45,9 +44,10 @@ public class Controller implements Initializable {
         animatedSprites = new ArrayList<>();
 
         playerSprite.setPosition(mainCanvas.getWidth() / 2, mainCanvas.getHeight() / 2);
-        lokSprite.setPosition(mainCanvas.getWidth() / 4, mainCanvas.getHeight() / 4);
 
-        sprites.add(lokSprite);
+        addLokhlass();
+        addPikachu();
+
         sprites.add(playerSprite);
 
         backImage = new ArrayList<>();
@@ -106,13 +106,29 @@ public class Controller implements Initializable {
                     movePokemons();
 
                     try {
-                        Thread.sleep(2000);
+                        Thread.sleep(200);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
             }
         }).start();
+    }
+
+    private void addLokhlass()
+    {
+        Pokemon lokSprite = new Pokemon("lokhlass", 512, 512, true);
+        lokSprite.setPosition(mainCanvas.getWidth() / 4, mainCanvas.getHeight() / 4);
+
+        sprites.add(lokSprite);
+    }
+
+    private void addPikachu()
+    {
+        Pokemon pikaSprite = new Pokemon("pikachu", 512, 512, true);
+        pikaSprite.setPosition(mainCanvas.getWidth() / 1.5, mainCanvas.getHeight() / 1.5);
+
+        sprites.add(pikaSprite);
     }
 
     private void movePokemons()
@@ -125,21 +141,7 @@ public class Controller implements Initializable {
 
                 if(pokemon.hasBehavior())
                 {
-                    switch ((int) Math.round(Math.random() * 3))
-                    {
-                        case 0:
-                            pokemon.up(terrain);
-                            break;
-                        case 1:
-                            pokemon.down(terrain);
-                            break;
-                        case 2:
-                            pokemon.left(terrain);
-                            break;
-                        default:
-                            pokemon.right(terrain);
-                            break;
-                    }
+                    pokemon.move(terrain);
                 }
             }
         }

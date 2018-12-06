@@ -13,7 +13,7 @@ public class Sprite {
     private double y;
     private double width;
     private double height;
-    private int speed = 5;
+    protected int speed = 5;
     private String spriteName;
     private List<Sprite> touchingSprites;
     private Sprite pet;
