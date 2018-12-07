@@ -16,7 +16,7 @@ public class AnimatedSprite extends Thread {
         for(int i = 0; i < sprites.length; i++)
         {
             sprites[i] = new Sprite(spritePath + "_" + i, borderX, borderY);
-            sprites[i].setPosition(x, y);
+            sprites[i].setPosition(x - sprites[i].image.getWidth() / 2, y - sprites[i].image.getHeight() / 2);
         }
 
         this.size = size;
