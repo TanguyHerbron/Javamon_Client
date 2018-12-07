@@ -58,8 +58,7 @@ public class Tile {
             try {
                 image = new Image(str);
             } catch (IllegalArgumentException e) {
-                System.out.println("Error for " + str);
-                image = new Image("/tile/grass_0.png");
+                image = new Image("/tile/default.png");
             }
         }
     }
