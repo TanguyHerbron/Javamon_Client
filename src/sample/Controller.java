@@ -37,7 +37,7 @@ public class Controller implements Initializable {
         graphicsContext = mainCanvas.getGraphicsContext2D();
         playerSprite = new Sprite("player", 512, 512);
 
-        terrain = new Terrain(0, 0);
+        terrain = new Terrain(0, 1);
         terrain.prepare();
 
         sprites = new ArrayList<>();
@@ -54,7 +54,7 @@ public class Controller implements Initializable {
 
         for(int i = 0; i < 4; i++)
         {
-            backImage.add(new Image("/sprite/grass_" + i + ".png"));
+            backImage.add(new Image("/tile/grass_" + i + ".png"));
         }
 
         mainCanvas.setFocusTraversable(true);

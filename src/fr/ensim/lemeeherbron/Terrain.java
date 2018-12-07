@@ -4,7 +4,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -17,7 +16,7 @@ public class Terrain {
     private int x;
     private int y;
 
-    private Image[][] textureList;
+    private Tile[][] tileTable;
     private List<Sprite> obstacleList;
 
     public Terrain(int x, int y)
@@ -25,7 +24,7 @@ public class Terrain {
         this.x = x;
         this.y = y;
 
-        textureList = new Image[32][32];
+        tileTable = new Tile[32][32];
         obstacleList = new ArrayList<>();
     }
 
@@ -35,23 +34,58 @@ public class Terrain {
             File terImg = new File(getClass().getResource("/terrain/" + x + "_" + y + ".png").toURI());
             BufferedImage imgPxls = ImageIO.read(terImg);
 
-            for(int i = 0; i < imgPxls.getHeight(); i++)
+            for(int y = 0; y < imgPxls.getHeight(); y++)
             {
-                for(int j = 0; j < imgPxls.getWidth(); j++)
+                for(int x = 0; x < imgPxls.getWidth(); x++)
                 {
-                    textureList[i][j] = getTileForColor(Integer.toHexString(imgPxls.getRGB(i, j)));
+                    Tile topTile = null;
+                    Tile leftTile = null;
+                    Tile cornerTile = null;
 
-                    Sprite obstacle = getSpriteForColor(Integer.toHexString(imgPxls.getRGB(i, j)));
+                    try {
+                        topTile = tileTable[x][y - 1];
+                    } catch (IndexOutOfBoundsException e) {
+                        topTile = new Tile(false);
+                    }
+
+                    try {
+                        leftTile = tileTable[x - 1][y];
+                    } catch (IndexOutOfBoundsException e) {
+                        leftTile = new Tile(false);
+                    }
+
+                    try {
+                        cornerTile = tileTable[x - 1][y - 1];
+                    } catch (IndexOutOfBoundsException e) {
+                        cornerTile = new Tile(false);
+                    }
+
+                    tileTable[x][y] = getTileForColor(Integer.toHexString(imgPxls.getRGB(x, y)), x * 16, y * 16, topTile, leftTile, cornerTile);
+
+                    Sprite obstacle = getSpriteForColor(Integer.toHexString(imgPxls.getRGB(x, y)));
 
                     if(obstacle != null)
                     {
-                        obstacle.setPosition(i * 16, j * 16);
+                        obstacle.setPosition(x * 16, y * 16);
                         obstacleList.add(obstacle);
                     }
                 }
             }
+
+            constructTiles();
         } catch (IOException | URISyntaxException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void constructTiles()
+    {
+        for(int i = 0; i < tileTable.length; i++)
+        {
+            for(int j = 0; j < tileTable[i].length; j++)
+            {
+                tileTable[i][j].construct();
+            }
         }
     }
 
@@ -107,54 +141,58 @@ public class Terrain {
         return sprite;
     }
 
-    private Image getTileForColor(String hexCode)
+    private Tile getTileForColor(String hexCode, int x, int y, Tile topTile, Tile leftTile, Tile cornerTile)
     {
-        Image image = null;
+        Tile tile = null;
 
         switch (hexCode.substring(6, 8))
         {
             case "ff":
-                image = new Image("/sprite/grass_3.png");
-                break;
-            case "02":
-                image = new Image("/sprite/path_dark_up.png");
+                tile = new Tile("grass", x, y, 3);
+
+                if(topTile.isVariant())
+                {
+                    topTile.setBl(tile.getTl());
+                    topTile.setBr(tile.getTr());
+                }
+
+                if(leftTile.isVariant())
+                {
+                    leftTile.setTr(tile.getTl());
+                    leftTile.setBr(tile.getBl());
+                }
+
+                if(cornerTile.isVariant())
+                {
+                    cornerTile.setBr(leftTile.getTr() || topTile.getBl());
+                }
+
                 break;
             case "01":
-                image = new Image("/sprite/path_dark.png");
-                break;
-            case "03":
-                image = new Image("/sprite/path_dark_down.png");
-                break;
-            case "04":
-                image = new Image("/sprite/path_dark_turn_up_right.png");
-                break;
-            case "05":
-                image = new Image("/sprite/path_dark_turn_up_left.png");
-                break;
-            case "06":
-                image = new Image("/sprite/path_dark_right.png");
-                break;
-            case "07":
-                image = new Image("/sprite/path_dark_left.png");
-                break;
-            case "08":
-                image = new Image("/sprite/path_dark_up_right.png");
-                break;
-            case "09":
-                image = new Image("/sprite/path_dark_up_left.png");
+                tile = new Tile("path_dark", x, y, true);
+
+                tile.setTl(leftTile.getTr());
+                tile.setTr(topTile.getBr());
+                tile.setBl(leftTile.getBr());
+
+                if(!leftTile.isVariant())
+                {
+                    topTile.setBl(tile.getTl());
+                }
+
                 break;
         }
 
-        return image;
+        return tile;
     }
 
     public void render(GraphicsContext graphicsContext)
     {
-        for(int i = 0; i < textureList.length; i++)
+        for(int i = 0; i < tileTable.length; i++)
         {
-            for(int j = 0; j < textureList[i].length; j++)
+            for(int j = 0; j < tileTable[i].length; j++)
             {
-                graphicsContext.drawImage(textureList[i][j], i * 16, j * 16);
+                tileTable[i][j].render(graphicsContext);
             }
         }
 
@@ -162,5 +200,10 @@ public class Terrain {
         {
             sprite.render(graphicsContext);
         }
+    }
+
+    public Tile[][] getTiles()
+    {
+        return tileTable;
     }
 }
