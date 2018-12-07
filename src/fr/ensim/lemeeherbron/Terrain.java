@@ -44,20 +44,35 @@ public class Terrain {
 
                     try {
                         topTile = tileTable[x][y - 1];
-                    } catch (IndexOutOfBoundsException e) {
-                        topTile = new Tile(false);
+
+                        if(topTile == null)
+                        {
+                            topTile = new Tile(true);
+                        }
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        topTile = new Tile(true);
                     }
 
                     try {
                         leftTile = tileTable[x - 1][y];
-                    } catch (IndexOutOfBoundsException e) {
-                        leftTile = new Tile(false);
+
+                        if(leftTile == null)
+                        {
+                            leftTile = new Tile(true);
+                        }
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        leftTile = new Tile(true);
                     }
 
                     try {
                         cornerTile = tileTable[x - 1][y - 1];
-                    } catch (IndexOutOfBoundsException e) {
-                        cornerTile = new Tile(false);
+
+                        if(cornerTile == null)
+                        {
+                            cornerTile = new Tile(true);
+                        }
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        cornerTile = new Tile(true);
                     }
 
                     tileTable[x][y] = getTileForColor(Integer.toHexString(imgPxls.getRGB(x, y)), x * 16, y * 16, topTile, leftTile, cornerTile);
@@ -106,33 +121,6 @@ public class Terrain {
             case "fd":
                 sprite = new Sprite("rock", 512, 512, true);
                 break;
-            case "fc":
-                sprite = new Sprite("lake_center", 512, 512);
-                break;
-            case "fb":
-                sprite = new Sprite("lake_right", 512, 512, true);
-                break;
-            case "fa":
-                sprite = new Sprite("lake_left", 512, 512, true);
-                break;
-            case "f9":
-                sprite = new Sprite("lake_top", 512, 512, true);
-                break;
-            case "f8":
-                sprite = new Sprite("lake_bot", 512, 512, true);
-                break;
-            case "f7":
-                sprite = new Sprite("lake_bot_right", 512, 512, true);
-                break;
-            case "f6":
-                sprite = new Sprite("lake_bot_left", 512, 512, true);
-                break;
-            case "f5":
-                sprite = new Sprite("lake_top_right", 512, 512, true);
-                break;
-            case "f4":
-                sprite = new Sprite("lake_top_left", 512, 512, true);
-                break;
             case "f3":
                 sprite = new Sprite("building", 512, 512, true);
                 break;
@@ -171,7 +159,7 @@ public class Terrain {
             case "01":
                 tile = new Tile("path_dark", x, y, true);
 
-                tile.setTl(leftTile.getTr());
+                tile.setTl(leftTile.getTr() && topTile.getBl());
                 tile.setTr(topTile.getBr());
                 tile.setBl(leftTile.getBr());
 
@@ -181,6 +169,17 @@ public class Terrain {
                 }
 
                 break;
+            case "50":
+                tile = new Tile("lake", x, y, true);
+
+                tile.setTl(leftTile.getTr());
+                tile.setTr(topTile.getBr());
+                tile.setBl(leftTile.getBr());
+
+                if(!leftTile.isVariant())
+                {
+                    topTile.setBl(tile.getTl());
+                }
         }
 
         return tile;
