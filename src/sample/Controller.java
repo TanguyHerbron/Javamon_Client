@@ -38,7 +38,7 @@ public class Controller implements Initializable {
         graphicsContext = mainCanvas.getGraphicsContext2D();
         player = new Player("player", 512, 512, 2);
 
-        terrain = new Terrain(0, 1);
+        terrain = new Terrain(0, 0);
         terrain.prepare();
 
         sprites = new ArrayList<>();
@@ -66,27 +66,43 @@ public class Controller implements Initializable {
                 switch (event.getCode())
                 {
                     case Z:
-                        direction = 'u';
+                        if(direction != 'u')
+                        {
+                            direction = 'u';
+                            numberKeyPressed++;
+                        }
                         break;
                     case S:
-                        direction = 'd';
+                        if(direction != 'd')
+                        {
+                            direction = 'd';
+                            numberKeyPressed++;
+                        }
                         break;
                     case Q:
-                        direction = 'l';
+                        if(direction != 'l')
+                        {
+                            direction = 'l';
+                            numberKeyPressed++;
+                        }
                         break;
                     case D:
-                        direction = 'r';
+                        if(direction != 'r')
+                        {
+                            direction = 'r';
+                            numberKeyPressed++;
+                        }
                         break;
                 }
-
-                numberKeyPressed++;
             }
         });
 
         mainCanvas.setOnKeyReleased(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
+
                 numberKeyPressed--;
+
                 if(numberKeyPressed == 0)
                 {
                     direction = '0';
