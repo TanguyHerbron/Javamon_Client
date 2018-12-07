@@ -1,11 +1,7 @@
 package sample;
 
-import fr.ensim.lemeeherbron.AnimatedSprite;
-import fr.ensim.lemeeherbron.Pokemon;
-import fr.ensim.lemeeherbron.Sprite;
-import fr.ensim.lemeeherbron.Terrain;
+import fr.ensim.lemeeherbron.*;
 import javafx.animation.AnimationTimer;
-import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -20,10 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import static javafx.scene.input.KeyCode.*;
+
 public class Controller implements Initializable {
 
     @FXML private Canvas mainCanvas;
-    private Sprite playerSprite;
+    private Player player;
     private Terrain terrain;
     private GraphicsContext graphicsContext;
 
@@ -32,10 +30,12 @@ public class Controller implements Initializable {
     private List<Sprite> sprites;
     private List<Image> backImage;
 
+    private char direction = '0';
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         graphicsContext = mainCanvas.getGraphicsContext2D();
-        playerSprite = new Sprite("player", 512, 512);
+        player = new Player("player", 512, 512, 2);
 
         terrain = new Terrain(0, 1);
         terrain.prepare();
@@ -43,12 +43,12 @@ public class Controller implements Initializable {
         sprites = new ArrayList<>();
         animatedSprites = new ArrayList<>();
 
-        playerSprite.setPosition(mainCanvas.getWidth() / 2, mainCanvas.getHeight() / 2);
+        player.setPosition(mainCanvas.getWidth() / 2, mainCanvas.getHeight() / 2);
 
         addLokhlass();
         addPikachu();
 
-        sprites.add(playerSprite);
+        sprites.add(player);
 
         backImage = new ArrayList<>();
 
@@ -65,17 +65,27 @@ public class Controller implements Initializable {
                 switch (event.getCode())
                 {
                     case Z:
-                        playerSprite.up(terrain);
+                        direction = 'u';
                         break;
                     case S:
-                        playerSprite.down(terrain);
+                        direction = 'd';
                         break;
                     case Q:
-                        playerSprite.left(terrain);
+                        direction = 'l';
                         break;
                     case D:
-                        playerSprite.right(terrain);
+                        direction = 'r';
                         break;
+                }
+            }
+        });
+
+        mainCanvas.setOnKeyReleased(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if(event.getCode() == Z || event.getCode() == S ||event.getCode() == Q ||event.getCode() == D)
+                {
+                    direction = '0';
                 }
             }
         });
@@ -93,6 +103,22 @@ public class Controller implements Initializable {
         new AnimationTimer() {
             @Override
             public void handle(long now) {
+                switch (direction)
+                {
+                    case 'u':
+                        player.up(terrain);
+                        break;
+                    case 'd':
+                        player.down(terrain);
+                        break;
+                    case 'l':
+                        player.left(terrain);
+                        break;
+                    case 'r':
+                        player.right(terrain);
+                        break;
+                }
+
                 drawBackground();
                 renderObjects();
             }
@@ -117,7 +143,7 @@ public class Controller implements Initializable {
 
     private void addLokhlass()
     {
-        Pokemon lokSprite = new Pokemon("lokhlass", 512, 512, true);
+        Pokemon lokSprite = new Pokemon("lokhlass", 512, 512, 3, true);
         lokSprite.setPosition(mainCanvas.getWidth() / 4, mainCanvas.getHeight() / 4);
 
         sprites.add(lokSprite);
@@ -125,7 +151,7 @@ public class Controller implements Initializable {
 
     private void addPikachu()
     {
-        Pokemon pikaSprite = new Pokemon("pikachu", 512, 512, true);
+        Pokemon pikaSprite = new Pokemon("pikachu", 512, 512, 5, true);
         pikaSprite.setPosition(mainCanvas.getWidth() / 1.5, mainCanvas.getHeight() / 1.5);
 
         sprites.add(pikaSprite);
@@ -137,11 +163,11 @@ public class Controller implements Initializable {
         {
             if(sprite instanceof Pokemon)
             {
-                Pokemon pokemon = (Pokemon) sprite;
+                Entity entity = (Entity) sprite;
 
-                if(pokemon.hasBehavior())
+                if(((Pokemon) entity).hasBehavior())
                 {
-                    pokemon.move(terrain);
+                    ((Pokemon) entity).move(terrain);
                 }
             }
         }

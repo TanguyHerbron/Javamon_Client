@@ -8,22 +8,18 @@ import java.util.*;
 
 public class Sprite {
 
-    private Image image;
-    private double x;
-    private double y;
+    protected Image image;
+    protected double x;
+    protected double y;
     private double width;
     private double height;
-    protected int speed = 5;
-    private String spriteName;
+    protected String spriteName;
     private List<Sprite> touchingSprites;
-    private Sprite pet;
 
     private double borderX;
     private double borderY;
 
     private boolean obstable;
-
-    private char lastMove;
 
     public Sprite(String spriteName, double borderX, double borderY)
     {
@@ -54,12 +50,6 @@ public class Sprite {
         this.obstable = obstable;
     }
 
-    public void givePet()
-    {
-        pet = new Sprite("pikachu", borderX, borderY);
-        pet.setPosition(x, y);
-    }
-
     public boolean checkMove(Terrain terrain)
     {
         int index = 0;
@@ -85,58 +75,6 @@ public class Sprite {
         return found;
     }
 
-    public void up(Terrain terrain)
-    {
-        y -= speed;
-        image = new Image("/sprite/" + spriteName + "_b.png");
-
-        lastMove = 'u';
-
-        if(checkMove(terrain))
-        {
-            y += speed;
-        }
-    }
-
-    public void down(Terrain terrain)
-    {
-        y += speed;
-        image = new Image("/sprite/" + spriteName + "_f.png");
-
-        lastMove = 'd';
-
-        if(checkMove(terrain))
-        {
-            y -= speed;
-        }
-    }
-
-    public void left(Terrain terrain)
-    {
-        x -= speed;
-        image = new Image("/sprite/" + spriteName + "_l.png");
-
-        lastMove = 'l';
-
-        if(checkMove(terrain))
-        {
-            x += speed;
-        }
-    }
-
-    public void right(Terrain terrain)
-    {
-        x += speed;
-        image = new Image("/sprite/" + spriteName + "_r.png");
-
-        lastMove = 'r';
-
-        if(checkMove(terrain))
-        {
-            x -= speed;
-        }
-    }
-
     public void setPosition(double x, double y)
     {
         this.x = x;
@@ -148,33 +86,9 @@ public class Sprite {
         return obstable;
     }
 
-    private void reverseMove()
-    {
-        switch (lastMove)
-        {
-            case 'u':
-                y += speed;
-                break;
-            case 'd':
-                y -= speed;
-                break;
-            case 'l':
-                x += speed;
-                break;
-            case 'r':
-                x -= speed;
-                break;
-        }
-    }
-
     public void render(GraphicsContext graphicsContext)
     {
         graphicsContext.drawImage(image, x, y);
-
-        if(pet != null)
-        {
-            pet.render(graphicsContext);
-        }
     }
 
     public Rectangle2D getBoundary()
@@ -190,7 +104,10 @@ public class Sprite {
             {
                 if(spr.isObstable())
                 {
-                    reverseMove();
+                    if(this instanceof Entity)
+                    {
+                        ((Entity) this).reverseMove();
+                    }
                 }
                 else
                 {

@@ -1,19 +1,14 @@
 package fr.ensim.lemeeherbron;
 
-import com.sun.javafx.geom.Vec2d;
 import com.sun.javafx.geom.Vec2f;
 
-public class Pokemon extends Sprite {
+public class Pokemon extends Entity {
 
     private boolean behavior;
     private Vec2f target;
 
-    public Pokemon(String spriteName, double borderX, double boderY) {
-        super(spriteName, borderX, boderY);
-    }
-
-    public Pokemon(String spriteName, double borderX, double borderY, boolean behavior) {
-        super(spriteName, borderX, borderY);
+    public Pokemon(String spriteName, double borderX, double borderY, int speed, boolean behavior) {
+        super(spriteName, borderX, borderY, speed);
 
         this.behavior = behavior;
     }
@@ -36,8 +31,8 @@ public class Pokemon extends Sprite {
         {
             target = new Vec2f();
 
-            target.x = ((int) Math.round((Math.random() * 10) - 5)) * 5;
-            target.y = ((int) Math.round((Math.random() * 10) - 5)) * 5;
+            target.x = ((int) Math.round((Math.random() * 10) - 5)) * speed;
+            target.y = ((int) Math.round((Math.random() * 10) - 5)) * speed;
         }
     }
 
