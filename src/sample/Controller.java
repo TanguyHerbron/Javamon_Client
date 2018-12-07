@@ -46,7 +46,7 @@ public class Controller implements Initializable {
         graphicsContext = mainCanvas.getGraphicsContext2D();
         player = new Player("player", 512, 512, 2);
 
-        terrain = new Terrain(0, 0);
+        terrain = new Terrain(0, 1);
         terrain.prepare();
 
         sprites = new ArrayList<>();
