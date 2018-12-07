@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -21,6 +22,7 @@ import static javafx.scene.input.KeyCode.*;
 public class Controller implements Initializable {
 
     @FXML private Canvas mainCanvas;
+    @FXML private Label fpsLabel;
     private Player player;
     private Terrain terrain;
     private GraphicsContext graphicsContext;
@@ -32,6 +34,11 @@ public class Controller implements Initializable {
 
     private char direction = '0';
     private int numberKeyPressed;
+
+    //FPS counter variables
+    private final long[] frameTimes = new long[100];
+    private int frameTimeIndex = 0;
+    private boolean arrayFilled = false;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -141,6 +148,8 @@ public class Controller implements Initializable {
 
                 drawBackground();
                 renderObjects();
+
+                computeFPS(now);
             }
         }.start();
 
@@ -159,6 +168,26 @@ public class Controller implements Initializable {
                 }
             }
         }).start();
+    }
+
+    private void computeFPS(long now)
+    {
+        long oldFrameTime = frameTimes[frameTimeIndex];
+        frameTimes[frameTimeIndex] = now;
+        frameTimeIndex = (frameTimeIndex + 1) % frameTimes.length;
+        if(frameTimeIndex == 0)
+        {
+            arrayFilled = true;
+        }
+
+        if(arrayFilled)
+        {
+            long elapsedNanos = now - oldFrameTime;
+            long elapsedNanosPerFrame = elapsedNanos / frameTimes.length;
+            double frameRate = 1_000_000_000.0 / elapsedNanosPerFrame;
+            fpsLabel.setText(String.format("%.2f FPS", frameRate));
+        }
+
     }
 
     private void addLokhlass()
