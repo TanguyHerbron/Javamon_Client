@@ -10,6 +10,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
@@ -109,7 +110,10 @@ public class Controller implements Initializable {
             @Override
             public void handle(KeyEvent event) {
 
-                numberKeyPressed--;
+                if(event.getCode().equals(KeyCode.Z) || event.getCode().equals(KeyCode.Q) || event.getCode().equals(KeyCode.S) || event.getCode().equals(KeyCode.D))
+                {
+                    numberKeyPressed--;
+                }
 
                 if(numberKeyPressed == 0)
                 {
