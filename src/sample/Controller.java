@@ -31,6 +31,7 @@ public class Controller implements Initializable {
     private List<Image> backImage;
 
     private char direction = '0';
+    private int numberKeyPressed;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -77,13 +78,16 @@ public class Controller implements Initializable {
                         direction = 'r';
                         break;
                 }
+
+                numberKeyPressed++;
             }
         });
 
         mainCanvas.setOnKeyReleased(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                if(event.getCode() == Z || event.getCode() == S ||event.getCode() == Q ||event.getCode() == D)
+                numberKeyPressed--;
+                if(numberKeyPressed == 0)
                 {
                     direction = '0';
                 }
