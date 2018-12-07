@@ -1,5 +1,6 @@
 package sample;
 
+import com.sun.javafx.geom.Vec2f;
 import fr.ensim.lemeeherbron.*;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;

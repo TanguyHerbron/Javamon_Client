@@ -72,4 +72,14 @@ public class Pokemon extends Entity {
             generateTarget();
         }
     }
+
+    public void setTarget(int x, int y)
+    {
+        target = new Vec2f(x * speed, y * speed);
+    }
+
+    public int getSpeed()
+    {
+        return speed;
+    }
 }

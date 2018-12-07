@@ -115,13 +115,16 @@ public class Terrain {
 
         switch (hexCode.substring(4, 6))
         {
-            case "fe":
+            case "ff":
                 sprite = new Sprite("big_tree", 512, 512, true);
                 break;
-            case "fd":
+            case "fa":
+                sprite = new Sprite("", 512, 512, true);
+                break;
+            case "f5":
                 sprite = new Sprite("rock", 512, 512, true);
                 break;
-            case "f3":
+            case "f0":
                 sprite = new Sprite("building", 512, 512, true);
                 break;
         }

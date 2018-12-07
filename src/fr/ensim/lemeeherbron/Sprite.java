@@ -25,10 +25,17 @@ public class Sprite {
     {
         touchingSprites = new ArrayList<>();
 
-        try {
-            image = new Image("/sprite/" + spriteName + "_f.png");
-        } catch (IllegalArgumentException e) {
-            image = new Image("/sprite/" + spriteName + ".png");
+        if(spriteName.equals(""))
+        {
+            image = new Image("/sprite/blank.png");;
+        }
+        else
+        {
+            try {
+                image = new Image("/sprite/" + spriteName + "_f.png");
+            } catch (IllegalArgumentException e) {
+                image = new Image("/sprite/" + spriteName + ".png");
+            }
         }
 
         this.width = image.getWidth();
