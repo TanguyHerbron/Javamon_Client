@@ -38,48 +38,63 @@ public class Pokemon extends Entity {
 
     public void move(Terrain terrain)
     {
-        if(target != null && (target.x != 0 || target.y != 0))
+        double x = Math.round(this.x);
+        double y = Math.round(this.y);
+
+        if(target != null && (target.x != x || target.y != y))
         {
-            if(target.x != 0)
+            if(target.x != x)
             {
-                if(target.x > 0)
+                if(target.x < x)
                 {
                     left(terrain);
-                    target.x -= speed;
                 }
                 else
                 {
                     right(terrain);
-                    target.x += speed;
                 }
             }
             else
             {
-                if(target.y > 0)
+                if(target.y < y)
                 {
                     up(terrain);
-                    target.y -= speed;
                 }
                 else
                 {
                     down(terrain);
-                    target.y += speed;
                 }
             }
-        }
-        else
-        {
-            generateTarget();
+
+            if(Math.abs(target.x - this.x) < speed)
+            {
+                this.x = target.x;
+            }
+
+            if(Math.abs(target.y - this.y) < speed)
+            {
+                this.y = target.y;
+            }
+
+            if(this.x == target.x && this.y == target.y)
+            {
+                target = null;
+            }
         }
     }
 
     public void setTarget(int x, int y)
     {
-        target = new Vec2f(x * speed, y * speed);
+        target = new Vec2f(x, y);
     }
 
     public int getSpeed()
     {
         return speed;
+    }
+
+    public boolean hasTarget()
+    {
+        return target != null;
     }
 }

@@ -2,6 +2,8 @@ package sample;
 
 import com.sun.javafx.geom.Vec2f;
 import fr.ensim.lemeeherbron.*;
+import fr.ensim.lemeeherbron.pathfinder.AStarPathFinder;
+import fr.ensim.lemeeherbron.pathfinder.Path;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -34,6 +36,11 @@ public class Controller implements Initializable {
     private List<Sprite> sprites;
     private List<Image> backImage;
 
+    //PATHFINDING
+    private Pokemon pikaSprite;
+    private Sprite selectedSprite;
+    private Path path;
+
     private char direction = '0';
     private int numberKeyPressed;
 
@@ -47,7 +54,7 @@ public class Controller implements Initializable {
         graphicsContext = mainCanvas.getGraphicsContext2D();
         player = new Player("player", 512, 512, 2);
 
-        terrain = new Terrain(0, 1);
+        terrain = new Terrain(0, 0);
         terrain.prepare();
 
         sprites = new ArrayList<>();
@@ -55,7 +62,7 @@ public class Controller implements Initializable {
 
         player.setPosition(mainCanvas.getWidth() / 2, mainCanvas.getHeight() / 2);
 
-        addLokhlass();
+        //addLokhlass();
         addPikachu();
 
         sprites.add(player);
@@ -106,6 +113,7 @@ public class Controller implements Initializable {
             }
         });
 
+        //TODO Redo the entire input system (maybe add threads and mutexs to avoid multiple input glitchs ?)
         mainCanvas.setOnKeyReleased(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
@@ -125,10 +133,22 @@ public class Controller implements Initializable {
         mainCanvas.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                AnimatedSprite animatedSprite = new AnimatedSprite("explo", 512, 512, 6, event.getX(), event.getY());
-                animatedSprite.start();
+                //displayAnimation();
 
-                animatedSprites.add(animatedSprite);
+                int x = (int) Math.round(event.getX() / 16);
+                int y = (int) Math.round(event.getY() / 16);
+
+                int xp = (int) Math.round(pikaSprite.getX() / 16);
+                int xy = (int) Math.round(pikaSprite.getY() / 16);
+
+                selectedSprite = new Sprite("selected", 512, 512);
+                selectedSprite.setPosition(x * 16, y * 16);
+
+                System.out.println("Loading path from " + xp * 16 + " " + xy * 16 + " to " + event.getX() + " " + event.getY());
+
+                AStarPathFinder aStarPathFinder = new AStarPathFinder(terrain, 100);
+
+                path = aStarPathFinder.findPath(xp, xy, x, y);
             }
         });
 
@@ -175,6 +195,14 @@ public class Controller implements Initializable {
         }).start();
     }
 
+    private void displayAnimation(double x, double y)
+    {
+        AnimatedSprite animatedSprite = new AnimatedSprite("explo", 512, 512, 6, x, y);
+        animatedSprite.start();
+
+        animatedSprites.add(animatedSprite);
+    }
+
     private void computeFPS(long now)
     {
         long oldFrameTime = frameTimes[frameTimeIndex];
@@ -205,15 +233,15 @@ public class Controller implements Initializable {
 
     private void addPikachu()
     {
-        Pokemon pikaSprite = new Pokemon("pikachu", 512, 512, 5, true);
-        pikaSprite.setPosition(mainCanvas.getWidth() / 1.5, mainCanvas.getHeight() / 1.5);
+        pikaSprite = new Pokemon("pikachu", 512, 512, 2, true);
+        pikaSprite.setPosition(380, 380);
 
         sprites.add(pikaSprite);
     }
 
     private void movePokemons()
     {
-        for(Sprite sprite : sprites)
+        /*for(Sprite sprite : sprites)
         {
             if(sprite instanceof Pokemon)
             {
@@ -224,12 +252,42 @@ public class Controller implements Initializable {
                     ((Pokemon) entity).move(terrain);
                 }
             }
+        }*/
+
+        if(path != null)
+        {
+            if(pikaSprite.getX() == path.getFirstStep().getX() && pikaSprite.getY() == path.getFirstStep().getY())
+            {
+                path.completeFistStep();
+
+                if(path.getLength() == 0)
+                {
+                    path = null;
+                }
+            }
+
+            if(!pikaSprite.hasTarget() && path != null)
+            {
+                pikaSprite.setTarget(path.getFirstStep().getX(), path.getFirstStep().getY());
+            }
+
+            pikaSprite.move(terrain);
         }
     }
 
     private void drawBackground()
     {
         terrain.render(graphicsContext);
+
+        if(path != null)
+        {
+            path.render(graphicsContext);
+        }
+
+        if(selectedSprite != null)
+        {
+            selectedSprite.render(graphicsContext);
+        }
     }
 
     private void renderObjects()

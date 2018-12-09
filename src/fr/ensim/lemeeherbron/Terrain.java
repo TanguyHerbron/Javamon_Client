@@ -204,6 +204,29 @@ public class Terrain {
         }
     }
 
+    public boolean blocked(int x, int y)
+    {
+        for(int i = 0; i < obstacleList.size(); i++)
+        {
+            if(Math.round(obstacleList.get(i).x / 16) == x && Math.round(obstacleList.get(i).y / 16) == y)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public int getWidth()
+    {
+        return tileTable.length;
+    }
+
+    public int getHeight()
+    {
+        return tileTable[0].length;
+    }
+
     public Tile[][] getTiles()
     {
         return tileTable;
