@@ -110,7 +110,7 @@ public class Sprite {
 
     public Rectangle2D getBoundary()
     {
-        return new Rectangle2D(x, y, width - 4, height - 4);
+        return new Rectangle2D(x, y, width - 8, height - 8);
     }
 
     public synchronized boolean intersects(Sprite spr)

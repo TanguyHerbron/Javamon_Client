@@ -144,8 +144,6 @@ public class Controller implements Initializable {
                 selectedSprite = new Sprite("selected", 512, 512);
                 selectedSprite.setPosition(x * 16, y * 16);
 
-                System.out.println("Loading path from " + xp * 16 + " " + xy * 16 + " to " + event.getX() + " " + event.getY());
-
                 AStarPathFinder aStarPathFinder = new AStarPathFinder(terrain, 100);
 
                 path = aStarPathFinder.findPath(xp, xy, x, y);
@@ -233,7 +231,7 @@ public class Controller implements Initializable {
 
     private void addPikachu()
     {
-        pikaSprite = new Pokemon("pikachu", 512, 512, 2, true);
+        pikaSprite = new Pokemon("pikachu", 512, 512, 10, true);
         pikaSprite.setPosition(380, 380);
 
         sprites.add(pikaSprite);
@@ -279,7 +277,7 @@ public class Controller implements Initializable {
     {
         terrain.render(graphicsContext);
 
-        if(path != null)
+        /*if(path != null)
         {
             path.render(graphicsContext);
         }
@@ -287,7 +285,7 @@ public class Controller implements Initializable {
         if(selectedSprite != null)
         {
             selectedSprite.render(graphicsContext);
-        }
+        }*/
     }
 
     private void renderObjects()

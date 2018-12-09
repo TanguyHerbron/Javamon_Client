@@ -54,8 +54,6 @@ public class Path {
     public void completeFistStep()
     {
         steps.remove(0);
-
-        System.out.println("Step completed");
     }
 
     public void render(GraphicsContext graphicsContext)
