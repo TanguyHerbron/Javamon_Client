@@ -123,8 +123,6 @@ public class AStarPathFinder {
 
         while(target != nodes[sx][sy])
         {
-            System.out.println("Loading path step x> " + target.getX() * 16 + " y> " + target.getY() * 16);
-
             path.prependStep(target.getX() * 16, target.getY() * 16);
             target = target.getParent();
         }
