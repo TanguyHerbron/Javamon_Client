@@ -91,6 +91,7 @@ public class Controller implements Initializable {
                         {
                             direction = 'u';
                             numberKeyPressed++;
+                            player.setWalking(true);
                         }
                         break;
                     case S:
@@ -98,6 +99,7 @@ public class Controller implements Initializable {
                         {
                             direction = 'd';
                             numberKeyPressed++;
+                            player.setWalking(true);
                         }
                         break;
                     case Q:
@@ -105,6 +107,7 @@ public class Controller implements Initializable {
                         {
                             direction = 'l';
                             numberKeyPressed++;
+                            player.setWalking(true);
                         }
                         break;
                     case D:
@@ -112,6 +115,7 @@ public class Controller implements Initializable {
                         {
                             direction = 'r';
                             numberKeyPressed++;
+                            player.setWalking(true);
                         }
                         break;
                 }
@@ -131,6 +135,7 @@ public class Controller implements Initializable {
                 if(numberKeyPressed == 0)
                 {
                     direction = '0';
+                    player.setWalking(false);
                 }
             }
         });
@@ -218,7 +223,7 @@ public class Controller implements Initializable {
 
     private void setupPlayer()
     {
-        player = new Player("leviator", 32, 32, 512, 512, 2);
+        player = new Player("old_man", 32, 32, 512, 512, 2);
         player.setPosition(mainCanvas.getWidth() / 2, mainCanvas.getHeight() / 2);
 
         sprites.add(player);

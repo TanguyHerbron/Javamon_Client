@@ -209,7 +209,7 @@ public class Terrain {
     {
         for(int i = 0; i < obstacleList.size(); i++)
         {
-            if(Math.round(obstacleList.get(i).x / 16) == x && Math.round(obstacleList.get(i).y / 16) == y)
+            if(Math.round(obstacleList.get(i).getX() / 16) == x && Math.round(obstacleList.get(i).getY() / 16) == y)
             {
                 return true;
             }

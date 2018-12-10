@@ -8,7 +8,7 @@ public class Entity extends Sprite {
 
     protected int speed;
 
-    private char lastMove;
+    protected char lastMove;
 
     public Entity(String spriteName, double width, double height, double borderX, double borderY, int speed) {
         super(spriteName, width, height, borderX, borderY);
@@ -16,17 +16,9 @@ public class Entity extends Sprite {
         this.speed = speed;
     }
 
-    public Entity(String spriteName, double borderX, double borderY, int speed)
-    {
-        super(spriteName, borderX, borderY);
-
-        this.speed = speed;
-    }
-
     public void up(Terrain terrain)
     {
         y -= speed;
-        //image = new Image("/sprite/" + spriteName + "_b.png");
 
         lastMove = 'u';
 
@@ -39,7 +31,6 @@ public class Entity extends Sprite {
     public void down(Terrain terrain)
     {
         y += speed;
-        //image = new Image("/sprite/" + spriteName + "_f.png");
 
         lastMove = 'd';
 
@@ -52,7 +43,6 @@ public class Entity extends Sprite {
     public void left(Terrain terrain)
     {
         x -= speed;
-        //image = new Image("/sprite/" + spriteName + "_l.png");
 
         lastMove = 'l';
 
@@ -65,7 +55,6 @@ public class Entity extends Sprite {
     public void right(Terrain terrain)
     {
         x += speed;
-        //image = new Image("/sprite/" + spriteName + "_r.png");
 
         lastMove = 'r';
 
