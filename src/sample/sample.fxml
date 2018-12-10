@@ -3,19 +3,29 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500" prefWidth="500" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
     <children>
         <Canvas fx:id="mainCanvas" height="512" width="512" />
-        <Label fx:id="fpsLabel" textFill="WHITE" StackPane.alignment="TOP_LEFT">
+        <Label fx:id="fpsLabel" focusTraversable="false" textFill="WHITE" StackPane.alignment="TOP_LEFT">
             <StackPane.margin>
                 <Insets left="10.0" top="5.0" />
             </StackPane.margin>
          <font>
-            <Font name="System Bold" size="12.0" />
+            <Font name="Pokemon GB" size="10.0" />
          </font>
         </Label>
+      <ImageView fx:id="imageSettings" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" smooth="false" StackPane.alignment="TOP_RIGHT">
+         <StackPane.margin>
+            <Insets right="10.0" top="5.0" />
+         </StackPane.margin>
+         <image>
+            <Image url="@../../res/menu/gear.png" />
+         </image>
+      </ImageView>
     </children>
 </StackPane>

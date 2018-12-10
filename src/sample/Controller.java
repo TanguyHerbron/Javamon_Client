@@ -25,6 +25,8 @@ public class Controller implements Initializable {
 
     @FXML private Canvas mainCanvas;
     @FXML private Label fpsLabel;
+    @FXML private ImageView imageSettings;
+
     private Player player;
     private Terrain terrain;
     private GraphicsContext graphicsContext;
@@ -180,6 +182,22 @@ public class Controller implements Initializable {
                 }
             }
         }).start();
+
+        setupSettingsButton();
+    }
+
+    private void setupSettingsButton()
+    {
+        imageSettings.setImage(new Image("/menu/gear.png"));
+        imageSettings.setFitHeight(24);
+        imageSettings.setFitWidth(24);
+
+        imageSettings.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                
+            }
+        });
     }
 
     private void displayAnimationAt(double x, double y)
