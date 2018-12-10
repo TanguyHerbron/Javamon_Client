@@ -7,6 +7,7 @@ import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
@@ -15,6 +16,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -26,6 +29,8 @@ public class Controller implements Initializable {
     @FXML private Canvas mainCanvas;
     @FXML private Label fpsLabel;
     @FXML private ImageView imageSettings;
+    @FXML private Pane dialogPane;
+    @FXML private Canvas dialogCanvas;
 
     private Player player;
     private Terrain terrain;
@@ -195,9 +200,11 @@ public class Controller implements Initializable {
         imageSettings.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                
+                dialogPane.setVisible(!dialogPane.isVisible());
             }
         });
+
+        dialogPane.setVisible(false);
     }
 
     private void displayAnimationAt(double x, double y)
@@ -283,17 +290,112 @@ public class Controller implements Initializable {
     private void drawBackground()
     {
         terrain.render(graphicsContext);
-        terrain.drawGrid(graphicsContext);
+        //terrain.drawGrid(graphicsContext);
 
-        /*if(path != null)
+        if(path != null)
         {
             path.render(graphicsContext);
         }
 
-        if(selectedSprite != null)
+        /*if(selectedSprite != null)
         {
             selectedSprite.render(graphicsContext);
         }*/
+
+        if(dialogPane.isVisible())
+        {
+            drawMenuBackground((int) Math.round(dialogCanvas.getWidth()), (int) Math.round(dialogCanvas.getHeight()));
+
+            drawMenuLine((int) Math.round(dialogCanvas.getWidth()), 0, "top");
+            drawMenuLine((int) Math.round(dialogCanvas.getWidth()), (int) Math.round(dialogCanvas.getHeight()) - 8, "bot");
+            drawMenuLine((int) Math.round(dialogCanvas.getHeight()), 0, "left");
+            drawMenuLine((int) Math.round(dialogCanvas.getHeight()), (int) Math.round(dialogCanvas.getWidth()) - 8, "right");
+
+            drawMenuAngle(0, 0, 0);
+            drawMenuAngle((int) Math.round(dialogCanvas.getWidth() - 8), 0, 90);
+            drawMenuAngle(0, (int) Math.round(dialogCanvas.getHeight() - 8), 270);
+            drawMenuAngle((int) Math.round(dialogCanvas.getWidth() - 8), (int) Math.round(dialogCanvas.getHeight() - 8), 180);
+        }
+    }
+
+    private void drawMenuBackground(int width, int height)
+    {
+        Image background = new Image("/menu/background.png");
+
+        for(int y = 8; y < height - 8; y += background.getHeight())
+        {
+            for(int x = 8; x < width - 8; x += background.getWidth())
+            {
+                dialogCanvas.getGraphicsContext2D().drawImage(background, x, y);
+            }
+        }
+    }
+
+    private void drawMenuLine(int size, int offset, String side)
+    {
+        Image line = new Image("/menu/line.png");
+
+        ImageView iv = new ImageView(line);
+        SnapshotParameters params = new SnapshotParameters();
+        params.setFill(Color.TRANSPARENT);
+
+        switch (side)
+        {
+            case "top":
+                iv.setRotate(0);
+
+                line = iv.snapshot(params, null);
+
+                for(int i = 8; i < size - 8; i+=8)
+                {
+                    dialogCanvas.getGraphicsContext2D().drawImage(line, i, offset);
+                }
+                break;
+            case "bot":
+                iv.setRotate(180);
+
+                line = iv.snapshot(params, null);
+
+                for(int i = 8; i < size - 8; i+=8)
+                {
+                    dialogCanvas.getGraphicsContext2D().drawImage(line, i, offset);
+                }
+                break;
+            case "left":
+                iv.setRotate(270);
+
+                line = iv.snapshot(params, null);
+
+                for(int i = 8; i < size - 8; i+=8)
+                {
+                    dialogCanvas.getGraphicsContext2D().drawImage(line, offset, i);
+                }
+                break;
+            case "right":
+                iv.setRotate(90);
+
+                line = iv.snapshot(params, null);
+
+                for(int i = 8; i < size - 8; i+=8)
+                {
+                    dialogCanvas.getGraphicsContext2D().drawImage(line, offset, i);
+                }
+                break;
+        }
+    }
+
+    private void drawMenuAngle(int x, int y, int rotation)
+    {
+        Image corner = new Image("/menu/corner.png");
+
+        ImageView iv = new ImageView(corner);
+        iv.setRotate(rotation);
+        SnapshotParameters params = new SnapshotParameters();
+        params.setFill(Color.TRANSPARENT);
+
+        corner = iv.snapshot(params, null);
+
+        dialogCanvas.getGraphicsContext2D().drawImage(corner, x, y);
     }
 
     private void renderObjects()

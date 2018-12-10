@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
@@ -27,5 +28,13 @@
             <Image url="@../../res/menu/gear.png" />
          </image>
       </ImageView>
+      <Pane fx:id="dialogPane" prefHeight="200.0" prefWidth="200.0">
+         <StackPane.margin>
+            <Insets bottom="40.0" left="20.0" right="20.0" top="40.0" />
+         </StackPane.margin>
+         <children>
+            <Canvas fx:id="dialogCanvas" height="420.0" width="460.0" />
+         </children>
+      </Pane>
     </children>
 </StackPane>
