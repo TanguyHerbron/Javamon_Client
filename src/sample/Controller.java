@@ -223,7 +223,7 @@ public class Controller implements Initializable {
 
     private void setupPlayer()
     {
-        player = new Player("old_man", 32, 32, 512, 512, 2);
+        player = new Player("scientist", 32, 32, 512, 512, 7);
         player.setPosition(mainCanvas.getWidth() / 2, mainCanvas.getHeight() / 2);
 
         sprites.add(player);

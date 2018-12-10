@@ -7,8 +7,8 @@ public class Player extends Entity {
     private int counter;
     private boolean walking;
 
-    public Player(String spriteName, double width, double height, double borderX, double borderY, int speed) {
-        super(spriteName, width, height, borderX, borderY, speed);
+    public Player(String spriteName, double width, double height, double borderX, double borderY, double speed) {
+        super(spriteName, width, height, borderX, borderY, speed / 5);
     }
 
     public void setWalking(boolean walking)

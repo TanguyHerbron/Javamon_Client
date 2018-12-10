@@ -6,11 +6,11 @@ import javafx.scene.canvas.GraphicsContext;
 
 public class Entity extends Sprite {
 
-    protected int speed;
+    protected double speed;
 
     protected char lastMove;
 
-    public Entity(String spriteName, double width, double height, double borderX, double borderY, int speed) {
+    public Entity(String spriteName, double width, double height, double borderX, double borderY, double speed) {
         super(spriteName, width, height, borderX, borderY);
 
         this.speed = speed;

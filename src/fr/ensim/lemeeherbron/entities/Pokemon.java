@@ -32,8 +32,8 @@ public class Pokemon extends Entity {
         {
             target = new Vec2f();
 
-            target.x = ((int) Math.round((Math.random() * 10) - 5)) * speed;
-            target.y = ((int) Math.round((Math.random() * 10) - 5)) * speed;
+            target.x = ((int) Math.round(((Math.random() * 10) - 5) * speed));
+            target.y = ((int) Math.round(((Math.random() * 10) - 5) * speed));
         }
     }
 
@@ -89,7 +89,7 @@ public class Pokemon extends Entity {
         target = new Vec2f(x, y);
     }
 
-    public int getSpeed()
+    public double getSpeed()
     {
         return speed;
     }
