@@ -36,6 +36,8 @@ public class Controller implements Initializable {
     @FXML private CheckBox checkBoxDrawPath;
     @FXML private CheckBox checkBoxShowFPS;
 
+    private Pokemon leviator;
+
     private Player player;
     private Terrain terrain;
     private GraphicsContext graphicsContext;
@@ -60,7 +62,6 @@ public class Controller implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         graphicsContext = mainCanvas.getGraphicsContext2D();
-        player = new Player("player", 512, 512, 2);
 
         terrain = new Terrain(0, 0);
         terrain.prepare();
@@ -68,12 +69,10 @@ public class Controller implements Initializable {
         sprites = new ArrayList<>();
         animatedSprites = new ArrayList<>();
 
-        player.setPosition(mainCanvas.getWidth() / 2, mainCanvas.getHeight() / 2);
+        setupPlayer();
 
         //addLokhlass();
-        addPikachu();
-
-        sprites.add(player);
+        //addPikachu();
 
         mainCanvas.setFocusTraversable(true);
 
@@ -135,7 +134,7 @@ public class Controller implements Initializable {
             @Override
             public void handle(MouseEvent event) {
 
-                int x = (int) Math.round(event.getX() / 16);
+                /*int x = (int) Math.round(event.getX() / 16);
                 int y = (int) Math.round(event.getY() / 16);
 
                 int xp = (int) Math.round(pikaSprite.getX() / 16);
@@ -146,7 +145,7 @@ public class Controller implements Initializable {
 
                 AStarPathFinder aStarPathFinder = new AStarPathFinder(terrain, 100);
 
-                path = aStarPathFinder.findPath(xp, xy, x, y);
+                path = aStarPathFinder.findPath(xp, xy, x, y);*/
             }
         });
 
@@ -210,6 +209,14 @@ public class Controller implements Initializable {
         }).start();
 
         setupSettingsButton();
+    }
+
+    private void setupPlayer()
+    {
+        player = new Player("leviator", 512, 512, 2);
+        player.setPosition(mainCanvas.getWidth() / 2, mainCanvas.getHeight() / 2);
+
+        sprites.add(player);
     }
 
     private void setupSettingsButton()

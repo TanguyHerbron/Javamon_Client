@@ -19,7 +19,7 @@ public class Sprite {
     private double borderX;
     private double borderY;
 
-    private boolean obstable;
+    private boolean obstacle;
 
     public Sprite(String spriteName, double borderX, double borderY)
     {
@@ -54,7 +54,7 @@ public class Sprite {
     {
         this(spriteName, borderX, borderY);
 
-        this.obstable = obstable;
+        this.obstacle = obstable;
     }
 
     public boolean checkMove(Terrain terrain)
@@ -62,7 +62,7 @@ public class Sprite {
         int index = 0;
         boolean found = false;
 
-        if(x + width > borderX || x < 0 || y + height > borderY || y < 0)
+        if(x + 32 > borderX || x < 0 || y + 32 > borderY || y < 0)
         {
             found = true;
         }
@@ -98,9 +98,9 @@ public class Sprite {
         this.y = y;
     }
 
-    public boolean isObstable()
+    public boolean isObstacle()
     {
-        return obstable;
+        return obstacle;
     }
 
     public void render(GraphicsContext graphicsContext)
@@ -119,7 +119,7 @@ public class Sprite {
         {
             if(!touchingSprites.contains(spr))
             {
-                if(spr.isObstable())
+                if(spr.isObstacle())
                 {
                     if(this instanceof Entity)
                     {
