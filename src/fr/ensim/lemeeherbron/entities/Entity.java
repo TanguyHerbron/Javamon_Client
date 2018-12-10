@@ -8,6 +8,7 @@ public class Entity extends Sprite {
 
     protected double speed;
 
+    private int counter;
     protected char lastMove;
 
     public Entity(String spriteName, double width, double height, double borderX, double borderY, double speed) {
@@ -98,22 +99,56 @@ public class Entity extends Sprite {
         switch (lastMove)
         {
             case 'u':
-                xPiece = 0;
-                yPiece = 0;
+                if(counter > 15)
+                {
+                    xPiece = 0;
+                    yPiece = 0;
+                }
+                else
+                {
+                    xPiece = 0;
+                    yPiece = 32;
+                }
                 break;
             case 'd':
-                xPiece = 0;
-                yPiece = 64;
+                if(counter > 15)
+                {
+                    xPiece = 0;
+                    yPiece = 64;
+                }
+                else
+                {
+                    xPiece = 0;
+                    yPiece = 96;
+                }
                 break;
             case 'l':
-                xPiece = 32;
-                yPiece = 0;
+                if(counter > 15)
+                {
+                    xPiece = 32;
+                    yPiece = 0;
+                }
+                else
+                {
+                    xPiece = 32;
+                    yPiece = 32;
+                }
                 break;
             case 'r':
-                xPiece = 32;
-                yPiece = 64;
+                if(counter > 15)
+                {
+                    xPiece = 32;
+                    yPiece = 64;
+                }
+                else
+                {
+                    xPiece = 32;
+                    yPiece = 96;
+                }
                 break;
         }
+
+        counter = (counter + 1) % 31;
 
         graphicsContext.drawImage(image, xPiece, yPiece, width, height, x, y, width, height);
     }

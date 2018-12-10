@@ -5,6 +5,7 @@ import fr.ensim.lemeeherbron.entities.AnimatedSprite;
 import fr.ensim.lemeeherbron.entities.Player;
 import fr.ensim.lemeeherbron.entities.Pokemon;
 import fr.ensim.lemeeherbron.entities.Sprite;
+import fr.ensim.lemeeherbron.terrain.pathfinder.AStarPathFinder;
 import fr.ensim.lemeeherbron.terrain.pathfinder.Path;
 import fr.ensim.lemeeherbron.terrain.Terrain;
 import javafx.animation.AnimationTimer;
@@ -75,6 +76,7 @@ public class Controller implements Initializable {
         animatedSprites = new ArrayList<>();
 
         setupPlayer();
+        addPikachu();
 
         //addLokhlass();
         //addPikachu();
@@ -144,7 +146,7 @@ public class Controller implements Initializable {
             @Override
             public void handle(MouseEvent event) {
 
-                /*int x = (int) Math.round(event.getX() / 16);
+                int x = (int) Math.round(event.getX() / 16);
                 int y = (int) Math.round(event.getY() / 16);
 
                 int xp = (int) Math.round(pikaSprite.getX() / 16);
@@ -155,7 +157,7 @@ public class Controller implements Initializable {
 
                 AStarPathFinder aStarPathFinder = new AStarPathFinder(terrain, 100);
 
-                path = aStarPathFinder.findPath(xp, xy, x, y);*/
+                path = aStarPathFinder.findPath(xp, xy, x, y);
             }
         });
 
@@ -284,7 +286,7 @@ public class Controller implements Initializable {
 
     private void addPikachu()
     {
-        pikaSprite = new Pokemon("pikachu", 32, 32, 512, 512, 10, true);
+        pikaSprite = new Pokemon("leviator", 32, 32, 512, 512, 10, true);
         pikaSprite.setPosition(380, 380);
 
         sprites.add(pikaSprite);
