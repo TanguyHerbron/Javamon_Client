@@ -104,4 +104,14 @@ public class Tile {
     {
         return ">> " + tl + " " + tr + " " + bl + " " + br;
     }
+
+    public int getWidth()
+    {
+        return (int) Math.round(image.getWidth());
+    }
+
+    public int getHeight()
+    {
+        return (int) Math.round(image.getHeight());
+    }
 }

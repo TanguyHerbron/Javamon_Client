@@ -1,7 +1,9 @@
 package fr.ensim.lemeeherbron;
 
+import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -230,5 +232,27 @@ public class Terrain {
     public Tile[][] getTiles()
     {
         return tileTable;
+    }
+
+    public void drawGrid(GraphicsContext graphicsContext)
+    {
+        int height = tileTable[0][0].getHeight();
+        int width = tileTable[0][0].getWidth();
+
+        graphicsContext.setLineWidth(1.0);
+        graphicsContext.setStroke(Color.WHITE);
+        graphicsContext.setGlobalAlpha(0.4);
+
+        for(int i = 0; i < tileTable.length; i++)
+        {
+            graphicsContext.strokeLine(i * height, 0, i * height, tileTable.length * height);
+        }
+
+        for(int i = 0; i < tileTable[0].length; i++)
+        {
+            graphicsContext.strokeLine(0, i * width, tileTable[0].length * width, i * width);
+        }
+
+        graphicsContext.setGlobalAlpha(1);
     }
 }

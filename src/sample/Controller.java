@@ -1,6 +1,5 @@
 package sample;
 
-import com.sun.javafx.geom.Vec2f;
 import fr.ensim.lemeeherbron.*;
 import fr.ensim.lemeeherbron.pathfinder.AStarPathFinder;
 import fr.ensim.lemeeherbron.pathfinder.Path;
@@ -12,6 +11,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -20,8 +20,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-
-import static javafx.scene.input.KeyCode.*;
 
 public class Controller implements Initializable {
 
@@ -34,7 +32,6 @@ public class Controller implements Initializable {
     private List<AnimatedSprite> animatedSprites;
 
     private List<Sprite> sprites;
-    private List<Image> backImage;
 
     //PATHFINDING
     private Pokemon pikaSprite;
@@ -66,13 +63,6 @@ public class Controller implements Initializable {
         addPikachu();
 
         sprites.add(player);
-
-        backImage = new ArrayList<>();
-
-        for(int i = 0; i < 4; i++)
-        {
-            backImage.add(new Image("/tile/grass_" + i + ".png"));
-        }
 
         mainCanvas.setFocusTraversable(true);
 
@@ -133,7 +123,6 @@ public class Controller implements Initializable {
         mainCanvas.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                //displayAnimation();
 
                 int x = (int) Math.round(event.getX() / 16);
                 int y = (int) Math.round(event.getY() / 16);
@@ -193,7 +182,7 @@ public class Controller implements Initializable {
         }).start();
     }
 
-    private void displayAnimation(double x, double y)
+    private void displayAnimationAt(double x, double y)
     {
         AnimatedSprite animatedSprite = new AnimatedSprite("explo", 512, 512, 6, x, y);
         animatedSprite.start();
@@ -276,6 +265,7 @@ public class Controller implements Initializable {
     private void drawBackground()
     {
         terrain.render(graphicsContext);
+        terrain.drawGrid(graphicsContext);
 
         /*if(path != null)
         {
