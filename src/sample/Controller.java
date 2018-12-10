@@ -10,6 +10,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -31,6 +32,9 @@ public class Controller implements Initializable {
     @FXML private ImageView imageSettings;
     @FXML private Pane dialogPane;
     @FXML private Canvas dialogCanvas;
+    @FXML private CheckBox checkBoxDrawGrid;
+    @FXML private CheckBox checkBoxDrawPath;
+    @FXML private CheckBox checkBoxShowFPS;
 
     private Player player;
     private Terrain terrain;
@@ -168,9 +172,26 @@ public class Controller implements Initializable {
                 drawBackground();
                 renderObjects();
 
-                computeFPS(now);
+                if(checkBoxShowFPS.isSelected())
+                {
+                    computeFPS(now);
+                }
             }
         }.start();
+
+        checkBoxShowFPS.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if(checkBoxShowFPS.isSelected())
+                {
+                    fpsLabel.setVisible(true);
+                }
+                else
+                {
+                    fpsLabel.setVisible(false);
+                }
+            }
+        });
 
         new Thread(new Runnable() {
             @Override
@@ -205,6 +226,7 @@ public class Controller implements Initializable {
         });
 
         dialogPane.setVisible(false);
+        fpsLabel.setVisible(false);
     }
 
     private void displayAnimationAt(double x, double y)
@@ -290,9 +312,13 @@ public class Controller implements Initializable {
     private void drawBackground()
     {
         terrain.render(graphicsContext);
-        //terrain.drawGrid(graphicsContext);
 
-        if(path != null)
+        if(checkBoxDrawGrid.isSelected())
+        {
+            terrain.drawGrid(graphicsContext);
+        }
+
+        if(checkBoxDrawPath.isSelected() && path != null)
         {
             path.render(graphicsContext);
         }
