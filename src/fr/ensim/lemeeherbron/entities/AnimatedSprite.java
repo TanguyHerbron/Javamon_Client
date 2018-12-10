@@ -1,4 +1,4 @@
-package fr.ensim.lemeeherbron;
+package fr.ensim.lemeeherbron.entities;
 
 import javafx.scene.canvas.GraphicsContext;
 
@@ -9,13 +9,13 @@ public class AnimatedSprite extends Thread {
     private int state;
     private boolean repeat;
 
-    public AnimatedSprite(String spritePath, double borderX, double borderY, int size, double x, double y)
+    public AnimatedSprite(String spritePath, double width, double height, double borderX, double borderY, int size, double x, double y)
     {
         sprites = new Sprite[size];
 
         for(int i = 0; i < sprites.length; i++)
         {
-            sprites[i] = new Sprite(spritePath + "_" + i, borderX, borderY);
+            sprites[i] = new Sprite(spritePath + "_" + i, width, height, borderX, borderY);
             sprites[i].setPosition(x - sprites[i].image.getWidth() / 2, y - sprites[i].image.getHeight() / 2);
         }
 

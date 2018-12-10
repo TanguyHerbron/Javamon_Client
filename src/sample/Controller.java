@@ -1,13 +1,16 @@
 package sample;
 
 import fr.ensim.lemeeherbron.*;
-import fr.ensim.lemeeherbron.pathfinder.AStarPathFinder;
-import fr.ensim.lemeeherbron.pathfinder.Path;
+import fr.ensim.lemeeherbron.entities.AnimatedSprite;
+import fr.ensim.lemeeherbron.entities.Player;
+import fr.ensim.lemeeherbron.entities.Pokemon;
+import fr.ensim.lemeeherbron.entities.Sprite;
+import fr.ensim.lemeeherbron.terrain.pathfinder.Path;
+import fr.ensim.lemeeherbron.terrain.Terrain;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.CheckBox;
@@ -18,7 +21,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -216,7 +218,7 @@ public class Controller implements Initializable {
 
     private void setupPlayer()
     {
-        player = new Player("leviator", 512, 512, 2);
+        player = new Player("leviator", 32, 32, 512, 512, 2);
         player.setPosition(mainCanvas.getWidth() / 2, mainCanvas.getHeight() / 2);
 
         sprites.add(player);
@@ -241,7 +243,7 @@ public class Controller implements Initializable {
 
     private void displayAnimationAt(double x, double y)
     {
-        AnimatedSprite animatedSprite = new AnimatedSprite("explo", 512, 512, 6, x, y);
+        AnimatedSprite animatedSprite = new AnimatedSprite("explo", 16, 16, 512, 512, 6, x, y);
         animatedSprite.start();
 
         animatedSprites.add(animatedSprite);
@@ -269,7 +271,7 @@ public class Controller implements Initializable {
 
     private void addLokhlass()
     {
-        Pokemon lokSprite = new Pokemon("lokhlass", 512, 512, 3, true);
+        Pokemon lokSprite = new Pokemon("lokhlass", 32, 32, 512, 512, 3, true);
         lokSprite.setPosition(mainCanvas.getWidth() / 4, mainCanvas.getHeight() / 4);
 
         sprites.add(lokSprite);
@@ -277,7 +279,7 @@ public class Controller implements Initializable {
 
     private void addPikachu()
     {
-        pikaSprite = new Pokemon("pikachu", 512, 512, 10, true);
+        pikaSprite = new Pokemon("pikachu", 32, 32, 512, 512, 10, true);
         pikaSprite.setPosition(380, 380);
 
         sprites.add(pikaSprite);
@@ -289,11 +291,11 @@ public class Controller implements Initializable {
         {
             if(sprite instanceof Pokemon)
             {
-                Entity entity = (Entity) sprite;
+                Entity entities = (Entity) sprite;
 
-                if(((Pokemon) entity).hasBehavior())
+                if(((Pokemon) entities).hasBehavior())
                 {
-                    ((Pokemon) entity).move(terrain);
+                    ((Pokemon) entities).move(terrain);
                 }
             }
         }*/

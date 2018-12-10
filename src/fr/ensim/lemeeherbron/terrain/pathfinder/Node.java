@@ -1,4 +1,4 @@
-package fr.ensim.lemeeherbron.pathfinder;
+package fr.ensim.lemeeherbron.terrain.pathfinder;
 
 public class Node implements Comparable {
 

@@ -1,4 +1,4 @@
-package fr.ensim.lemeeherbron;
+package fr.ensim.lemeeherbron.terrain;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;

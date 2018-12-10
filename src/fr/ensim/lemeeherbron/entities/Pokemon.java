@@ -1,14 +1,15 @@
-package fr.ensim.lemeeherbron;
+package fr.ensim.lemeeherbron.entities;
 
 import com.sun.javafx.geom.Vec2f;
+import fr.ensim.lemeeherbron.terrain.Terrain;
 
 public class Pokemon extends Entity {
 
     private boolean behavior;
     private Vec2f target;
 
-    public Pokemon(String spriteName, double borderX, double borderY, int speed, boolean behavior) {
-        super(spriteName, borderX, borderY, speed);
+    public Pokemon(String spriteName, int width, int height, double borderX, double borderY, int speed, boolean behavior) {
+        super(spriteName, width, height, borderX, borderY, speed);
 
         this.behavior = behavior;
     }

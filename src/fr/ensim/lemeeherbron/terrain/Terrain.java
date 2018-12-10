@@ -1,8 +1,7 @@
-package fr.ensim.lemeeherbron;
+package fr.ensim.lemeeherbron.terrain;
 
-import javafx.scene.canvas.Canvas;
+import fr.ensim.lemeeherbron.entities.Sprite;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 import javax.imageio.ImageIO;

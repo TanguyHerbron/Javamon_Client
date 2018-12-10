@@ -1,10 +1,8 @@
-package fr.ensim.lemeeherbron;
+package fr.ensim.lemeeherbron.entities;
 
-import com.sun.javafx.geom.Vec2d;
-import com.sun.javafx.geom.Vec2f;
+import fr.ensim.lemeeherbron.terrain.Terrain;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 
 public class Entity extends Sprite {
 
@@ -12,8 +10,15 @@ public class Entity extends Sprite {
 
     private char lastMove;
 
-    public Entity(String spriteName, double borderX, double boderY, int speed) {
-        super(spriteName, borderX, boderY);
+    public Entity(String spriteName, double width, double height, double borderX, double borderY, int speed) {
+        super(spriteName, width, height, borderX, borderY);
+
+        this.speed = speed;
+    }
+
+    public Entity(String spriteName, double borderX, double borderY, int speed)
+    {
+        super(spriteName, borderX, borderY);
 
         this.speed = speed;
     }
@@ -121,6 +126,6 @@ public class Entity extends Sprite {
                 break;
         }
 
-        graphicsContext.drawImage(image, xPiece, yPiece, 32, 32, x, y, 32, 32);
+        graphicsContext.drawImage(image, xPiece, yPiece, width, height, x, y, width, height);
     }
 }

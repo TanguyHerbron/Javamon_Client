@@ -1,4 +1,4 @@
-package fr.ensim.lemeeherbron.pathfinder;
+package fr.ensim.lemeeherbron.terrain.pathfinder;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;

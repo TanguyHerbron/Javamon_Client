@@ -1,5 +1,6 @@
-package fr.ensim.lemeeherbron;
+package fr.ensim.lemeeherbron.entities;
 
+import fr.ensim.lemeeherbron.terrain.Terrain;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -11,8 +12,8 @@ public class Sprite {
     protected Image image;
     protected double x;
     protected double y;
-    private double width;
-    private double height;
+    protected double width;
+    protected double height;
     protected String spriteName;
     private List<Sprite> touchingSprites;
 
@@ -38,9 +39,6 @@ public class Sprite {
             }
         }
 
-        this.width = image.getWidth();
-        this.height = image.getHeight();
-
         x = 0;
         y = 0;
 
@@ -48,13 +46,31 @@ public class Sprite {
 
         this.borderX = borderX;
         this.borderY = borderY;
+
+        if(width == 0)
+        {
+            width = image.getWidth();
+        }
+
+        if(height == 0)
+        {
+            height = image.getHeight();
+        }
     }
 
-    public Sprite(String spriteName, double borderX, double borderY, boolean obstable)
+    public Sprite(String spriteName, double width, double height, double borderX, double borderY)
     {
         this(spriteName, borderX, borderY);
 
-        this.obstacle = obstable;
+        this.width = width;
+        this.height = height;
+    }
+
+    public Sprite(String spriteName, double borderX, double borderY, boolean obstacle)
+    {
+        this(spriteName, borderX, borderY);
+
+        this.obstacle = obstacle;
     }
 
     public boolean checkMove(Terrain terrain)
@@ -62,7 +78,7 @@ public class Sprite {
         int index = 0;
         boolean found = false;
 
-        if(x + 32 > borderX || x < 0 || y + 32 > borderY || y < 0)
+        if(x + width > borderX || x < 0 || y + height > borderY || y < 0)
         {
             found = true;
         }

@@ -1,6 +1,6 @@
-package fr.ensim.lemeeherbron.pathfinder;
+package fr.ensim.lemeeherbron.terrain.pathfinder;
 
-import fr.ensim.lemeeherbron.Terrain;
+import fr.ensim.lemeeherbron.terrain.Terrain;
 
 import java.util.ArrayList;
 
