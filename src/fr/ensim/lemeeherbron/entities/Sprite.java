@@ -28,8 +28,6 @@ public class Sprite {
     {
         touchingSprites = new ArrayList<>();
 
-        System.out.println(">> " + "/sprite/" + spriteName + ".png");
-
         if(spriteName.equals(""))
         {
             image = new Image("/sprite/blank.png");;
