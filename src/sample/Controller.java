@@ -290,7 +290,7 @@ public class Controller implements Initializable {
 
     private void addPikachu()
     {
-        pikaSprite = new Pokemon("leviator", 32, 32, 512, 512, 10, true);
+        pikaSprite = new Pokemon("ptera", 32, 32, 512, 512, 10, true);
         pikaSprite.setPosition(380, 380);
 
         sprites.add(pikaSprite);

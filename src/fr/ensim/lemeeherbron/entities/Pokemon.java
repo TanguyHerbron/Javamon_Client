@@ -14,6 +14,13 @@ public class Pokemon extends Entity {
         this.behavior = behavior;
     }
 
+    @Override
+    public void setPosition(double x, double y)
+    {
+        this.x = x - 8;
+        this.y = y - 8;
+    }
+
     public void setBehavior(boolean behavior)
     {
         this.behavior = behavior;
@@ -22,19 +29,6 @@ public class Pokemon extends Entity {
     public boolean hasBehavior()
     {
         return behavior;
-    }
-
-    private void generateTarget()
-    {
-        int chance = (int) (Math.round(Math.random() * 50));
-
-        if(chance == 1)
-        {
-            target = new Vec2f();
-
-            target.x = ((int) Math.round(((Math.random() * 10) - 5) * speed));
-            target.y = ((int) Math.round(((Math.random() * 10) - 5) * speed));
-        }
     }
 
     public void move(Terrain terrain)
