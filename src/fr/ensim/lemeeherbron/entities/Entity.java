@@ -87,7 +87,7 @@ public class Entity extends Sprite {
     @Override
     public Rectangle2D getBoundary()
     {
-        return new Rectangle2D(x, y, 16, 16);
+        return new Rectangle2D(x + (width - 16 - (width - 16) / 2), y + (height - 16), 16, 16);
     }
 
     @Override

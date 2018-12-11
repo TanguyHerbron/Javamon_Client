@@ -126,7 +126,7 @@ public class Sprite {
 
     public Rectangle2D getBoundary()
     {
-        return new Rectangle2D(x, y, width - 8, height - 8);
+        return new Rectangle2D( x, y, 16, 16);
     }
 
     public synchronized boolean intersects(Sprite spr)
