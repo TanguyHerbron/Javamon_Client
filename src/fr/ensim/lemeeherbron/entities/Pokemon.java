@@ -9,7 +9,7 @@ public class Pokemon extends Entity {
     private Vec2f target;
 
     public Pokemon(String spriteName, int width, int height, double borderX, double borderY, int speed, boolean behavior) {
-        super(spriteName, width, height, borderX, borderY, speed);
+        super("pokemon/" + spriteName, width, height, borderX, borderY, speed);
 
         this.behavior = behavior;
     }
