@@ -58,7 +58,11 @@ public class Tile {
             try {
                 image = new Image(str);
             } catch (IllegalArgumentException e) {
-                image = new Image("/tile/default.png");
+                try {
+                    image = new Image("/tile/" + tilePath + ".png");
+                } catch (IllegalArgumentException e2) {
+                    image = new Image("/tile/default.png");
+                }
             }
         }
     }

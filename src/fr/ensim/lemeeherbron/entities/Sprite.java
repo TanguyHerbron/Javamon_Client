@@ -22,6 +22,8 @@ public class Sprite {
 
     private boolean obstacle;
 
+    private boolean portal;
+
     public Sprite(String spriteName, double borderX, double borderY)
     {
         touchingSprites = new ArrayList<>();
@@ -86,7 +88,7 @@ public class Sprite {
         {
             while(index < terrain.getObstacleList().size() && !found)
             {
-                if(intersects(terrain.getObstacleList().get(index)))
+                if(intersects(terrain.getObstacleList().get(index)) == 1)
                 {
                     found = true;
                 }
@@ -129,7 +131,7 @@ public class Sprite {
         return new Rectangle2D( x, y, 16, 16);
     }
 
-    public synchronized boolean intersects(Sprite spr)
+    public int intersects(Sprite spr)
     {
         if(spr.getBoundary().intersects(this.getBoundary()))
         {
@@ -144,9 +146,16 @@ public class Sprite {
                 }
                 else
                 {
-                    touchingSprites.add(spr);
+                    if(spr.portal)
+                    {
+                        return 2;
+                    }
+                    else
+                    {
+                        touchingSprites.add(spr);
 
-                    return true;
+                        return 1;
+                    }
                 }
             }
         }
@@ -155,6 +164,16 @@ public class Sprite {
             touchingSprites.remove(spr);
         }
 
-        return false;
+        return 0;
+    }
+
+    public String getSpriteName()
+    {
+        return spriteName;
+    }
+
+    public void setPortal(boolean portal)
+    {
+        this.portal = portal;
     }
 }

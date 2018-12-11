@@ -64,13 +64,14 @@ public class Controller implements Initializable {
     private int frameTimeIndex = 0;
     private boolean arrayFilled = false;
 
+    private boolean renderCanvas = true;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         graphicsContext = mainCanvas.getGraphicsContext2D();
 
         menuDrawer = new MenuDrawer(dialogCanvas);
         terrain = new Terrain(0, 0);
-        terrain.prepare();
 
         sprites = new ArrayList<>();
         animatedSprites = new ArrayList<>();
@@ -180,8 +181,11 @@ public class Controller implements Initializable {
                         break;
                 }
 
-                drawBackground();
-                renderObjects();
+                if(renderCanvas)
+                {
+                    drawBackground();
+                    renderObjects();
+                }
 
                 if(checkBoxShowFPS.isSelected())
                 {
@@ -358,10 +362,30 @@ public class Controller implements Initializable {
         for(Sprite sprite : sprites)
         {
             sprite.render(graphicsContext);
+        }
 
-            for(Sprite obs : terrain.getObstacleList())
+        for(Sprite obs : terrain.getObstacleList())
+        {
+            if(player.intersects(obs) == 2)
             {
-                sprite.intersects(obs);
+                player.setPosition(-1, -1);
+
+                switch (terrain.getValue())
+                {
+                    case "00":
+                        fadeOutTransition();
+                        terrain = new Terrain("inside1");
+                        player.setPosition(240, 288);
+                        break;
+                    case "inside1":
+                        fadeOutTransition();
+                        terrain = new Terrain(0, 0);
+                        player.setPosition(304, 256);
+                        break;
+                }
+
+                sprites.clear();
+                sprites.add(player);
             }
         }
 
@@ -380,5 +404,51 @@ public class Controller implements Initializable {
 
             index++;
         }
+    }
+
+    private void fadeOutTransition()
+    {
+        renderCanvas = false;
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while(mainCanvas.getOpacity() > 0)
+                {
+                    mainCanvas.setOpacity(mainCanvas.getOpacity() - 0.1);
+
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                while(!terrain.isReady());
+
+                fadeInTransition();
+            }
+        }).start();
+    }
+
+    private void fadeInTransition()
+    {
+        renderCanvas = true;
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while(mainCanvas.getOpacity() < 1)
+                {
+                    mainCanvas.setOpacity(mainCanvas.getOpacity() + 0.1);
+
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
     }
 }
