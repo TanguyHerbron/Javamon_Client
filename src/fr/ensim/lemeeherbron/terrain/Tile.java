@@ -76,7 +76,7 @@ public class Tile {
             {
                 if(!bl && !br)
                 {
-                    orgY = 32;
+                    orgY = 34;
 
                     computeOrgX(tl, tr);
                 }
@@ -84,21 +84,21 @@ public class Tile {
                 {
                     if(Stream.of(tl, tr, bl, br).filter(p -> !p).count() == 1)
                     {
-                        orgY = 48;
+                        orgY = 51;
 
                         if(!br) orgX = 0;
-                        else if(!bl) orgX = 16;
+                        else if(!bl) orgX = 17;
                         else
                         {
-                            orgY = 64;
+                            orgY = 67;
 
                             if(!tr) orgX = 0;
-                            else if(!tl) orgX = 16;
+                            else if(!tl) orgX = 17;
                         }
                     }
                     else
                     {
-                        orgY = 16;
+                        orgY = 17;
 
                         computeOrgX(tl && bl, tr && br);
                     }
@@ -110,8 +110,8 @@ public class Tile {
     private void computeOrgX(boolean b1, boolean b2)
     {
         if(!b1) orgX = 0;
-        else if (!b2) orgX = 32;
-        else orgX = 16;
+        else if (!b2) orgX = 34;
+        else orgX = 17;
     }
 
     public boolean getTl() {
