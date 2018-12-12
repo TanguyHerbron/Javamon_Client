@@ -26,6 +26,7 @@ import javafx.scene.layout.Pane;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
@@ -300,7 +301,9 @@ public class Controller implements Initializable {
     {
         /*for(Sprite sprite : sprites)
         {
-            if(sprite instanceof Pokemon)
+            Pokemon pokemon = (Pokemon) sprite;
+
+            if(pokemon.hasBehavior())
             {
                 Entity entities = (Entity) sprite;
 
@@ -362,7 +365,6 @@ public class Controller implements Initializable {
         for(Sprite sprite : sprites)
         {
             sprite.render(graphicsContext);
-        }
 
         for(Sprite obs : terrain.getObstacleList())
         {
