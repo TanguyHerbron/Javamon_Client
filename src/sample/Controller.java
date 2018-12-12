@@ -71,7 +71,7 @@ public class Controller implements Initializable {
         graphicsContext = mainCanvas.getGraphicsContext2D();
 
         menuDrawer = new MenuDrawer(dialogCanvas);
-        terrain = new Terrain(0, 0);
+        terrain = new Terrain(1, 0);
 
         sprites = new ArrayList<>();
         animatedSprites = new ArrayList<>();

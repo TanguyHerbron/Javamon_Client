@@ -3,10 +3,17 @@ package fr.ensim.lemeeherbron.terrain;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Stream;
+
 public class Tile {
 
     private Image image;
     private String tilePath;
+
+    private int randomTextNumber;
 
     private boolean tl = false;
     private boolean tr = false;
@@ -16,9 +23,12 @@ public class Tile {
     private int x;
     private int y;
 
+    private int orgX;
+    private int orgY;
+
     public Tile(String tilePath, int x, int y, boolean isVariant)
     {
-        this.tilePath = tilePath;
+        image = new Image("/tile/" + tilePath + ".png");
 
         this.x = x;
         this.y = y;
@@ -39,7 +49,9 @@ public class Tile {
 
     public Tile(String tilePath, int x, int y, int random)
     {
-        image = new Image("/tile/" + tilePath + "_" + (((int) Math.round(Math.random() * random))) + ".png");
+        image = new Image("/tile/" + tilePath + ".png");
+
+        this.randomTextNumber = random;
 
         this.x = x;
         this.y = y;
@@ -47,24 +59,59 @@ public class Tile {
 
     public void render(GraphicsContext graphicsContext)
     {
-        graphicsContext.drawImage(image, x, y);
+        graphicsContext.drawImage(image, orgX, orgY, 16, 16, x, y, 16, 16);
     }
 
     public void construct()
     {
-        if(image == null && tilePath != null)
+        if(image != null)
         {
-            String str = "/tile/" + tilePath + "_" + (tl ? 1 : 0) + (tr ? 1 : 0) + (bl ? 1 : 0) + (br ? 1 : 0) + ".png";
-            try {
-                image = new Image(str);
-            } catch (IllegalArgumentException e) {
-                try {
-                    image = new Image("/tile/" + tilePath + ".png");
-                } catch (IllegalArgumentException e2) {
-                    image = new Image("/tile/default.png");
+            if(!tl && !tr)
+            {
+                orgY = 0;
+
+                computeOrgX(bl, br);
+            }
+            else
+            {
+                if(!bl && !br)
+                {
+                    orgY = 32;
+
+                    computeOrgX(tl, tr);
+                }
+                else
+                {
+                    if(Stream.of(tl, tr, bl, br).filter(p -> !p).count() == 1)
+                    {
+                        orgY = 48;
+
+                        if(!br) orgX = 0;
+                        else if(!bl) orgX = 16;
+                        else
+                        {
+                            orgY = 64;
+
+                            if(!tr) orgX = 0;
+                            else if(!tl) orgX = 16;
+                        }
+                    }
+                    else
+                    {
+                        orgY = 16;
+
+                        computeOrgX(tl && bl, tr && br);
+                    }
                 }
             }
         }
+    }
+
+    private void computeOrgX(boolean b1, boolean b2)
+    {
+        if(!b1) orgX = 0;
+        else if (!b2) orgX = 32;
+        else orgX = 16;
     }
 
     public boolean getTl() {
