@@ -362,9 +362,9 @@ public class Controller implements Initializable {
 
     private void renderObjects()
     {
-        for(Sprite sprite : sprites)
-        {
+        for(Sprite sprite : sprites) {
             sprite.render(graphicsContext);
+        }
 
         for(Sprite obs : terrain.getObstacleList())
         {
