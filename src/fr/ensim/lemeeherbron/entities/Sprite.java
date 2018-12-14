@@ -88,7 +88,7 @@ public class Sprite {
         {
             while(index < terrain.getObstacleList().size() && !found)
             {
-                if(intersects(terrain.getObstacleList().get(index)) == 1)
+                if(terrain.getObstacleList().get(index).isObstacle() && intersects(terrain.getObstacleList().get(index)) == 1)
                 {
                     found = true;
                 }

@@ -174,8 +174,7 @@ public class Terrain {
                 sprite.setPortal(true);
                 break;
             case "e5":
-                sprite = new Sprite("carpet", 512, 512);
-                sprite.setPortal(true);
+                sprite = new Sprite("carpet", 512, 512, false);
                 break;
         }
 
