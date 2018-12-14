@@ -320,21 +320,18 @@ public class Terrain {
 
     public void drawGrid(GraphicsContext graphicsContext)
     {
-        int height = tileTable[0][0].getHeight();
-        int width = tileTable[0][0].getWidth();
-
         graphicsContext.setLineWidth(1.0);
         graphicsContext.setStroke(Color.WHITE);
         graphicsContext.setGlobalAlpha(0.4);
 
         for(int i = 0; i < tileTable.length; i++)
         {
-            graphicsContext.strokeLine(i * height, 0, i * height, tileTable.length * height);
+            graphicsContext.strokeLine(i * 16, 0, i * 16, tileTable.length * 16);
         }
 
         for(int i = 0; i < tileTable[0].length; i++)
         {
-            graphicsContext.strokeLine(0, i * width, tileTable[0].length * width, i * width);
+            graphicsContext.strokeLine(0, i * 16, tileTable[0].length * 16, i * 16);
         }
 
         graphicsContext.setGlobalAlpha(1);
