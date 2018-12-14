@@ -66,42 +66,80 @@ public class Tile {
     {
         if(image != null)
         {
-            if(!tl && !tr)
+            if(randomTextNumber != 0)
             {
-                orgY = 0;
-
-                computeOrgX(bl, br);
-            }
-            else
-            {
-                if(!bl && !br)
+                if(Math.random() * 10 > 9)
                 {
-                    orgY = 34;
-
-                    computeOrgX(tl, tr);
+                    switch ((int) Math.round(Math.random() * randomTextNumber))
+                    {
+                        case 0:
+                            orgX = 17;
+                            orgY = 0;
+                            break;
+                        case 1:
+                            orgX = 0;
+                            orgY = 17;
+                            break;
+                        case 2:
+                            orgX = 17;
+                            orgY = 17;
+                            break;
+                        default :
+                            orgX = 0;
+                            orgY = 0;
+                            break;
+                    }
                 }
                 else
                 {
-                    if(Stream.of(tl, tr, bl, br).filter(p -> !p).count() == 1)
-                    {
-                        orgY = 51;
+                    orgX = 0;
+                    orgY = 0;
+                }
+            }
+            else
+            {
+                selectVariant();
+            }
+        }
+    }
 
-                        if(!br) orgX = 0;
-                        else if(!bl) orgX = 17;
-                        else
-                        {
-                            orgY = 67;
+    private void selectVariant()
+    {
+        if(!tl && !tr)
+        {
+            orgY = 0;
 
-                            if(!tr) orgX = 0;
-                            else if(!tl) orgX = 17;
-                        }
-                    }
+            computeOrgX(bl, br);
+        }
+        else
+        {
+            if(!bl && !br)
+            {
+                orgY = 34;
+
+                computeOrgX(tl, tr);
+            }
+            else
+            {
+                if(Stream.of(tl, tr, bl, br).filter(p -> !p).count() == 1)
+                {
+                    orgY = 51;
+
+                    if(!br) orgX = 0;
+                    else if(!bl) orgX = 17;
                     else
                     {
-                        orgY = 17;
+                        orgY = 67;
 
-                        computeOrgX(tl && bl, tr && br);
+                        if(!tr) orgX = 0;
+                        else if(!tl) orgX = 17;
                     }
+                }
+                else
+                {
+                    orgY = 17;
+
+                    computeOrgX(tl && bl, tr && br);
                 }
             }
         }
