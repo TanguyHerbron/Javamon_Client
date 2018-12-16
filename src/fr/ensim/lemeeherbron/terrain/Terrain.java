@@ -1,6 +1,7 @@
 package fr.ensim.lemeeherbron.terrain;
 
 import fr.ensim.lemeeherbron.entities.Sprite;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -287,6 +288,10 @@ public class Terrain {
         for(Sprite sprite : obstacleList)
         {
             sprite.render(graphicsContext);
+
+            Rectangle2D rec = sprite.getBoundary();
+            graphicsContext.setFill(Color.BLUE);
+            graphicsContext.fillRect(rec.getMinX(), rec.getMinY(), rec.getWidth(), rec.getHeight());
         }
     }
 

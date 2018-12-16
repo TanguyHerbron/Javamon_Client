@@ -12,6 +12,7 @@ import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.CheckBox;
@@ -22,6 +23,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -364,6 +366,13 @@ public class Controller implements Initializable {
     {
         for(Sprite sprite : sprites) {
             sprite.render(graphicsContext);
+
+            if(sprite instanceof Pokemon || sprite instanceof Player)
+            {
+                Rectangle2D rec = sprite.getBoundary();
+                graphicsContext.setFill(Color.BLUE);
+                graphicsContext.fillRect(rec.getMinX(), rec.getMinY(), rec.getWidth(), rec.getHeight());
+            }
         }
 
         for(Sprite obs : terrain.getObstacleList())
