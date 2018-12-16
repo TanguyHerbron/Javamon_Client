@@ -14,11 +14,33 @@ public class Pokemon extends Entity {
         this.behavior = behavior;
     }
 
+    public void setPosX(double x)
+    {
+        this.x = x - 8;
+    }
+
+    public void setPosY(double y)
+    {
+        this.y = y - 16;
+    }
+
     @Override
     public void setPosition(double x, double y)
     {
-        this.x = x - 8;
-        this.y = y - 8;
+        setPosX(x);
+        setPosY(y);
+    }
+
+    @Override
+    public double getX()
+    {
+        return getBoundary().getMinX();
+    }
+
+    @Override
+    public double getY()
+    {
+        return getBoundary().getMinY();
     }
 
     public void setBehavior(boolean behavior)
@@ -33,8 +55,8 @@ public class Pokemon extends Entity {
 
     public void move(Terrain terrain)
     {
-        double x = Math.round(this.x);
-        double y = Math.round(this.y);
+        double x = Math.round(getBoundary().getMinX());
+        double y = Math.round(getBoundary().getMinY());
 
         if(target != null && (target.x != x || target.y != y))
         {
@@ -61,17 +83,17 @@ public class Pokemon extends Entity {
                 }
             }
 
-            if(Math.abs(target.x - this.x) < speed)
+            if(Math.abs(target.x - getX()) < speed)
             {
-                this.x = target.x;
+                setPosX(target.x);
             }
 
-            if(Math.abs(target.y - this.y) < speed)
+            if(Math.abs(target.y - getY()) < speed)
             {
-                this.y = target.y;
+                setPosY(target.y);
             }
 
-            if(this.x == target.x && this.y == target.y)
+            if(getX() == target.x && getY() == target.y)
             {
                 target = null;
             }

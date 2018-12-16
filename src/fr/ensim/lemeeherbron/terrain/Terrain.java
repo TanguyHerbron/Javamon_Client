@@ -288,10 +288,6 @@ public class Terrain {
         for(Sprite sprite : obstacleList)
         {
             sprite.render(graphicsContext);
-
-            Rectangle2D rec = sprite.getBoundary();
-            graphicsContext.setFill(Color.BLUE);
-            graphicsContext.fillRect(rec.getMinX(), rec.getMinY(), rec.getWidth(), rec.getHeight());
         }
     }
 

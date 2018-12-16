@@ -21,6 +21,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -41,6 +42,7 @@ public class Controller implements Initializable {
     @FXML private CheckBox checkBoxDrawGrid;
     @FXML private CheckBox checkBoxDrawPath;
     @FXML private CheckBox checkBoxShowFPS;
+    @FXML private CheckBox checkBoxShowHitBox;
 
     private Pokemon leviator;
 
@@ -150,11 +152,11 @@ public class Controller implements Initializable {
             @Override
             public void handle(MouseEvent event) {
 
-                int x = (int) Math.round(event.getX() / 16);
-                int y = (int) Math.round(event.getY() / 16);
+                int x = (int) Math.floor(event.getX() / 16);
+                int y = (int) Math.floor(event.getY() / 16);
 
-                int xp = (int) Math.round(pikaSprite.getX() / 16);
-                int xy = (int) Math.round(pikaSprite.getY() / 16);
+                int xp = (int) Math.floor(pikaSprite.getX() / 16);
+                int xy = (int) Math.floor(pikaSprite.getY() / 16);
 
                 selectedSprite = new Sprite("selected", 512, 512);
                 selectedSprite.setPosition(x * 16, y * 16);
@@ -162,6 +164,11 @@ public class Controller implements Initializable {
                 AStarPathFinder aStarPathFinder = new AStarPathFinder(terrain, 100);
 
                 path = aStarPathFinder.findPath(xp, xy, x, y);
+
+                for(int i = 0; i < path.getLength(); i++)
+                {
+                    System.out.println(">> " + i + " " + path.getStep(i).getX() / 16 + " " + path.getStep(i).getY() / 16);
+                }
             }
         });
 
@@ -293,8 +300,8 @@ public class Controller implements Initializable {
 
     private void addPikachu()
     {
-        pikaSprite = new Pokemon("leviator", 32, 32, 512, 512, 10, true);
-        pikaSprite.setPosition(380, 380);
+        pikaSprite = new Pokemon("leviator", 32, 32, 512, 512, 2, true);
+        pikaSprite.setPosition(20 * 16, 20 * 16);
 
         sprites.add(pikaSprite);
     }
@@ -344,6 +351,11 @@ public class Controller implements Initializable {
         if(checkBoxDrawGrid.isSelected())
         {
             terrain.drawGrid(graphicsContext);
+
+            if(selectedSprite != null)
+            {
+                selectedSprite.render(graphicsContext);
+            }
         }
 
         if(checkBoxDrawPath.isSelected() && path != null)
@@ -366,13 +378,6 @@ public class Controller implements Initializable {
     {
         for(Sprite sprite : sprites) {
             sprite.render(graphicsContext);
-
-            if(sprite instanceof Pokemon || sprite instanceof Player)
-            {
-                Rectangle2D rec = sprite.getBoundary();
-                graphicsContext.setFill(Color.BLUE);
-                graphicsContext.fillRect(rec.getMinX(), rec.getMinY(), rec.getWidth(), rec.getHeight());
-            }
         }
 
         for(Sprite obs : terrain.getObstacleList())
@@ -414,6 +419,23 @@ public class Controller implements Initializable {
             }
 
             index++;
+        }
+
+        if(checkBoxShowHitBox.isSelected())
+        {
+            for(Sprite sprite : terrain.getObstacleList())
+            {
+                Rectangle2D rec = sprite.getBoundary();
+                graphicsContext.setFill(Color.BLUE);
+                graphicsContext.fillRect(rec.getMinX(), rec.getMinY(), rec.getWidth(), rec.getHeight());
+            }
+
+            for(Sprite sprite : sprites)
+            {
+                Rectangle2D rec = sprite.getBoundary();
+                graphicsContext.setFill(Color.BLUE);
+                graphicsContext.fillRect(rec.getMinX(), rec.getMinY(), rec.getWidth(), rec.getHeight());
+            }
         }
     }
 
