@@ -24,7 +24,7 @@ public class GameSpine {
     {
         this.graphicsContext = graphicsContext;
 
-        terrain = new Terrain(0, 0);
+        terrain = Terrain.build(0, 0);
 
         sprites = new ArrayList<>();
         animatedSprites = new ArrayList<>();
@@ -34,7 +34,7 @@ public class GameSpine {
 
     private void setupPlayer()
     {
-        player = new Player("scientist", 32, 32, 512, 512, 7);
+        player = new Player("scientist",512, 512, 7);
         player.setPosition(25 * 16, 20 * 16);
 
         sprites.add(player);
@@ -117,12 +117,12 @@ public class GameSpine {
                 switch (terrain.getValue())
                 {
                     case "00":
-                        terrain = new Terrain("inside1");
+                        terrain = Terrain.build("inside1");
                         player.setPosition(240, 288);
                         switchMap = true;
                         break;
                     case "inside1":
-                        terrain = new Terrain(0, 0);
+                        terrain = Terrain.build(0, 0);
                         player.setPosition(304, 256);
                         switchMap = true;
                         break;

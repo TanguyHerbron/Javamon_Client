@@ -1,9 +1,14 @@
 package fr.ensim.lemeeherbron.entities;
 
+import fr.ensim.lemeeherbron.terrain.Terrain;
 import javafx.event.EventHandler;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Color;
+
+import java.util.List;
 
 public class Player extends Entity implements EventHandler<KeyEvent> {
 
@@ -13,8 +18,8 @@ public class Player extends Entity implements EventHandler<KeyEvent> {
     private char direction = '0';
     private int numberKeyPressed;
 
-    public Player(String spriteName, double width, double height, double borderX, double borderY, double speed) {
-        super("npc/" + spriteName, width, height, borderX, borderY, speed / 5);
+    public Player(String spriteName, double borderX, double borderY, double speed) {
+        super("npc/" + spriteName, 32, 32, borderX, borderY, speed / 5);
     }
 
     public char getDirection()
@@ -177,8 +182,60 @@ public class Player extends Entity implements EventHandler<KeyEvent> {
 
         if(numberKeyPressed == 0)
         {
-            direction = '0';
             walking = false;
+            direction = '0';
+        }
+
+        if(keyCode.equals(KeyCode.E))
+        {
+            double lookingX = getBoundary().getMinX();
+            double lookingY = getBoundary().getMinY();
+
+            int width = 16;
+            int height = 16;
+
+            boolean found = false;
+            int index = 0;
+            List<Sprite> obstacles = Terrain.getInstance().getObstacleList();
+
+            switch (lastMove)
+            {
+                case 'u':
+                    lookingY -= 4;
+                    height = 4;
+                    break;
+                case 'd':
+                    lookingY += 16;
+                    height = 4;
+                    break;
+                case 'l':
+                    lookingX -= 4;
+                    width = 4;
+                    break;
+                case 'r':
+                    lookingX += 16;
+                    width = 4;
+                    break;
+            }
+
+            Rectangle2D lookingRec = new Rectangle2D(lookingX, lookingY, width, height);
+
+            while(!found && index < obstacles.size())
+            {
+                if(obstacles.get(index).getBoundary().intersects(lookingRec))
+                {
+                    found = true;
+
+                    System.out.println("Found NPC at");
+                }
+
+                index++;
+            }
+
+            if(!found)
+            {
+                System.out.println("No NPC");
+            }
         }
     }
 }

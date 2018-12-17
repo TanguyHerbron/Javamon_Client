@@ -21,7 +21,28 @@ public class Terrain {
 
     private boolean ready;
 
-    public Terrain(int x, int y)
+    private static Terrain INSTANCE;
+
+    public static Terrain getInstance()
+    {
+        return INSTANCE;
+    }
+
+    public static Terrain build(String name)
+    {
+        INSTANCE = new Terrain(name);
+
+        return INSTANCE;
+    }
+
+    public static Terrain build(int x, int y)
+    {
+        INSTANCE = new Terrain(x, y);
+
+        return INSTANCE;
+    }
+
+    private Terrain(int x, int y)
     {
         tileTable = new Tile[32][32];
         obstacleList = new ArrayList<>();
@@ -31,7 +52,7 @@ public class Terrain {
         prepare(x, y);
     }
 
-    public Terrain(String insideName)
+    private Terrain(String insideName)
     {
         tileTable = new Tile[32][32];
         obstacleList = new ArrayList<>();
@@ -176,6 +197,9 @@ public class Terrain {
                 break;
             case "e5":
                 sprite = new Sprite("carpet", 512, 512, false);
+                break;
+            case "e2":
+                sprite = new Sprite("bar", 512, 512, false);
                 break;
         }
 
