@@ -1,0 +1,5 @@
+<properties>
+	<entry key="sprite">pikachu</entry>
+	<entry key="speed">5</entry>
+	<entry key="behavior">false</entry>
+</properties>

@@ -17,6 +17,10 @@ public class Pokemon extends Entity {
         this.behavior = behavior;
     }
 
+    public Pokemon(String spriteName, double borderX, double borderY, int speed, boolean behavior) {
+        this(spriteName, 32, 32, borderX, borderY, speed, behavior);
+    }
+
     public Pokemon(String spriteName, int width, int height, double borderX, double borderY, int speed, boolean behavior, Terrain terrain)
     {
         this(spriteName, width, height, borderX, borderY, speed, behavior);
@@ -146,5 +150,11 @@ public class Pokemon extends Entity {
     private boolean hasTarget()
     {
         return target != null;
+    }
+
+    @Override
+    public String toString()
+    {
+        return ">> " + spriteName + " " + speed + " " + behavior;
     }
 }
