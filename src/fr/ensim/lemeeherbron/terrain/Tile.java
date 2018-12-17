@@ -4,6 +4,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
@@ -62,16 +63,7 @@ public class Tile {
 
     public void render(GraphicsContext graphicsContext)
     {
-        PixelReader reader = image.getPixelReader();
-        PixelWriter writer = graphicsContext.getPixelWriter();
-        for (int x = 0; x < 16; x++) {
-            for (int y = 0; y < 16; y++) {
-                Color color = reader.getColor(orgX + x, orgY + y);
-                if (color.isOpaque()) {
-                    writer.setColor(this.x + x, this.y + y, color);
-                }
-            }
-        }
+        graphicsContext.drawImage(image, x, y);
     }
 
     public void construct()
@@ -113,6 +105,26 @@ public class Tile {
                 selectVariant();
             }
         }
+
+        loadImage();
+    }
+
+    private void loadImage()
+    {
+        WritableImage resampledImage = new WritableImage(16, 16);
+
+        PixelReader reader = image.getPixelReader();
+        PixelWriter writer = resampledImage.getPixelWriter();
+        for (int x = 0; x < 16; x++) {
+            for (int y = 0; y < 16; y++) {
+                Color color = reader.getColor(orgX + x, orgY + y);
+                if (color.isOpaque()) {
+                    writer.setColor(x, y, color);
+                }
+            }
+        }
+
+        image = resampledImage;
     }
 
     private void selectVariant()
