@@ -1,19 +1,25 @@
 package fr.ensim.lemeeherbron.entities;
 
+import javafx.event.EventHandler;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 
-public class Player extends Entity {
+public class Player extends Entity implements EventHandler<KeyEvent> {
 
     private int counter;
     private boolean walking;
+
+    private char direction = '0';
+    private int numberKeyPressed;
 
     public Player(String spriteName, double width, double height, double borderX, double borderY, double speed) {
         super("npc/" + spriteName, width, height, borderX, borderY, speed / 5);
     }
 
-    public void setWalking(boolean walking)
+    public char getDirection()
     {
-        this.walking = walking;
+        return direction;
     }
 
     @Override
@@ -108,5 +114,71 @@ public class Player extends Entity {
         counter = (counter + 1) % 31;
 
         graphicsContext.drawImage(image, xPiece, yPiece, width, height, x, y, width, height);
+    }
+
+    @Override
+    public void handle(KeyEvent event) {
+        if(event.getEventType() == KeyEvent.KEY_PRESSED)
+        {
+            keyPressedEvent(event.getCode());
+        }
+
+        if(event.getEventType() == KeyEvent.KEY_RELEASED)
+        {
+            keyReleasedEvent(event.getCode());
+        }
+    }
+
+    private void keyPressedEvent(KeyCode keyCode)
+    {
+        switch (keyCode)
+        {
+            case Z:
+                if(direction != 'u')
+                {
+                    direction = 'u';
+                    numberKeyPressed++;
+                    walking = true;
+                }
+                break;
+            case S:
+                if(direction != 'd')
+                {
+                    direction = 'd';
+                    numberKeyPressed++;
+                    walking = true;
+                }
+                break;
+            case Q:
+                if(direction != 'l')
+                {
+                    direction = 'l';
+                    numberKeyPressed++;
+                    walking = true;
+                }
+                break;
+            case D:
+                if(direction != 'r')
+                {
+                    direction = 'r';
+                    numberKeyPressed++;
+                    walking = true;
+                }
+                break;
+        }
+    }
+
+    private void keyReleasedEvent(KeyCode keyCode)
+    {
+        if(keyCode.equals(KeyCode.Z) || keyCode.equals(KeyCode.Q) || keyCode.equals(KeyCode.S) || keyCode.equals(KeyCode.D))
+        {
+            numberKeyPressed--;
+        }
+
+        if(numberKeyPressed == 0)
+        {
+            direction = '0';
+            walking = false;
+        }
     }
 }
