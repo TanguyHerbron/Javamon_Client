@@ -1,4 +1,4 @@
-package sample;
+package sample.Controllers;
 
 import fr.ensim.lemeeherbron.*;
 import fr.ensim.lemeeherbron.entities.AnimatedSprite;
@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.ResourceBundle;
 
-public class Controller implements Initializable {
+public class WindowController implements Initializable {
 
     @FXML private Canvas mainCanvas;
     @FXML private Label fpsLabel;

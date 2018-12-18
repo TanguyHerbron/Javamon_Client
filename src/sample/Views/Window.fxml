@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500" prefWidth="500" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500" prefWidth="500" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controllers.WindowController">
     <children>
         <Canvas fx:id="mainCanvas" height="512" width="512" />
         <Label fx:id="fpsLabel" focusTraversable="false" text="-- FPS" textFill="WHITE" StackPane.alignment="TOP_LEFT">
@@ -27,7 +27,7 @@
             <Insets right="10.0" top="5.0" />
          </StackPane.margin>
          <image>
-            <Image url="@../../res/menu/gear.png" />
+            <Image url="@../../../res/menu/gear.png" />
          </image>
       </ImageView>
       <Pane fx:id="dialogPane" prefHeight="200.0" prefWidth="200.0">

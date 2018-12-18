@@ -6,14 +6,17 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import sample.Controllers.StartScreenController;
 
-public class Main extends Application {
+public class MainNetwork extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("Views/Window.fxml"));
-        primaryStage.setTitle("Javamon");
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Views/StartScreen.fxml"));
+        Parent root = fxmlLoader.load();
+        primaryStage.setTitle("Javamon - Client");
         primaryStage.setScene(new Scene(root, 512, 512));
+        StartScreenController startScreenController = fxmlLoader.<StartScreenController>getController();
         primaryStage.getIcons().add(new Image("/icon.png"));
         primaryStage.show();
     }
