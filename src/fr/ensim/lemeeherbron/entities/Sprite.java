@@ -20,7 +20,7 @@ public class Sprite {
     private double borderX;
     private double borderY;
 
-    private boolean obstacle;
+    protected boolean obstacle;
 
     private boolean portal;
 

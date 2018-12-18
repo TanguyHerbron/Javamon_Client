@@ -222,19 +222,14 @@ public class Player extends Entity implements EventHandler<KeyEvent> {
 
             while(!found && index < obstacles.size())
             {
-                if(obstacles.get(index).getBoundary().intersects(lookingRec))
+                if(obstacles.get(index) instanceof NPC && obstacles.get(index).getBoundary().intersects(lookingRec))
                 {
                     found = true;
 
-                    System.out.println("Found NPC at");
+                    ((NPC) obstacles.get(index)).interact();
                 }
 
                 index++;
-            }
-
-            if(!found)
-            {
-                System.out.println("No NPC");
             }
         }
     }

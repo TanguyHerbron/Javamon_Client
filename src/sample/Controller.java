@@ -21,7 +21,9 @@ public class Controller extends AnimationTimer implements Initializable {
     @FXML private Canvas mainCanvas;
     @FXML private Label fpsLabel;
     @FXML private ImageView imageSettings;
+    @FXML private Pane settingsPane;
     @FXML private Pane dialogPane;
+    @FXML private Canvas settingsCanvas;
     @FXML private Canvas dialogCanvas;
     @FXML private CheckBox checkBoxDrawGrid;
     @FXML private CheckBox checkBoxDrawPath;
@@ -30,7 +32,8 @@ public class Controller extends AnimationTimer implements Initializable {
 
     private GameSpine gameSpine;
 
-    private MenuDrawer menuDrawer;
+    private MenuDrawer settingsDrawer;
+    private MenuDrawer dialogDrawer;
 
     //FPS counter variables
     private final long[] frameTimes = new long[100];
@@ -44,7 +47,9 @@ public class Controller extends AnimationTimer implements Initializable {
 
         gameSpine = new GameSpine(mainCanvas.getGraphicsContext2D());
 
-        menuDrawer = new MenuDrawer(dialogCanvas);
+        settingsDrawer = new MenuDrawer(settingsCanvas);
+
+        dialogDrawer = new MenuDrawer(dialogCanvas);
 
         mainCanvas.setFocusTraversable(true);
 
@@ -73,6 +78,22 @@ public class Controller extends AnimationTimer implements Initializable {
 
         setupSettingsButton();
 
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while(true)
+                {
+                    gameSpine.movePlayer();
+
+                    try {
+                        Thread.sleep(20);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
+
         start();
     }
 
@@ -85,11 +106,11 @@ public class Controller extends AnimationTimer implements Initializable {
         imageSettings.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                dialogPane.setVisible(!dialogPane.isVisible());
+                settingsPane.setVisible(!settingsPane.isVisible());
             }
         });
 
-        dialogPane.setVisible(false);
+        settingsPane.setVisible(false);
         fpsLabel.setVisible(checkBoxShowFPS.isSelected());
     }
 
@@ -166,18 +187,33 @@ public class Controller extends AnimationTimer implements Initializable {
 
     @Override
     public void handle(long now) {
-        gameSpine.movePlayer();
-
         if(renderCanvas) gameSpine.draw();
 
         if(checkBoxDrawGrid.isSelected()) gameSpine.drawGrid();
 
         if(checkBoxShowHitBox.isSelected()) gameSpine.drawHitboxs();
 
-        if(dialogPane.isVisible()) menuDrawer.draw();
+        if(settingsPane.isVisible()) settingsDrawer.draw();
 
         if(gameSpine.checkPortal()) fadeOutTransition();
 
         if(checkBoxShowFPS.isSelected()) computeFPS(now);
+
+        if(gameSpine.checkInteraction())
+        {
+            if(!dialogPane.isVisible())
+            {
+                dialogPane.setVisible(true);
+            }
+
+            dialogDrawer.draw();
+        }
+        else
+        {
+            if(dialogPane.isVisible())
+            {
+                dialogPane.setVisible(false);
+            }
+        }
     }
 }

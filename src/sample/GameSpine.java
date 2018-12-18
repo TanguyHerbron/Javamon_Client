@@ -1,6 +1,7 @@
 package sample;
 
 import fr.ensim.lemeeherbron.entities.AnimatedSprite;
+import fr.ensim.lemeeherbron.entities.NPC;
 import fr.ensim.lemeeherbron.entities.Player;
 import fr.ensim.lemeeherbron.entities.Sprite;
 import fr.ensim.lemeeherbron.terrain.Terrain;
@@ -34,7 +35,7 @@ public class GameSpine {
 
     private void setupPlayer()
     {
-        player = new Player("scientist",512, 512, 7);
+        player = new Player("scientist",512, 512, 8);
         player.setPosition(25 * 16, 20 * 16);
 
         sprites.add(player);
@@ -119,6 +120,10 @@ public class GameSpine {
                     case "00":
                         terrain = Terrain.build("inside1");
                         player.setPosition(240, 288);
+                        NPC npc = new NPC("old_man");
+                        npc.setPosition(15*16, 20*16);
+
+                        terrain.getObstacleList().add(npc);
                         switchMap = true;
                         break;
                     case "inside1":
@@ -134,6 +139,23 @@ public class GameSpine {
         }
 
         return switchMap;
+    }
+
+    public boolean checkInteraction()
+    {
+        int index = 0;
+
+        while(index < terrain.getObstacleList().size())
+        {
+            if(terrain.getObstacleList().get(index) instanceof NPC && ((NPC) terrain.getObstacleList().get(index)).interacts())
+            {
+                return true;
+            }
+
+            index++;
+        }
+
+        return false;
     }
 
     public void drawHitboxs()
