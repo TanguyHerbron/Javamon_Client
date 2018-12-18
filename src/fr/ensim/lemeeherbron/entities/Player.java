@@ -1,5 +1,6 @@
 package fr.ensim.lemeeherbron.entities;
 
+import fr.ensim.lemeeherbron.entities.interaction.Dialog;
 import fr.ensim.lemeeherbron.terrain.Terrain;
 import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
@@ -17,6 +18,8 @@ public class Player extends Entity implements EventHandler<KeyEvent> {
 
     private char direction = '0';
     private int numberKeyPressed;
+
+    private Dialog currentDialog;
 
     public Player(String spriteName, double borderX, double borderY, double speed) {
         super("npc/" + spriteName, 32, 32, borderX, borderY, speed / 5);
@@ -123,7 +126,7 @@ public class Player extends Entity implements EventHandler<KeyEvent> {
 
     @Override
     public void handle(KeyEvent event) {
-        if(event.getEventType() == KeyEvent.KEY_PRESSED)
+        if(event.getEventType() == KeyEvent.KEY_PRESSED && currentDialog == null)
         {
             keyPressedEvent(event.getCode());
         }
@@ -188,49 +191,76 @@ public class Player extends Entity implements EventHandler<KeyEvent> {
 
         if(keyCode.equals(KeyCode.E))
         {
-            double lookingX = getBoundary().getMinX();
-            double lookingY = getBoundary().getMinY();
 
-            int width = 16;
-            int height = 16;
+            walking = false;
+            direction = '0';
+            numberKeyPressed = 0;
 
-            boolean found = false;
-            int index = 0;
-            List<Sprite> obstacles = Terrain.getInstance().getObstacleList();
-
-            switch (lastMove)
+            if(currentDialog == null)
             {
-                case 'u':
-                    lookingY -= 4;
-                    height = 4;
-                    break;
-                case 'd':
-                    lookingY += 16;
-                    height = 4;
-                    break;
-                case 'l':
-                    lookingX -= 4;
-                    width = 4;
-                    break;
-                case 'r':
-                    lookingX += 16;
-                    width = 4;
-                    break;
+                 lookForInteraction();
             }
-
-            Rectangle2D lookingRec = new Rectangle2D(lookingX, lookingY, width, height);
-
-            while(!found && index < obstacles.size())
+            else
             {
-                if(obstacles.get(index) instanceof NPC && obstacles.get(index).getBoundary().intersects(lookingRec))
-                {
-                    found = true;
-
-                    ((NPC) obstacles.get(index)).interact();
-                }
-
-                index++;
+                currentDialog = currentDialog.getNextDialog();
             }
         }
+    }
+
+    private void lookForInteraction()
+    {
+        double lookingX = getBoundary().getMinX();
+        double lookingY = getBoundary().getMinY();
+
+        int width = 16;
+        int height = 16;
+
+        boolean found = false;
+        int index = 0;
+        List<Sprite> obstacles = Terrain.getInstance().getObstacleList();
+
+        switch (lastMove)
+        {
+            case 'u':
+                lookingY -= 4;
+                height = 4;
+                break;
+            case 'd':
+                lookingY += 16;
+                height = 4;
+                break;
+            case 'l':
+                lookingX -= 4;
+                width = 4;
+                break;
+            case 'r':
+                lookingX += 16;
+                width = 4;
+                break;
+        }
+
+        Rectangle2D lookingRec = new Rectangle2D(lookingX, lookingY, width, height);
+
+        while(!found && index < obstacles.size())
+        {
+            if(obstacles.get(index) instanceof NPC && obstacles.get(index).getBoundary().intersects(lookingRec))
+            {
+                found = true;
+
+                this.currentDialog = ((NPC) obstacles.get(index)).interact(lastMove);
+            }
+
+            index++;
+        }
+    }
+
+    public Dialog getDialog()
+    {
+        return currentDialog;
+    }
+
+    public boolean interacts()
+    {
+        return currentDialog != null;
     }
 }

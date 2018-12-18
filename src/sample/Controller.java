@@ -20,6 +20,7 @@ public class Controller extends AnimationTimer implements Initializable {
 
     @FXML private Canvas mainCanvas;
     @FXML private Label fpsLabel;
+    @FXML private Label dialogLabel;
     @FXML private ImageView imageSettings;
     @FXML private Pane settingsPane;
     @FXML private Pane dialogPane;
@@ -83,7 +84,10 @@ public class Controller extends AnimationTimer implements Initializable {
             public void run() {
                 while(true)
                 {
-                    gameSpine.movePlayer();
+                    if(gameSpine.getPlayer().getDialog() == null)
+                    {
+                        gameSpine.movePlayer();
+                    }
 
                     try {
                         Thread.sleep(20);
@@ -199,21 +203,26 @@ public class Controller extends AnimationTimer implements Initializable {
 
         if(checkBoxShowFPS.isSelected()) computeFPS(now);
 
-        if(gameSpine.checkInteraction())
+        if(gameSpine.getPlayer().interacts())
         {
             if(!dialogPane.isVisible())
             {
                 dialogPane.setVisible(true);
             }
 
-            dialogDrawer.draw();
-        }
-        else
-        {
-            if(dialogPane.isVisible())
+            if(gameSpine.getPlayer().getDialog() != null)
+            {
+                dialogLabel.setText(gameSpine.getPlayer().getDialog().getText());
+                dialogDrawer.draw();
+            }
+            else
             {
                 dialogPane.setVisible(false);
             }
+        }
+        else
+        {
+            dialogPane.setVisible(false);
         }
     }
 }
