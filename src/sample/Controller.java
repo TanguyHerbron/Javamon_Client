@@ -1,6 +1,7 @@
 package sample;
 
 import fr.ensim.lemeeherbron.*;
+import fr.ensim.lemeeherbron.entities.Pokemon;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
