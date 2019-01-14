@@ -308,11 +308,6 @@ public class Terrain {
                 }
             }
         }
-
-        for(Sprite sprite : obstacleList)
-        {
-            sprite.render(graphicsContext);
-        }
     }
 
     public boolean blocked(int x, int y)

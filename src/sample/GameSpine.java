@@ -11,6 +11,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class GameSpine {
@@ -79,11 +80,38 @@ public class GameSpine {
 
     private void drawSprites()
     {
-        for(Sprite sprite : sprites) {
+        List<Sprite> renderedSprites = new ArrayList<>();
+        renderedSprites.addAll(sprites);
+        renderedSprites.addAll(terrain.getObstacleList());
+
+        //With this sort, each sprite are then rendered by Y coordinate order, which mean if a sprite is behind another in 2D
+        //it's well rendered behind the other sprite instead of being drawn on top of it
+        renderedSprites.sort(new Comparator<Sprite>() {
+            @Override
+            public int compare(Sprite o1, Sprite o2) {
+                if(o1.getSpriteName().equals("carpet"))
+                {
+                    return -1;
+                }
+
+                if(o2.getSpriteName().equals("carpet"))
+                {
+                    return 1;
+                }
+
+                return Double.compare(o1.getBoundary().getMinY(), o2.getBoundary().getMinY());
+            }
+        });
+
+        int y = 0;
+        int index = 0;
+
+        for(Sprite sprite : renderedSprites)
+        {
             sprite.render(graphicsContext);
         }
 
-        int index = 0;
+        index = 0;
 
         while(index < animatedSprites.size())
         {

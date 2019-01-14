@@ -82,7 +82,7 @@
             <Canvas fx:id="dialogCanvas" height="50.0" width="450.0" />
             <VBox prefHeight="50.0" prefWidth="450.0">
                <children>
-                  <Label alignment="TOP_LEFT" contentDisplay="CENTER" ellipsisString="" prefHeight="50.0" prefWidth="450.0" text="Hello there bouloulou je suce des bites&#10;pour avoir un truc sur deux lignes mais" textAlignment="JUSTIFY" textOverrun="CLIP">
+                  <Label fx:id="dialogLabel" alignment="TOP_LEFT" contentDisplay="CENTER" ellipsisString="" prefHeight="50.0" prefWidth="450.0" textAlignment="JUSTIFY" textOverrun="CLIP">
                      <font>
                         <Font name="Pokemon GB" size="10.0" />
                      </font>
