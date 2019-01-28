@@ -7,8 +7,8 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.paint.Color;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Player extends Entity implements EventHandler<KeyEvent> {
@@ -21,8 +21,15 @@ public class Player extends Entity implements EventHandler<KeyEvent> {
 
     private Dialog currentDialog;
 
+    private List<Pokemon> pokemons;
+
     public Player(String spriteName, double borderX, double borderY, double speed) {
         super("npc/" + spriteName, 32, 32, borderX, borderY, speed / 5);
+
+        pokemons = new ArrayList<>();
+
+        pokemons.add(new Pokemon("ptera", 512, 512, 5, true));
+        pokemons.add(new Pokemon("leviator", 512, 512, 5, true));
     }
 
     public char getDirection()
@@ -254,6 +261,11 @@ public class Player extends Entity implements EventHandler<KeyEvent> {
         }
     }
 
+    public void updateDialog()
+    {
+        currentDialog = currentDialog.getNextDialog();
+    }
+
     public Dialog getDialog()
     {
         return currentDialog;
@@ -262,5 +274,10 @@ public class Player extends Entity implements EventHandler<KeyEvent> {
     public boolean interacts()
     {
         return currentDialog != null;
+    }
+
+    public List<Pokemon> getPokemonList()
+    {
+        return pokemons;
     }
 }

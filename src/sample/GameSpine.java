@@ -1,9 +1,7 @@
 package sample;
 
-import fr.ensim.lemeeherbron.entities.AnimatedSprite;
-import fr.ensim.lemeeherbron.entities.NPC;
-import fr.ensim.lemeeherbron.entities.Player;
-import fr.ensim.lemeeherbron.entities.Sprite;
+import com.sun.javafx.geom.Vec2d;
+import fr.ensim.lemeeherbron.entities.*;
 import fr.ensim.lemeeherbron.terrain.Terrain;
 import javafx.animation.AnimationTimer;
 import javafx.geometry.Rectangle2D;
@@ -146,12 +144,14 @@ public class GameSpine {
                 switch (terrain.getValue())
                 {
                     case "00":
-                        terrain = Terrain.build("inside1");
-                        player.setPosition(240, 288);
-                        NPC npc = new NPC("old_man", 'u');
-                        npc.setPosition(15*16, 20*16);
+                        String value = terrain.getValue();
 
-                        terrain.getObstacleList().add(npc);
+                        terrain = Terrain.build("inside1");
+
+                        Vec2d pos = terrain.getSpawnPointFor(value);
+
+                        player.setPosition(pos.x * 16, pos.y * 16);
+
                         switchMap = true;
                         break;
                     case "inside1":
@@ -189,5 +189,10 @@ public class GameSpine {
     public void drawGrid()
     {
         terrain.drawGrid(graphicsContext);
+    }
+
+    public void addPokemonOnTerrain(Pokemon pokemon)
+    {
+        terrain.getObstacleList().add(pokemon);
     }
 }

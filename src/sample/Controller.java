@@ -9,12 +9,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class Controller extends AnimationTimer implements Initializable {
@@ -31,6 +33,7 @@ public class Controller extends AnimationTimer implements Initializable {
     @FXML private CheckBox checkBoxDrawPath;
     @FXML private CheckBox checkBoxShowFPS;
     @FXML private CheckBox checkBoxShowHitBox;
+    @FXML private ListView choiceList;
 
     private GameSpine gameSpine;
 
@@ -63,10 +66,12 @@ public class Controller extends AnimationTimer implements Initializable {
             @Override
             public void handle(MouseEvent event) {
 
-                /*int x = (int) Math.floor(event.getX() / 16);
+                int x = (int) Math.floor(event.getX() / 16);
                 int y = (int) Math.floor(event.getY() / 16);
 
-                int xp = (int) Math.floor(pikaSprite.getX() / 16);
+                System.out.println("Clicked on " + x + " " + y);
+
+                /*int xp = (int) Math.floor(pikaSprite.getX() / 16);
                 int xy = (int) Math.floor(pikaSprite.getY() / 16);
 
                 selectedSprite = new Sprite("selected", 512, 512);
@@ -79,6 +84,8 @@ public class Controller extends AnimationTimer implements Initializable {
         });
 
         setupSettingsButton();
+
+        setupChoiceList();
 
         new Thread(new Runnable() {
             @Override
@@ -100,6 +107,27 @@ public class Controller extends AnimationTimer implements Initializable {
         }).start();
 
         start();
+    }
+
+    private void setupChoiceList()
+    {
+        choiceList.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+
+                String pokemonName = choiceList.getSelectionModel().getSelectedItems().get(0).toString().substring(choiceList.getSelectionModel().getSelectedItems().get(0).toString().indexOf("/"));
+
+                Pokemon newPokemon = new Pokemon(pokemonName, 512, 512, 5, true);
+                newPokemon.setPosition(256, 100);
+
+                gameSpine.addPokemonOnTerrain(newPokemon);
+
+                gameSpine.getPlayer().updateDialog();
+
+                choiceList.setVisible(false);
+                choiceList.getItems().removeAll(choiceList.getItems());
+            }
+        });
     }
 
     private void setupSettingsButton()
@@ -213,7 +241,21 @@ public class Controller extends AnimationTimer implements Initializable {
 
             if(gameSpine.getPlayer().getDialog() != null)
             {
-                dialogLabel.setText(gameSpine.getPlayer().getDialog().getText());
+                String str = " ";
+
+                if(gameSpine.getPlayer().getDialog().mustChoosePokemon() && choiceList.getItems().size() == 0)
+                {
+                    List<Pokemon> pokemonList = gameSpine.getPlayer().getPokemonList();
+
+                    choiceList.setVisible(true);
+
+                    for(int i = 0; i < pokemonList.size(); i++)
+                    {
+                        choiceList.getItems().add(choiceList.getItems().size(), pokemonList.get(i).getSpriteName());
+                    }
+                }
+
+                dialogLabel.setText(gameSpine.getPlayer().getDialog().getText() + str);
                 dialogDrawer.draw();
             }
             else

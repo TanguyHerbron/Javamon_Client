@@ -1,6 +1,5 @@
 package fr.ensim.lemeeherbron.entities;
 
-import fr.ensim.lemeeherbron.MenuDrawer;
 import fr.ensim.lemeeherbron.entities.interaction.Dialog;
 import javafx.scene.canvas.GraphicsContext;
 
@@ -19,10 +18,15 @@ public class NPC extends Entity {
 
         this.obstacle = true;
 
-        dialog = new Dialog("Hello");
-        dialog.setNextDialog(new Dialog("Goodbye"));
+        dialog = new Dialog("Choose a Pokemon");
+        dialog.setMustChoosePokemon(true);
+        dialog.setNextDialog(new Dialog("We'll take care of it"));
 
         switchSide(orientation);
+    }
+
+    public NPC(String spriteName, double borderX, double borderY) {
+        super("npc/" + spriteName, 32, 32, borderX, borderY, 0);
     }
 
     public void switchSide(char orientation)
@@ -50,10 +54,6 @@ public class NPC extends Entity {
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
-    }
-
-    public NPC(String spriteName, double borderX, double borderY) {
-        super("npc/" + spriteName, 32, 32, borderX, borderY, 0);
     }
 
     public Dialog interact(char side)

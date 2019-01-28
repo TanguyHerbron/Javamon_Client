@@ -1,16 +1,21 @@
 package fr.ensim.lemeeherbron.terrain;
 
+import com.sun.javafx.geom.Vec2d;
+import fr.ensim.lemeeherbron.entities.NPC;
 import fr.ensim.lemeeherbron.entities.Sprite;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import jdk.nashorn.internal.parser.JSONParser;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Terrain {
@@ -18,6 +23,7 @@ public class Terrain {
     private Tile[][] tileTable;
     private List<Sprite> obstacleList;
     private String value;
+    private HashMap<String, Vec2d> spawnPoints;
 
     private boolean ready;
 
@@ -46,39 +52,71 @@ public class Terrain {
     {
         tileTable = new Tile[32][32];
         obstacleList = new ArrayList<>();
+        spawnPoints = new HashMap<>();
 
         this.value = x + "" + y;
 
-        prepare(x, y);
+        prepare(x + "_" + y);
     }
 
     private Terrain(String insideName)
     {
         tileTable = new Tile[32][32];
         obstacleList = new ArrayList<>();
+        spawnPoints = new HashMap<>();
 
         this.value = insideName;
 
-        prepare(insideName);
+        prepare("inside/" + insideName);
     }
 
-    private void prepare(String insideName)
+    private void prepare(String mapName)
     {
+        String baseUri = "/terrain/" + mapName;
+
         try {
-            File terImg = new File(getClass().getResource("/terrain/inside/" + insideName + ".png").toURI());
+            File terImg = new File(getClass().getResource(baseUri + ".png").toURI());
             generateTerrain(ImageIO.read(terImg));
+
+            File obsFile = new File(getClass().getResource(baseUri + ".json").toURI());
+            loadObjets(obsFile);
         } catch (IOException | URISyntaxException e) {
             e.printStackTrace();
         }
     }
 
-    private void prepare(int x, int y)
+    private void loadObjets(File file) throws IOException
     {
-        try {
-            File terImg = new File(getClass().getResource("/terrain/" + x + "_" + y + ".png").toURI());
-            generateTerrain(ImageIO.read(terImg));
-        } catch (IOException | URISyntaxException e) {
-            e.printStackTrace();
+        FileInputStream fis = new FileInputStream(file);
+        byte[] data = new byte[(int) file.length()];
+        fis.read(data);
+        fis.close();
+
+        JSONObject jsonObject = new JSONObject(new String(data, "UTF-8"));
+
+        JSONArray npcArray = jsonObject.getJSONArray("npc");
+
+        for(int i = 0; i < npcArray.length(); i++)
+        {
+            JSONObject npcObject = npcArray.getJSONObject(i);
+
+            NPC npc = new NPC(npcObject.getString("sprite"),
+                    npcObject.getString("orientation").charAt(0));
+
+            npc.setPosition(npcObject.getDouble("x") * 16
+                    , npcObject.getDouble("y") * 16);
+
+            obstacleList.add(npc);
+        }
+
+        JSONArray spawnArray = jsonObject.getJSONArray("spawnpoint");
+
+        for(int i = 0; i < spawnArray.length(); i++)
+        {
+            JSONObject spawnObject = spawnArray.getJSONObject(i);
+
+            spawnPoints.put(spawnObject.getString("from"),
+                    new Vec2d(spawnObject.getDouble("x"), spawnObject.getDouble("y")));
         }
     }
 
@@ -200,6 +238,9 @@ public class Terrain {
                 break;
             case "e2":
                 sprite = new Sprite("bar", 512, 512, false);
+                break;
+            case "de":
+                sprite = new Sprite("bar_r", 512, 512, false);
                 break;
         }
 
@@ -365,5 +406,10 @@ public class Terrain {
     public boolean isReady()
     {
         return ready;
+    }
+
+    public Vec2d getSpawnPointFor(String from)
+    {
+        return spawnPoints.get(from);
     }
 }

@@ -4,6 +4,7 @@ public class Dialog {
 
     private String currentMessage;
     private Dialog nextDialog = null;
+    private boolean mustChoosePokemon = false;
 
     public Dialog(String text)
     {
@@ -23,5 +24,13 @@ public class Dialog {
     public String getText()
     {
         return currentMessage;
+    }
+
+    public boolean mustChoosePokemon() {
+        return mustChoosePokemon;
+    }
+
+    public void setMustChoosePokemon(boolean mustChoosePokemon) {
+        this.mustChoosePokemon = mustChoosePokemon;
     }
 }
