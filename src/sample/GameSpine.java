@@ -45,6 +45,8 @@ public class GameSpine {
         return player;
     }
 
+    public Terrain getTerrain() { return terrain; }
+
     public void movePlayer()
     {
         switch (player.getDirection())
@@ -101,15 +103,12 @@ public class GameSpine {
             }
         });
 
-        int y = 0;
         int index = 0;
 
         for(Sprite sprite : renderedSprites)
         {
             sprite.render(graphicsContext);
         }
-
-        index = 0;
 
         while(index < animatedSprites.size())
         {
@@ -191,8 +190,21 @@ public class GameSpine {
         terrain.drawGrid(graphicsContext);
     }
 
-    public void addPokemonOnTerrain(Pokemon pokemon)
+    public void addPokemonOnBoard(Pokemon pokemon)
     {
-        terrain.getObstacleList().add(pokemon);
+        sprites.add(pokemon);
+    }
+
+    public void triggerBehaviors()
+    {
+        for(Sprite sprite : sprites)
+        {
+            if(sprite instanceof Pokemon)
+            {
+                Pokemon pokemon = (Pokemon) sprite;
+
+                pokemon.simulateBehavior();
+            }
+        }
     }
 }

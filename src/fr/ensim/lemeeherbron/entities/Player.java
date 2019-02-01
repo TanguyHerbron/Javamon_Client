@@ -280,4 +280,19 @@ public class Player extends Entity implements EventHandler<KeyEvent> {
     {
         return pokemons;
     }
+
+    public void removePokemon(String pokemonName)
+    {
+        int i = 0;
+
+        while(i < pokemons.size())
+        {
+            if(pokemons.get(i).getSpriteName().equals(pokemonName))
+            {
+                pokemons.remove(i);
+            }
+
+            i++;
+        }
+    }
 }

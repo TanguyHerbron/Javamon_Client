@@ -2,23 +2,36 @@ package fr.ensim.lemeeherbron.entities;
 
 import com.sun.javafx.geom.Vec2f;
 import fr.ensim.lemeeherbron.terrain.Terrain;
+import fr.ensim.lemeeherbron.terrain.pathfinder.AStarPathFinder;
 import fr.ensim.lemeeherbron.terrain.pathfinder.Path;
+
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Pokemon extends Entity {
 
+    private static final AtomicInteger count = new AtomicInteger(0);
+    private int id;
     private boolean behavior;
     private Vec2f target;
     private Path path;
     private Terrain terrain;
 
+    private int tempoMove;
+
     public Pokemon(String spriteName, int width, int height, double borderX, double borderY, int speed, boolean behavior) {
         super("pokemon/" + spriteName, width, height, borderX, borderY, speed);
 
         this.behavior = behavior;
+        id = count.incrementAndGet();
     }
 
     public Pokemon(String spriteName, double borderX, double borderY, int speed, boolean behavior) {
         this(spriteName, 32, 32, borderX, borderY, speed, behavior);
+    }
+
+    public Pokemon(String spriteName, double borderX, double borderY, int speed, boolean behavior, Terrain terrain) {
+        this(spriteName, 32, 32, borderX, borderY, speed, behavior, terrain);
     }
 
     public Pokemon(String spriteName, int width, int height, double borderX, double borderY, int speed, boolean behavior, Terrain terrain)
@@ -65,6 +78,43 @@ public class Pokemon extends Entity {
     public boolean hasBehavior()
     {
         return behavior;
+    }
+
+    public void simulateBehavior()
+    {
+        if(path != null)
+        {
+            if(tempoMove == 500)
+            {
+                move();
+                tempoMove = 0;
+            }
+            else
+            {
+                tempoMove++;
+            }
+        }
+        else
+        {
+            if(hasBehavior())
+            {
+                boolean wantsToMove = new Random().nextInt(5)==0;
+
+                if(wantsToMove)
+                {
+                    Random rand = new Random();
+
+                    int xp = (int) Math.floor(getX() / 16);
+                    int xy = (int) Math.floor(getY() / 16);
+
+                    AStarPathFinder aStarPathFinder = new AStarPathFinder(terrain, 100);
+
+                    path = aStarPathFinder.findPath(xp, xy, rand.nextInt(32), rand.nextInt(32));
+
+                    tempoMove = 0;
+                }
+            }
+        }
     }
 
     public void move()
@@ -150,6 +200,10 @@ public class Pokemon extends Entity {
     private boolean hasTarget()
     {
         return target != null;
+    }
+
+    public int getId() {
+        return id;
     }
 
     @Override

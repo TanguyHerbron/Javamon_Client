@@ -97,6 +97,8 @@ public class Controller extends AnimationTimer implements Initializable {
                         gameSpine.movePlayer();
                     }
 
+                    gameSpine.triggerBehaviors();
+
                     try {
                         Thread.sleep(20);
                     } catch (InterruptedException e) {
@@ -117,12 +119,14 @@ public class Controller extends AnimationTimer implements Initializable {
 
                 String pokemonName = choiceList.getSelectionModel().getSelectedItems().get(0).toString().substring(choiceList.getSelectionModel().getSelectedItems().get(0).toString().indexOf("/"));
 
-                Pokemon newPokemon = new Pokemon(pokemonName, 512, 512, 5, true);
+                Pokemon newPokemon = new Pokemon(pokemonName, 512, 512, 5, true, gameSpine.getTerrain());
                 newPokemon.setPosition(256, 100);
 
-                gameSpine.addPokemonOnTerrain(newPokemon);
+                gameSpine.addPokemonOnBoard(newPokemon);
 
                 gameSpine.getPlayer().updateDialog();
+
+                gameSpine.getPlayer().removePokemon(choiceList.getSelectionModel().getSelectedItems().get(0).toString());
 
                 choiceList.setVisible(false);
                 choiceList.getItems().removeAll(choiceList.getItems());
