@@ -1,17 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controllers.StartScreenController">
    <children>
-      <Button fx:id="Button_Connect" layoutX="274.0" layoutY="261.0" mnemonicParsing="false" text="Connect" />
-      <TextField fx:id="TextField_Login" layoutX="253.0" layoutY="158.0" prefHeight="25.0" prefWidth="149.0" />
-      <TextField fx:id="TextField_Password" layoutX="253.0" layoutY="200.0" />
-      <Label layoutX="207.0" layoutY="162.0" text="Login :" />
-      <Label layoutX="187.0" layoutY="204.0" text="Password :" />
+      <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <center>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <ImageView fitHeight="108.0" fitWidth="512.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@/javamon.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </ImageView>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0">
+                     <children>
+                        <TextField fx:id="TextField_Login" prefHeight="25.0" prefWidth="150.0" promptText="Login">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </TextField>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0">
+                     <children>
+                        <TextField fx:id="TextField_Password" promptText="Password" />
+                     </children>
+                  </HBox>
+                  <Button fx:id="Button_Connect" mnemonicParsing="false" text="Connect" />
+               </children>
+            </VBox>
+         </center>
+      </BorderPane>
    </children>
 </AnchorPane>
