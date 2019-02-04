@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ClientManager {
@@ -16,16 +17,20 @@ public class ClientManager {
     private int id;
 
     private PrintWriter pw;
-    private BufferedReader bf;
+    private BufferedReader br;
+
+    private List<Pokemon> serverPokemons;
 
     public ClientManager(String ip) throws IOException
     {
         clientSocket = new Socket(ip, PORT);
 
         pw = new PrintWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
-        bf = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+        br = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-        id = Integer.parseInt(bf.readLine());
+        serverPokemons = new ArrayList<>();
+
+        id = Integer.parseInt(br.readLine());
 
         System.out.println("My id is " + id);
     }
@@ -45,6 +50,7 @@ public class ClientManager {
             pokemonObject.put("name", pokemon.getSpriteName());
             pokemonObject.put("x", pokemon.getX());
             pokemonObject.put("y", pokemon.getY());
+            pokemonObject.put("orientation", pokemon.getOrientation());
 
             jsonArray.put(pokemonObject);
         }
@@ -55,4 +61,31 @@ public class ClientManager {
         pw.flush();
     }
 
+    public List<Pokemon> updatePokemons()
+    {
+        try {
+            if(br.ready())
+            {
+                serverPokemons.clear();
+
+                String str = br.readLine();
+
+                JSONArray jsonArray = new JSONArray(str);
+
+                for(int i = 0; i < jsonArray.length(); i++)
+                {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                    serverPokemons.add(new Pokemon(jsonObject.getInt("id"),
+                            jsonObject.getString("name"),
+                            jsonObject.getInt("x"),
+                            jsonObject.getInt("y"),
+                            jsonObject.getString("orientation").charAt(0)));
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return serverPokemons;
+    }
 }

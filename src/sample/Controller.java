@@ -111,6 +111,8 @@ public class Controller extends AnimationTimer implements Initializable {
 
                     clientManager.sendPokemons(Nursery.getPokemons());
 
+                    gameCore.updateServerPokemons(clientManager.updatePokemons());
+
                     try {
                         Thread.sleep(20);
                     } catch (InterruptedException e) {

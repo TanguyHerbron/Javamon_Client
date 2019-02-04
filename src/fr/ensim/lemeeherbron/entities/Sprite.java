@@ -24,6 +24,8 @@ public class Sprite {
 
     private boolean portal;
 
+    public Sprite() {}
+
     public Sprite(String spriteName, double borderX, double borderY)
     {
         touchingSprites = new ArrayList<>();

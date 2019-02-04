@@ -41,6 +41,18 @@ public class Pokemon extends Entity {
         this.terrain = terrain;
     }
 
+    public Pokemon(int id, String spriteName, int x, int y, char orientation)
+    {
+        this.id = id;
+        this.spriteName = spriteName;
+        this.x = x;
+        this.y = y;
+        this.lastMove = orientation;
+
+        terrain = Terrain.getInstance();
+        behavior = true;
+    }
+
     public void setPosX(double x)
     {
         this.x = x - 8;
@@ -204,6 +216,11 @@ public class Pokemon extends Entity {
 
     public int getId() {
         return id;
+    }
+
+    public char getOrientation()
+    {
+        return lastMove;
     }
 
     @Override

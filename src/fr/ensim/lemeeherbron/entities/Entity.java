@@ -11,6 +11,8 @@ public class Entity extends Sprite {
     private int counter;
     protected char lastMove;
 
+    public Entity() {}
+
     public Entity(String spriteName, double width, double height, double borderX, double borderY, double speed) {
         super(spriteName, width, height, borderX, borderY);
 

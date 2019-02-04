@@ -20,6 +20,7 @@ public class GameCore {
     private List<Sprite> sprites;
     private List<AnimatedSprite> animatedSprites;
     private Player player;
+    private List<Pokemon> serverPokemons;
 
     public GameCore(GraphicsContext graphicsContext)
     {
@@ -87,7 +88,11 @@ public class GameCore {
         List<Sprite> renderedSprites = new ArrayList<>();
         renderedSprites.addAll(sprites);
         renderedSprites.addAll(terrain.getObstacleList());
-        renderedSprites.addAll(Nursery.getPokemons());
+
+        if(terrain.getValue().equals("nursery") && serverPokemons != null)
+        {
+            renderedSprites.addAll(serverPokemons);
+        }
 
         //With this sort, each sprite are then rendered by Y coordinate order, which mean if a sprite is behind another in 2D
         //it's well rendered behind the other sprite instead of being drawn on top of it
@@ -198,5 +203,10 @@ public class GameCore {
     public void addPokemonToNursery(Pokemon pokemon)
     {
         Nursery.addPokemon(pokemon);
+    }
+
+    public void updateServerPokemons(List<Pokemon> pokemons)
+    {
+        serverPokemons = pokemons;
     }
 }

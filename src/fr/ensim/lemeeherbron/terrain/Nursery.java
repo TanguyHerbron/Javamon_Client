@@ -38,6 +38,11 @@ public class Nursery {
         return pokemons;
     }
 
+    public static void setPokemons(List<Pokemon> newPokemons)
+    {
+        pokemons = newPokemons;
+    }
+
     public static void triggerBehaviors()
     {
         for(Pokemon pokemon : pokemons)
