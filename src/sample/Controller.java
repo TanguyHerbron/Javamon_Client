@@ -1,7 +1,6 @@
 package sample;
 
 import fr.ensim.lemeeherbron.*;
-import fr.ensim.lemeeherbron.entities.Pokemon;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -35,7 +34,7 @@ public class Controller extends AnimationTimer implements Initializable {
     @FXML private CheckBox checkBoxShowHitBox;
     @FXML private ListView choiceList;
 
-    private GameSpine gameSpine;
+    private GameCore gameCore;
 
     private MenuDrawer settingsDrawer;
     private MenuDrawer dialogDrawer;
@@ -50,7 +49,7 @@ public class Controller extends AnimationTimer implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        gameSpine = new GameSpine(mainCanvas.getGraphicsContext2D());
+        gameCore = new GameCore(mainCanvas.getGraphicsContext2D());
 
         settingsDrawer = new MenuDrawer(settingsCanvas);
 
@@ -58,9 +57,9 @@ public class Controller extends AnimationTimer implements Initializable {
 
         mainCanvas.setFocusTraversable(true);
 
-        mainCanvas.setOnKeyPressed(gameSpine.getPlayer());
+        mainCanvas.setOnKeyPressed(gameCore.getPlayer());
 
-        mainCanvas.setOnKeyReleased(gameSpine.getPlayer());
+        mainCanvas.setOnKeyReleased(gameCore.getPlayer());
 
         mainCanvas.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -92,9 +91,9 @@ public class Controller extends AnimationTimer implements Initializable {
             public void run() {
                 while(true)
                 {
-                    if(gameSpine.getPlayer().getDialog() == null)
+                    if(gameCore.getPlayer().getDialog() == null)
                     {
-                        gameSpine.movePlayer();
+                        gameCore.movePlayer();
                     }
 
                     gameSpine.triggerBehaviors();
@@ -189,7 +188,7 @@ public class Controller extends AnimationTimer implements Initializable {
                     }
                 }
 
-                while(!gameSpine.isReady());
+                while(!gameCore.isReady());
 
                 fadeInTransition();
             }
@@ -224,26 +223,26 @@ public class Controller extends AnimationTimer implements Initializable {
 
     @Override
     public void handle(long now) {
-        if(renderCanvas) gameSpine.draw();
+        if(renderCanvas) gameCore.draw();
 
-        if(checkBoxDrawGrid.isSelected()) gameSpine.drawGrid();
+        if(checkBoxDrawGrid.isSelected()) gameCore.drawGrid();
 
-        if(checkBoxShowHitBox.isSelected()) gameSpine.drawHitboxs();
+        if(checkBoxShowHitBox.isSelected()) gameCore.drawHitboxs();
 
         if(settingsPane.isVisible()) settingsDrawer.draw();
 
-        if(gameSpine.checkPortal()) fadeOutTransition();
+        if(gameCore.checkPortal()) fadeOutTransition();
 
         if(checkBoxShowFPS.isSelected()) computeFPS(now);
 
-        if(gameSpine.getPlayer().interacts())
+        if(gameCore.getPlayer().interacts())
         {
             if(!dialogPane.isVisible())
             {
                 dialogPane.setVisible(true);
             }
 
-            if(gameSpine.getPlayer().getDialog() != null)
+            if(gameCore.getPlayer().getDialog() != null)
             {
                 String str = " ";
 

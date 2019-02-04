@@ -100,6 +100,16 @@ public class Sprite {
         return found;
     }
 
+    public int getTileX()
+    {
+        return (int) Math.floor(x / 16);
+    }
+
+    public int getTileY()
+    {
+        return (int) Math.floor(y / 16);
+    }
+
     public double getX()
     {
         return x;

@@ -13,7 +13,7 @@ public class PokemonBuilder {
         Pokemon newPokemon = null;
 
         try {
-            InputStream inputStream = PokemonBuilder.class.getResourceAsStream("/preset/" + name + ".xml");
+            InputStream inputStream = PokemonBuilder.class.getResourceAsStream("/preset/pokemon/" + name + ".xml");
             Properties properties = new Properties();
             properties.loadFromXML(inputStream);
 

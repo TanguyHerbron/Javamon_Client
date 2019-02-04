@@ -12,6 +12,14 @@ public class NPC extends Entity {
 
     private Dialog dialog;
 
+    public NPC(String spriteName, char orientation, int x, int y)
+    {
+        this(spriteName, orientation);
+
+        this.x = x;
+        this.y = y;
+    }
+
     public NPC(String spriteName, char orientation)
     {
         this(spriteName, 0, 0);

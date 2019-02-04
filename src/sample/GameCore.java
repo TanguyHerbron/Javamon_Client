@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class GameSpine {
+public class GameCore {
 
     private GraphicsContext graphicsContext;
     private Terrain terrain;
@@ -20,7 +20,7 @@ public class GameSpine {
     private List<AnimatedSprite> animatedSprites;
     private Player player;
 
-    public GameSpine(GraphicsContext graphicsContext)
+    public GameCore(GraphicsContext graphicsContext)
     {
         this.graphicsContext = graphicsContext;
 
