@@ -50,9 +50,8 @@ public class ClientManager {
         }
 
         mainObject.put("pokemon", jsonArray);
-        System.out.println("Sending data");
 
-        pw.write(jsonArray.toString());
+        pw.println(mainObject.toString());
         pw.flush();
     }
 
