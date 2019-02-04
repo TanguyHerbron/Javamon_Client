@@ -1,6 +1,9 @@
 package sample;
 
 import fr.ensim.lemeeherbron.*;
+import fr.ensim.lemeeherbron.entities.Pokemon;
+import fr.ensim.lemeeherbron.networking.ClientManager;
+import fr.ensim.lemeeherbron.terrain.Nursery;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -14,6 +17,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -35,6 +39,7 @@ public class Controller extends AnimationTimer implements Initializable {
     @FXML private ListView choiceList;
 
     private GameCore gameCore;
+    private ClientManager clientManager;
 
     private MenuDrawer settingsDrawer;
     private MenuDrawer dialogDrawer;
@@ -86,6 +91,12 @@ public class Controller extends AnimationTimer implements Initializable {
 
         setupChoiceList();
 
+        try {
+            clientManager = new ClientManager("localhost");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -96,7 +107,9 @@ public class Controller extends AnimationTimer implements Initializable {
                         gameCore.movePlayer();
                     }
 
-                    gameSpine.triggerBehaviors();
+                    Nursery.triggerBehaviors();
+
+                    clientManager.sendPokemons(Nursery.getPokemons());
 
                     try {
                         Thread.sleep(20);
@@ -118,14 +131,14 @@ public class Controller extends AnimationTimer implements Initializable {
 
                 String pokemonName = choiceList.getSelectionModel().getSelectedItems().get(0).toString().substring(choiceList.getSelectionModel().getSelectedItems().get(0).toString().indexOf("/"));
 
-                Pokemon newPokemon = new Pokemon(pokemonName, 512, 512, 5, true, gameSpine.getTerrain());
+                Pokemon newPokemon = new Pokemon(pokemonName, 512, 512, 5, true, gameCore.getTerrain());
                 newPokemon.setPosition(256, 100);
 
-                gameSpine.addPokemonOnBoard(newPokemon);
+                gameCore.addPokemonToNursery(newPokemon);
 
-                gameSpine.getPlayer().updateDialog();
+                gameCore.getPlayer().updateDialog();
 
-                gameSpine.getPlayer().removePokemon(choiceList.getSelectionModel().getSelectedItems().get(0).toString());
+                gameCore.getPlayer().removePokemon(choiceList.getSelectionModel().getSelectedItems().get(0).toString());
 
                 choiceList.setVisible(false);
                 choiceList.getItems().removeAll(choiceList.getItems());
@@ -246,9 +259,9 @@ public class Controller extends AnimationTimer implements Initializable {
             {
                 String str = " ";
 
-                if(gameSpine.getPlayer().getDialog().mustChoosePokemon() && choiceList.getItems().size() == 0)
+                if(gameCore.getPlayer().getDialog().mustChoosePokemon() && choiceList.getItems().size() == 0)
                 {
-                    List<Pokemon> pokemonList = gameSpine.getPlayer().getPokemonList();
+                    List<Pokemon> pokemonList = gameCore.getPlayer().getPokemonList();
 
                     choiceList.setVisible(true);
 
@@ -258,7 +271,7 @@ public class Controller extends AnimationTimer implements Initializable {
                     }
                 }
 
-                dialogLabel.setText(gameSpine.getPlayer().getDialog().getText() + str);
+                dialogLabel.setText(gameCore.getPlayer().getDialog().getText() + str);
                 dialogDrawer.draw();
             }
             else

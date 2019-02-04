@@ -2,6 +2,7 @@ package sample;
 
 import com.sun.javafx.geom.Vec2d;
 import fr.ensim.lemeeherbron.entities.*;
+import fr.ensim.lemeeherbron.terrain.Nursery;
 import fr.ensim.lemeeherbron.terrain.Terrain;
 import javafx.animation.AnimationTimer;
 import javafx.geometry.Rectangle2D;
@@ -24,7 +25,9 @@ public class GameCore {
     {
         this.graphicsContext = graphicsContext;
 
-        terrain = Terrain.build(0, 0);
+        terrain = Terrain.build("nursery");
+
+        Nursery.init();
 
         sprites = new ArrayList<>();
         animatedSprites = new ArrayList<>();
@@ -35,7 +38,8 @@ public class GameCore {
     private void setupPlayer()
     {
         player = new Player("scientist",512, 512, 8);
-        player.setPosition(25 * 16, 20 * 16);
+        Vec2d pos = terrain.getSpawnPointFor("00");
+        player.setPosition(pos.x * 16, pos.y * 16);
 
         sprites.add(player);
     }
@@ -83,6 +87,7 @@ public class GameCore {
         List<Sprite> renderedSprites = new ArrayList<>();
         renderedSprites.addAll(sprites);
         renderedSprites.addAll(terrain.getObstacleList());
+        renderedSprites.addAll(Nursery.getPokemons());
 
         //With this sort, each sprite are then rendered by Y coordinate order, which mean if a sprite is behind another in 2D
         //it's well rendered behind the other sprite instead of being drawn on top of it
@@ -190,21 +195,8 @@ public class GameCore {
         terrain.drawGrid(graphicsContext);
     }
 
-    public void addPokemonOnBoard(Pokemon pokemon)
+    public void addPokemonToNursery(Pokemon pokemon)
     {
-        sprites.add(pokemon);
-    }
-
-    public void triggerBehaviors()
-    {
-        for(Sprite sprite : sprites)
-        {
-            if(sprite instanceof Pokemon)
-            {
-                Pokemon pokemon = (Pokemon) sprite;
-
-                pokemon.simulateBehavior();
-            }
-        }
+        Nursery.addPokemon(pokemon);
     }
 }
