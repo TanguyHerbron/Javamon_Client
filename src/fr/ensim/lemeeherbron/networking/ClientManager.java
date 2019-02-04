@@ -50,7 +50,7 @@ public class ClientManager {
             pokemonObject.put("name", pokemon.getSpriteName());
             pokemonObject.put("x", pokemon.getX());
             pokemonObject.put("y", pokemon.getY());
-            pokemonObject.put("orientation", pokemon.getOrientation());
+            pokemonObject.put("orientation", String.valueOf(pokemon.getOrientation()));
 
             jsonArray.put(pokemonObject);
         }
@@ -80,12 +80,13 @@ public class ClientManager {
                             jsonObject.getString("name"),
                             jsonObject.getInt("x"),
                             jsonObject.getInt("y"),
-                            jsonObject.getString("orientation").charAt(0)));
+                            jsonObject.get("orientation").toString().charAt(0)));
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         return serverPokemons;
     }
 }

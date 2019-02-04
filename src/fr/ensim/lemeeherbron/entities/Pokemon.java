@@ -43,8 +43,9 @@ public class Pokemon extends Entity {
 
     public Pokemon(int id, String spriteName, int x, int y, char orientation)
     {
+        super(spriteName, 32, 32, 512, 512, 5);
+
         this.id = id;
-        this.spriteName = spriteName;
         this.x = x;
         this.y = y;
         this.lastMove = orientation;
@@ -121,7 +122,7 @@ public class Pokemon extends Entity {
 
                     AStarPathFinder aStarPathFinder = new AStarPathFinder(terrain, 100);
 
-                    path = aStarPathFinder.findPath(xp, xy, rand.nextInt(32), rand.nextInt(32));
+                    path = aStarPathFinder.findPath(xp, xy, rand.nextInt(5) + 10, rand.nextInt(5) + 10);
 
                     tempoMove = 0;
                 }

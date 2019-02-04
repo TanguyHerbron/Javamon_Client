@@ -152,6 +152,11 @@ public class Entity extends Sprite {
 
         counter = (counter + 1) % 31;
 
+        if(this instanceof Pokemon)
+        {
+            System.out.println(">> Rendered with " + spriteName + " " + lastMove + " " + xPiece + " " + yPiece + " " + width + " " + height + " " + x + " " + y);
+        }
+
         graphicsContext.drawImage(image, xPiece, yPiece, width, height, x, y, width, height);
     }
 }

@@ -155,7 +155,7 @@ public class GameCore {
                     case "00":
                         String value = terrain.getValue();
 
-                        terrain = Terrain.build("inside1");
+                        terrain = Terrain.build("nursery");
 
                         Vec2d pos = terrain.getSpawnPointFor(value);
 
@@ -163,7 +163,7 @@ public class GameCore {
 
                         switchMap = true;
                         break;
-                    case "inside1":
+                    case "nursery":
                         terrain = Terrain.build(0, 0);
                         player.setPosition(304, 256);
                         switchMap = true;
