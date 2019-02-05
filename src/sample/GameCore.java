@@ -28,7 +28,7 @@ public class GameCore {
 
         terrain = Terrain.build("nursery");
 
-        Nursery.init();
+        //Nursery.init();
 
         sprites = new ArrayList<>();
         animatedSprites = new ArrayList<>();

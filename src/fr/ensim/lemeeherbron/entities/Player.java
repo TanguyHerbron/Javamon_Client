@@ -1,5 +1,7 @@
 package fr.ensim.lemeeherbron.entities;
 
+import fr.ensim.lemeeherbron.PokemonBuilder;
+import fr.ensim.lemeeherbron.PokemonNotLoadedException;
 import fr.ensim.lemeeherbron.entities.interaction.Dialog;
 import fr.ensim.lemeeherbron.terrain.Terrain;
 import javafx.event.EventHandler;
@@ -28,8 +30,11 @@ public class Player extends Entity implements EventHandler<KeyEvent> {
 
         pokemons = new ArrayList<>();
 
-        pokemons.add(new Pokemon("ptera", 512, 512, 5, true, Terrain.getInstance()));
-        pokemons.add(new Pokemon("leviator", 512, 512, 5, true, Terrain.getInstance()));
+        try {
+            pokemons.add(PokemonBuilder.build("magicarpe", 512, 512));
+        } catch (PokemonNotLoadedException e) {
+            e.printStackTrace();
+        }
     }
 
     public char getDirection()

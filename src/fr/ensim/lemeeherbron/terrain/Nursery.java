@@ -48,6 +48,7 @@ public class Nursery {
         for(Pokemon pokemon : pokemons)
         {
             pokemon.simulateBehavior();
+            pokemon.pex();
         }
     }
 }

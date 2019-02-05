@@ -1,11 +1,13 @@
 package fr.ensim.lemeeherbron;
 
 import fr.ensim.lemeeherbron.entities.Pokemon;
+import fr.ensim.lemeeherbron.terrain.Terrain;
 import jdk.internal.util.xml.impl.Input;
 
 import java.io.*;
 import java.net.URL;
 import java.util.Properties;
+import java.util.regex.Pattern;
 
 public class PokemonBuilder {
 
@@ -20,10 +22,17 @@ public class PokemonBuilder {
             String spriteName = properties.getProperty("sprite");
             int pokemonSpeed = Integer.parseInt(properties.getProperty("speed"));
             boolean pokemonBehavior = Boolean.parseBoolean(properties.getProperty("behavior"));
+            String[] evolutions = properties.getProperty("evolution").split(Pattern.quote("$"));
 
-            newPokemon = new Pokemon( spriteName,
+            newPokemon = new Pokemon(spriteName,
                     borderX, borderY, pokemonSpeed,
-                    pokemonBehavior);
+                    pokemonBehavior, Terrain.getInstance());
+
+            for(String evolution : evolutions)
+            {
+                newPokemon.addEvolutions(Integer.parseInt(evolution.substring(0, evolution.indexOf("|"))), evolution.substring(evolution.indexOf("|") + 1));
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }

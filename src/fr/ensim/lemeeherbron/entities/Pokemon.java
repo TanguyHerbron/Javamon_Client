@@ -4,6 +4,7 @@ import com.sun.javafx.geom.Vec2f;
 import fr.ensim.lemeeherbron.terrain.Terrain;
 import fr.ensim.lemeeherbron.terrain.pathfinder.AStarPathFinder;
 import fr.ensim.lemeeherbron.terrain.pathfinder.Path;
+import javafx.scene.image.Image;
 
 import java.util.HashMap;
 import java.util.Random;
@@ -17,12 +18,18 @@ public class Pokemon extends Entity {
     private Vec2f target;
     private Path path;
     private Terrain terrain;
+    private int level;
+    private float xp;
+    private HashMap<Integer, String> evolutions;
 
     public Pokemon(String spriteName, int width, int height, double borderX, double borderY, int speed, boolean behavior) {
         super("pokemon/" + spriteName, width, height, borderX, borderY, speed);
 
         this.behavior = behavior;
         id = count.incrementAndGet();
+
+        xp = 0;
+        level = 1;
     }
 
     public Pokemon(String spriteName, double borderX, double borderY, int speed, boolean behavior) {
@@ -51,6 +58,19 @@ public class Pokemon extends Entity {
 
         terrain = Terrain.getInstance();
         behavior = true;
+
+        xp = 0;
+        level = 1;
+    }
+
+    public void addEvolutions(int level, String spriteName)
+    {
+        if(evolutions == null)
+        {
+            evolutions = new HashMap<>();
+        }
+
+        evolutions.put(level, spriteName);
     }
 
     public void setPosX(double x)
@@ -213,5 +233,29 @@ public class Pokemon extends Entity {
     {
         String str = spriteName.substring(spriteName.lastIndexOf("/") + 1);
         return str.substring(0, 1).toUpperCase() + str.substring(1);
+    }
+
+    public void pex()
+    {
+        if(level < 100)
+        {
+            xp += 10;
+
+            float levelThreshold = (float) (100 + (level * (0.65 * level)));
+
+            if(xp > levelThreshold)
+            {
+                xp = xp % levelThreshold;
+                level++;
+
+                System.out.println(">> " + spriteName + " level " + level);
+
+                if(evolutions.containsKey(level))
+                {
+                    spriteName = "pokemon/" + evolutions.get(level);
+                    this.image = new Image("/sprite/" + spriteName + ".png");
+                }
+            }
+        }
     }
 }
