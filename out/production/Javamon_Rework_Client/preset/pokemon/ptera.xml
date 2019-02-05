@@ -4,4 +4,5 @@
 	<entry key="sprite">ptera</entry>
 	<entry key="speed">7</entry>
 	<entry key="behavior">false</entry>
+	<entry key="evolution"></entry>
 </properties>

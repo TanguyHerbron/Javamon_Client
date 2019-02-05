@@ -22,15 +22,19 @@ public class PokemonBuilder {
             String spriteName = properties.getProperty("sprite");
             int pokemonSpeed = Integer.parseInt(properties.getProperty("speed"));
             boolean pokemonBehavior = Boolean.parseBoolean(properties.getProperty("behavior"));
-            String[] evolutions = properties.getProperty("evolution").split(Pattern.quote("$"));
 
             newPokemon = new Pokemon(spriteName,
                     borderX, borderY, pokemonSpeed,
                     pokemonBehavior, Terrain.getInstance());
 
+            String[] evolutions = properties.getProperty("evolution").split(Pattern.quote("$"));
+
             for(String evolution : evolutions)
             {
-                newPokemon.addEvolutions(Integer.parseInt(evolution.substring(0, evolution.indexOf("|"))), evolution.substring(evolution.indexOf("|") + 1));
+                if(evolution.length() > 0)
+                {
+                    newPokemon.addEvolutions(Integer.parseInt(evolution.substring(0, evolution.indexOf("|"))), evolution.substring(evolution.indexOf("|") + 1));
+                }
             }
 
         } catch (IOException e) {

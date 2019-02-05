@@ -31,7 +31,7 @@ public class Player extends Entity implements EventHandler<KeyEvent> {
         pokemons = new ArrayList<>();
 
         try {
-            pokemons.add(PokemonBuilder.build("magicarpe", 512, 512));
+            pokemons.add(PokemonBuilder.build("ptera", 512, 512));
         } catch (PokemonNotLoadedException e) {
             e.printStackTrace();
         }

@@ -250,7 +250,7 @@ public class Pokemon extends Entity {
 
                 System.out.println(">> " + spriteName + " level " + level);
 
-                if(evolutions.containsKey(level))
+                if(evolutions != null && evolutions.containsKey(level))
                 {
                     spriteName = "pokemon/" + evolutions.get(level);
                     this.image = new Image("/sprite/" + spriteName + ".png");
