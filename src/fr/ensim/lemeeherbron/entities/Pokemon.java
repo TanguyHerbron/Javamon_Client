@@ -5,6 +5,7 @@ import fr.ensim.lemeeherbron.terrain.Terrain;
 import fr.ensim.lemeeherbron.terrain.pathfinder.AStarPathFinder;
 import fr.ensim.lemeeherbron.terrain.pathfinder.Path;
 
+import java.util.HashMap;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -16,8 +17,6 @@ public class Pokemon extends Entity {
     private Vec2f target;
     private Path path;
     private Terrain terrain;
-
-    private int tempoMove;
 
     public Pokemon(String spriteName, int width, int height, double borderX, double borderY, int speed, boolean behavior) {
         super("pokemon/" + spriteName, width, height, borderX, borderY, speed);
@@ -97,35 +96,20 @@ public class Pokemon extends Entity {
     {
         if(path != null)
         {
-            if(tempoMove == 500)
-            {
-                move();
-                tempoMove = 0;
-            }
-            else
-            {
-                tempoMove++;
-            }
+            move();
         }
         else
         {
             if(hasBehavior())
             {
-                boolean wantsToMove = new Random().nextInt(5)==0;
+                Random rand = new Random();
 
-                if(wantsToMove)
-                {
-                    Random rand = new Random();
+                int xp = (int) Math.floor(getX() / 16);
+                int xy = (int) Math.floor(getY() / 16);
 
-                    int xp = (int) Math.floor(getX() / 16);
-                    int xy = (int) Math.floor(getY() / 16);
+                AStarPathFinder aStarPathFinder = new AStarPathFinder(terrain, 100);
 
-                    AStarPathFinder aStarPathFinder = new AStarPathFinder(terrain, 100);
-
-                    path = aStarPathFinder.findPath(xp, xy, rand.nextInt(5) + 10, rand.nextInt(5) + 10);
-
-                    tempoMove = 0;
-                }
+                path = aStarPathFinder.findPath(xp, xy, rand.nextInt(32), rand.nextInt(32));
             }
         }
     }
@@ -227,6 +211,7 @@ public class Pokemon extends Entity {
     @Override
     public String toString()
     {
-        return ">> " + spriteName + " " + speed + " " + behavior;
+        String str = spriteName.substring(spriteName.lastIndexOf("/") + 1);
+        return str.substring(0, 1).toUpperCase() + str.substring(1);
     }
 }

@@ -2,6 +2,7 @@ package fr.ensim.lemeeherbron.terrain;
 
 import com.sun.javafx.geom.Vec2d;
 import fr.ensim.lemeeherbron.entities.NPC;
+import fr.ensim.lemeeherbron.entities.Nurse;
 import fr.ensim.lemeeherbron.entities.Sprite;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
@@ -100,8 +101,18 @@ public class Terrain {
         {
             JSONObject npcObject = npcArray.getJSONObject(i);
 
-            NPC npc = new NPC(npcObject.getString("sprite"),
-                    npcObject.getString("orientation").charAt(0));
+            NPC npc = null;
+
+            if(npcObject.getString("sprite").equals("nurse"))
+            {
+                npc = new Nurse("old_man",
+                        npcObject.getString("orientation").charAt(0));
+            }
+            else
+            {
+                npc = new NPC(npcObject.getString("sprite"),
+                        npcObject.getString("orientation").charAt(0));
+            }
 
             npc.setPosition(npcObject.getDouble("x") * 16
                     , npcObject.getDouble("y") * 16);

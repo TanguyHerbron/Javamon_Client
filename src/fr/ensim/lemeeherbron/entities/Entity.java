@@ -4,11 +4,12 @@ import fr.ensim.lemeeherbron.terrain.Terrain;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 
+import java.util.Random;
+
 public class Entity extends Sprite {
 
     protected double speed;
 
-    private int counter;
     protected char lastMove;
 
     public Entity() {}
@@ -98,10 +99,12 @@ public class Entity extends Sprite {
         int xPiece = 0;
         int yPiece = 0;
 
+        boolean counter = new Random().nextInt(2)==0;
+
         switch (lastMove)
         {
             case 'u':
-                if(counter > 15)
+                if(counter)
                 {
                     xPiece = 0;
                     yPiece = 0;
@@ -113,7 +116,7 @@ public class Entity extends Sprite {
                 }
                 break;
             case 'd':
-                if(counter > 15)
+                if(counter)
                 {
                     xPiece = 0;
                     yPiece = 64;
@@ -125,7 +128,7 @@ public class Entity extends Sprite {
                 }
                 break;
             case 'l':
-                if(counter > 15)
+                if(counter)
                 {
                     xPiece = 32;
                     yPiece = 0;
@@ -137,7 +140,7 @@ public class Entity extends Sprite {
                 }
                 break;
             case 'r':
-                if(counter > 15)
+                if(counter)
                 {
                     xPiece = 32;
                     yPiece = 64;
@@ -148,13 +151,6 @@ public class Entity extends Sprite {
                     yPiece = 96;
                 }
                 break;
-        }
-
-        counter = (counter + 1) % 31;
-
-        if(this instanceof Pokemon)
-        {
-            System.out.println(">> Rendered with " + spriteName + " " + lastMove + " " + xPiece + " " + yPiece + " " + width + " " + height + " " + x + " " + y);
         }
 
         graphicsContext.drawImage(image, xPiece, yPiece, width, height, x, y, width, height);

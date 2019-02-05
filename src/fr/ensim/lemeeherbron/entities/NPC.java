@@ -10,7 +10,7 @@ public class NPC extends Entity {
     private int imagePosX;
     private int imagePosY;
 
-    private Dialog dialog;
+    protected Dialog dialog;
 
     public NPC(String spriteName, char orientation, int x, int y)
     {
@@ -25,10 +25,6 @@ public class NPC extends Entity {
         this(spriteName, 0, 0);
 
         this.obstacle = true;
-
-        dialog = new Dialog("Choose a Pokemon");
-        dialog.setMustChoosePokemon(true);
-        dialog.setNextDialog(new Dialog("We'll take care of it"));
 
         switchSide(orientation);
     }

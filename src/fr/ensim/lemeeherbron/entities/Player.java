@@ -28,8 +28,8 @@ public class Player extends Entity implements EventHandler<KeyEvent> {
 
         pokemons = new ArrayList<>();
 
-        pokemons.add(new Pokemon("ptera", 512, 512, 5, true));
-        pokemons.add(new Pokemon("leviator", 512, 512, 5, true));
+        pokemons.add(new Pokemon("ptera", 512, 512, 5, true, Terrain.getInstance()));
+        pokemons.add(new Pokemon("leviator", 512, 512, 5, true, Terrain.getInstance()));
     }
 
     public char getDirection()
@@ -266,6 +266,11 @@ public class Player extends Entity implements EventHandler<KeyEvent> {
         currentDialog = currentDialog.getNextDialog();
     }
 
+    public void updateDialog(int index)
+    {
+        currentDialog = currentDialog.getDialog(index);
+    }
+
     public Dialog getDialog()
     {
         return currentDialog;
@@ -281,18 +286,13 @@ public class Player extends Entity implements EventHandler<KeyEvent> {
         return pokemons;
     }
 
-    public void removePokemon(String pokemonName)
+    public void removePokemon(Pokemon pokemon)
     {
-        int i = 0;
+        pokemons.remove(pokemon);
+    }
 
-        while(i < pokemons.size())
-        {
-            if(pokemons.get(i).getSpriteName().equals(pokemonName))
-            {
-                pokemons.remove(i);
-            }
-
-            i++;
-        }
+    public void givePokemon(Pokemon pokemon)
+    {
+        pokemons.add(pokemon);
     }
 }

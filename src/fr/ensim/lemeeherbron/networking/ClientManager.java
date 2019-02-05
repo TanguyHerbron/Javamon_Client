@@ -19,16 +19,12 @@ public class ClientManager {
     private PrintWriter pw;
     private BufferedReader br;
 
-    private List<Pokemon> serverPokemons;
-
     public ClientManager(String ip) throws IOException
     {
         clientSocket = new Socket(ip, PORT);
 
         pw = new PrintWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
         br = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-
-        serverPokemons = new ArrayList<>();
 
         id = Integer.parseInt(br.readLine());
 
@@ -63,11 +59,11 @@ public class ClientManager {
 
     public List<Pokemon> updatePokemons()
     {
+        List<Pokemon> serverPokemons = new ArrayList<>();
+
         try {
             if(br.ready())
             {
-                serverPokemons.clear();
-
                 String str = br.readLine();
 
                 JSONArray jsonArray = new JSONArray(str);

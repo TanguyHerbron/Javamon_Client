@@ -1,7 +1,7 @@
 {
   "npc": [
     {
-      "sprite": "old_man",
+      "sprite": "nurse",
       "orientation": "u",
       "x": "20",
       "y": "17"
