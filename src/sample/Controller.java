@@ -1,6 +1,7 @@
 package sample;
 
 import fr.ensim.lemeeherbron.*;
+import fr.ensim.lemeeherbron.entities.Nurse;
 import fr.ensim.lemeeherbron.entities.Pokemon;
 import fr.ensim.lemeeherbron.networking.ClientManager;
 import fr.ensim.lemeeherbron.terrain.Nursery;
@@ -19,6 +20,7 @@ import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -131,16 +133,34 @@ public class Controller extends AnimationTimer implements Initializable {
             @Override
             public void handle(MouseEvent event) {
 
-                String pokemonName = choiceList.getSelectionModel().getSelectedItems().get(0).toString().substring(choiceList.getSelectionModel().getSelectedItems().get(0).toString().indexOf("/"));
+                if(gameCore.getPlayer().getDialog().mustChoosePokemon())
+                {
+                    Pokemon pokemon = (Pokemon) choiceList.getSelectionModel().getSelectedItems().get(0);
 
-                Pokemon newPokemon = new Pokemon(pokemonName, 512, 512, 5, true, gameCore.getTerrain());
-                newPokemon.setPosition(256, 100);
+                    if(gameCore.getPlayer().getDialog().getText().equals("Which pokemon do you want to give us ?"))
+                    {
+                        pokemon.setPosition(320, 256);
 
-                gameCore.addPokemonToNursery(newPokemon);
+                        gameCore.addPokemonToNursery(pokemon);
 
-                gameCore.getPlayer().updateDialog();
+                        gameCore.getPlayer().updateDialog();
 
-                gameCore.getPlayer().removePokemon(choiceList.getSelectionModel().getSelectedItems().get(0).toString());
+                        gameCore.getPlayer().removePokemon(pokemon);
+                    }
+                    else
+                    {
+                        Nursery.removePokemon(pokemon);
+
+                        gameCore.getPlayer().givePokemon(pokemon);
+
+                        gameCore.getPlayer().updateDialog();
+                    }
+                }
+
+                if(gameCore.getPlayer().getDialog().hasChoice())
+                {
+                    gameCore.getPlayer().updateDialog(Integer.parseInt(choiceList.getSelectionModel().getSelectedIndices().get(0).toString()));
+                }
 
                 choiceList.setVisible(false);
                 choiceList.getItems().removeAll(choiceList.getItems());
@@ -261,15 +281,40 @@ public class Controller extends AnimationTimer implements Initializable {
             {
                 String str = " ";
 
-                if(gameCore.getPlayer().getDialog().mustChoosePokemon() && choiceList.getItems().size() == 0)
+                if(choiceList.getItems().size() == 0)
                 {
-                    List<Pokemon> pokemonList = gameCore.getPlayer().getPokemonList();
-
-                    choiceList.setVisible(true);
-
-                    for(int i = 0; i < pokemonList.size(); i++)
+                    if(gameCore.getPlayer().getDialog().mustChoosePokemon())
                     {
-                        choiceList.getItems().add(choiceList.getItems().size(), pokemonList.get(i).getSpriteName());
+                        if(gameCore.getPlayer().getDialog().getText().equals("Which pokemon do you want to give us ?"))
+                        {
+                            List<Pokemon> pokemonList = gameCore.getPlayer().getPokemonList();
+
+                            for(int i = 0; i < pokemonList.size(); i++)
+                            {
+                                choiceList.getItems().add(choiceList.getItems().size(), pokemonList.get(i));
+                            }
+                        }
+                        else
+                        {
+                            for(int i = 0; i < Nursery.getPokemons().size(); i++)
+                            {
+                                choiceList.getItems().add(choiceList.getItems().size(), Nursery.getPokemons().get(i));
+                            }
+                        }
+
+                        choiceList.setVisible(true);
+                    }
+
+                    if(gameCore.getPlayer().getDialog().hasChoice())
+                    {
+                        Iterator iterator = gameCore.getPlayer().getDialog().getChoices().keySet().iterator();
+
+                        while(iterator.hasNext())
+                        {
+                            choiceList.getItems().add(choiceList.getItems().size(), gameCore.getPlayer().getDialog().getChoices().get(iterator.next()));
+                        }
+
+                        choiceList.setVisible(true);
                     }
                 }
 
