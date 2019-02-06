@@ -1,5 +1,7 @@
 package fr.ensim.lemeeherbron.terrain;
 
+import fr.ensim.lemeeherbron.PokemonBuilder;
+import fr.ensim.lemeeherbron.PokemonNotLoadedException;
 import fr.ensim.lemeeherbron.entities.Pokemon;
 import fr.ensim.lemeeherbron.entities.Sprite;
 
@@ -12,19 +14,23 @@ public class Nursery {
 
     public static void init()
     {
-        Pokemon pokemon = null;
-
-        pokemon = new Pokemon("leviator", 512, 512, 5, true, Terrain.getInstance());
-        pokemon.setPosition(256, 100);
-        pokemons.add(pokemon);
-
-        pokemon = new Pokemon("ptera", 512, 512, 5, true, Terrain.getInstance());
-        pokemon.setPosition(256, 125);
-        pokemons.add(pokemon);
+        try {
+            pokemons.add(PokemonBuilder.build("chetiflor", 512, 512));
+            pokemons.get(pokemons.size() - 1).setPosition(320, 256);
+            pokemons.add(PokemonBuilder.build("chetiflor", 512, 512));
+            pokemons.get(pokemons.size() - 1).setPosition(320, 256);
+            pokemons.add(PokemonBuilder.build("chetiflor", 512, 512));
+            pokemons.get(pokemons.size() - 1).setPosition(320, 256);
+            pokemons.add(PokemonBuilder.build("chetiflor", 512, 512));
+            pokemons.get(pokemons.size() - 1).setPosition(320, 256);
+        } catch (PokemonNotLoadedException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void addPokemon(Pokemon pokemon)
     {
+        pokemon.setPosition(320, 256);
         pokemons.add(pokemon);
     }
 

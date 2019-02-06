@@ -2,7 +2,7 @@
   "npc": [],
   "spawnpoint": [
     {
-      "from": "inside1",
+      "from": "nursery",
       "x": "18",
       "y": "16"
     }

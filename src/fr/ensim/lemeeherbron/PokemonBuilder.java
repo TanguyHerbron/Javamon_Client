@@ -7,6 +7,7 @@ import jdk.internal.util.xml.impl.Input;
 import java.io.*;
 import java.net.URL;
 import java.util.Properties;
+import java.util.Random;
 import java.util.regex.Pattern;
 
 public class PokemonBuilder {
@@ -25,7 +26,7 @@ public class PokemonBuilder {
 
             newPokemon = new Pokemon(spriteName,
                     borderX, borderY, pokemonSpeed,
-                    pokemonBehavior, Terrain.getInstance());
+                    pokemonBehavior, Terrain.getInstance(), new Random().nextInt(2));
 
             String[] evolutions = properties.getProperty("evolution").split(Pattern.quote("$"));
 

@@ -139,8 +139,6 @@ public class Controller extends AnimationTimer implements Initializable {
 
                     if(gameCore.getPlayer().getDialog().getText().equals("Which pokemon do you want to give us ?"))
                     {
-                        pokemon.setPosition(320, 256);
-
                         gameCore.addPokemonToNursery(pokemon);
 
                         gameCore.getPlayer().updateDialog();
@@ -258,6 +256,8 @@ public class Controller extends AnimationTimer implements Initializable {
 
     @Override
     public void handle(long now) {
+        Pokemon.updateSprites();
+
         if(renderCanvas) gameCore.draw();
 
         if(checkBoxDrawGrid.isSelected()) gameCore.drawGrid();

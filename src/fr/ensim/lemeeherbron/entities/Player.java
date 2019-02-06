@@ -32,6 +32,9 @@ public class Player extends Entity implements EventHandler<KeyEvent> {
 
         try {
             pokemons.add(PokemonBuilder.build("ptera", 512, 512));
+
+            pokemons.add(PokemonBuilder.build("chetiflor", 512, 512));
+            pokemons.add(PokemonBuilder.build("chetiflor", 512, 512));
         } catch (PokemonNotLoadedException e) {
             e.printStackTrace();
         }
@@ -214,7 +217,10 @@ public class Player extends Entity implements EventHandler<KeyEvent> {
             }
             else
             {
-                currentDialog = currentDialog.getNextDialog();
+                if(!currentDialog.hasChoice())
+                {
+                    currentDialog = currentDialog.getNextDialog();
+                }
             }
         }
     }

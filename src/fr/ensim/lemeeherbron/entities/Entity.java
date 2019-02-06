@@ -12,6 +12,8 @@ public class Entity extends Sprite {
 
     protected char lastMove;
 
+    private static int spriteCounter = 0;
+
     public Entity() {}
 
     public Entity(String spriteName, double width, double height, double borderX, double borderY, double speed) {
@@ -93,18 +95,22 @@ public class Entity extends Sprite {
         return new Rectangle2D(x + (width - 16 - (width - 16) / 2), y + (height - 16), 16, 16);
     }
 
+    public static void updateSprites()
+    {
+        spriteCounter++;
+        spriteCounter %= 31;
+    }
+
     @Override
     public void render(GraphicsContext graphicsContext)
     {
         int xPiece = 0;
         int yPiece = 0;
 
-        boolean counter = new Random().nextInt(2)==0;
-
         switch (lastMove)
         {
             case 'u':
-                if(counter)
+                if(spriteCounter > 15)
                 {
                     xPiece = 0;
                     yPiece = 0;
@@ -116,7 +122,7 @@ public class Entity extends Sprite {
                 }
                 break;
             case 'd':
-                if(counter)
+                if(spriteCounter > 15)
                 {
                     xPiece = 0;
                     yPiece = 64;
@@ -128,7 +134,7 @@ public class Entity extends Sprite {
                 }
                 break;
             case 'l':
-                if(counter)
+                if(spriteCounter > 15)
                 {
                     xPiece = 32;
                     yPiece = 0;
@@ -140,7 +146,7 @@ public class Entity extends Sprite {
                 }
                 break;
             case 'r':
-                if(counter)
+                if(spriteCounter > 15)
                 {
                     xPiece = 32;
                     yPiece = 64;

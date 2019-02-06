@@ -1,6 +1,8 @@
 package fr.ensim.lemeeherbron.networking;
 
 import fr.ensim.lemeeherbron.entities.Pokemon;
+import fr.ensim.lemeeherbron.terrain.Nursery;
+import fr.ensim.lemeeherbron.terrain.Terrain;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -47,6 +49,8 @@ public class ClientManager {
             pokemonObject.put("x", pokemon.getX());
             pokemonObject.put("y", pokemon.getY());
             pokemonObject.put("orientation", String.valueOf(pokemon.getOrientation()));
+            pokemonObject.put("speed", pokemon.getSpeed());
+            pokemonObject.put("sexe", pokemon.getSexe());
 
             jsonArray.put(pokemonObject);
         }
@@ -72,11 +76,33 @@ public class ClientManager {
                 {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
 
-                    serverPokemons.add(new Pokemon(jsonObject.getInt("id"),
+                    Pokemon pokemon = new Pokemon(jsonObject.getInt("id"),
                             jsonObject.getString("name"),
                             jsonObject.getInt("x"),
                             jsonObject.getInt("y"),
-                            jsonObject.get("orientation").toString().charAt(0)));
+                            (char) Integer.parseInt(jsonObject.get("orientation").toString()));
+
+                    pokemon.setSpeed(jsonObject.getInt("speed"));
+
+                    serverPokemons.add(pokemon);
+
+                    if(pokemon.getId() == 0)
+                    {
+                        String spriteName = jsonObject.getString("name").substring(jsonObject.getString("name").lastIndexOf("/")+1);
+                        Pokemon newPokemon = new Pokemon(spriteName
+                                , 512
+                                , 512
+                                , jsonObject.getInt("speed")
+                                , true
+                                , Terrain.getInstance()
+                                , jsonObject.getInt("sexe"));
+
+                        Nursery.addPokemon(newPokemon);
+
+                        newPokemon.setPosition(jsonObject.getDouble("x"), jsonObject.getDouble("y"));
+
+                        System.out.println("Received new pokemon");
+                    }
                 }
             }
         } catch (IOException e) {

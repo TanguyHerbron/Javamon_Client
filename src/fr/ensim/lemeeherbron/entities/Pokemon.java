@@ -12,6 +12,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Pokemon extends Entity {
 
+    private static final int FEMALE = 0;
+    private static final int MALE = 1;
+
     private static final AtomicInteger count = new AtomicInteger(0);
     private int id;
     private boolean behavior;
@@ -21,6 +24,7 @@ public class Pokemon extends Entity {
     private int level;
     private float xp;
     private HashMap<Integer, String> evolutions;
+    private int sexe = MALE;
 
     public Pokemon(String spriteName, int width, int height, double borderX, double borderY, int speed, boolean behavior) {
         super("pokemon/" + spriteName, width, height, borderX, borderY, speed);
@@ -36,8 +40,10 @@ public class Pokemon extends Entity {
         this(spriteName, 32, 32, borderX, borderY, speed, behavior);
     }
 
-    public Pokemon(String spriteName, double borderX, double borderY, int speed, boolean behavior, Terrain terrain) {
+    public Pokemon(String spriteName, double borderX, double borderY, int speed, boolean behavior, Terrain terrain, int sexe) {
         this(spriteName, 32, 32, borderX, borderY, speed, behavior, terrain);
+
+        this.sexe = sexe;
     }
 
     public Pokemon(String spriteName, int width, int height, double borderX, double borderY, int speed, boolean behavior, Terrain terrain)
@@ -122,14 +128,17 @@ public class Pokemon extends Entity {
         {
             if(hasBehavior())
             {
-                Random rand = new Random();
+                if(new Random().nextInt(20) == 0)
+                {
+                    Random rand = new Random();
 
-                int xp = (int) Math.floor(getX() / 16);
-                int xy = (int) Math.floor(getY() / 16);
+                    int xp = (int) Math.floor(getX() / 16);
+                    int xy = (int) Math.floor(getY() / 16);
 
-                AStarPathFinder aStarPathFinder = new AStarPathFinder(terrain, 100);
+                    AStarPathFinder aStarPathFinder = new AStarPathFinder(terrain, 100);
 
-                path = aStarPathFinder.findPath(xp, xy, rand.nextInt(32), rand.nextInt(32));
+                    path = aStarPathFinder.findPath(xp, xy, rand.nextInt(32), rand.nextInt(32));
+                }
             }
         }
     }
@@ -214,6 +223,11 @@ public class Pokemon extends Entity {
         return speed;
     }
 
+    public void setSpeed(double speed)
+    {
+        this.speed = speed;
+    }
+
     private boolean hasTarget()
     {
         return target != null;
@@ -232,14 +246,21 @@ public class Pokemon extends Entity {
     public String toString()
     {
         String str = spriteName.substring(spriteName.lastIndexOf("/") + 1);
-        return str.substring(0, 1).toUpperCase() + str.substring(1);
+        String sexeSym = "♂";
+
+        if(sexe == FEMALE)
+        {
+            sexeSym = "♀";
+        }
+
+        return sexeSym + " " + str.substring(0, 1).toUpperCase() + str.substring(1);
     }
 
     public void pex()
     {
         if(level < 100)
         {
-            xp += 10;
+            xp += new Random().nextInt(10);
 
             float levelThreshold = (float) (100 + (level * (0.65 * level)));
 
@@ -248,8 +269,6 @@ public class Pokemon extends Entity {
                 xp = xp % levelThreshold;
                 level++;
 
-                System.out.println(">> " + spriteName + " level " + level);
-
                 if(evolutions != null && evolutions.containsKey(level))
                 {
                     spriteName = "pokemon/" + evolutions.get(level);
@@ -257,5 +276,10 @@ public class Pokemon extends Entity {
                 }
             }
         }
+    }
+
+    public int getSexe()
+    {
+        return sexe;
     }
 }
