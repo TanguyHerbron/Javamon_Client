@@ -27,7 +27,7 @@ public class GameCore {
 
         terrain = Terrain.build("nursery");
 
-        //Nursery.init();
+        Nursery.init();
 
         sprites = new ArrayList<>();
         animatedSprites = new ArrayList<>();
@@ -37,7 +37,7 @@ public class GameCore {
 
     private void setupPlayer()
     {
-        player = Player.build("scientist",512, 512, 8);
+        player = Player.build("old_man",512, 512, 8);
         Vec2d pos = terrain.getSpawnPointFor("00");
         player.setPosition(pos.x * 16, pos.y * 16);
     }

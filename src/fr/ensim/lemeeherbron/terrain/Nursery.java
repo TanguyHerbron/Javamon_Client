@@ -17,11 +17,15 @@ public class Nursery {
         try {
             pokemons.add(PokemonBuilder.build("chetiflor", 512, 512));
             pokemons.get(pokemons.size() - 1).setPosition(320, 256);
-            pokemons.add(PokemonBuilder.build("chetiflor", 512, 512));
+            pokemons.add(PokemonBuilder.build("bulbizarre", 512, 512));
             pokemons.get(pokemons.size() - 1).setPosition(320, 256);
-            pokemons.add(PokemonBuilder.build("chetiflor", 512, 512));
+            pokemons.add(PokemonBuilder.build("magicarpe", 512, 512));
             pokemons.get(pokemons.size() - 1).setPosition(320, 256);
-            pokemons.add(PokemonBuilder.build("chetiflor", 512, 512));
+            pokemons.add(PokemonBuilder.build("mystherbe", 512, 512));
+            pokemons.get(pokemons.size() - 1).setPosition(320, 256);
+            pokemons.add(PokemonBuilder.build("pikachu", 512, 512));
+            pokemons.get(pokemons.size() - 1).setPosition(320, 256);
+            pokemons.add(PokemonBuilder.build("ptera", 512, 512));
             pokemons.get(pokemons.size() - 1).setPosition(320, 256);
         } catch (PokemonNotLoadedException e) {
             e.printStackTrace();
