@@ -22,6 +22,15 @@ public class Entity extends Sprite {
         this.speed = speed;
     }
 
+    public Entity(String spriteName, double x, double y, char orientation)
+    {
+        super(spriteName, 32, 32, 512, 512);
+
+        this.x = x;
+        this.y = y;
+        this.lastMove = orientation;
+    }
+
     public void up(Terrain terrain)
     {
         y -= speed;
@@ -87,6 +96,11 @@ public class Entity extends Sprite {
                 x -= speed;
                 break;
         }
+    }
+
+    public char getOrientation()
+    {
+        return lastMove;
     }
 
     @Override

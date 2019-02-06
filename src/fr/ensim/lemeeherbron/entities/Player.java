@@ -15,7 +15,7 @@ import java.util.List;
 
 public class Player extends Entity implements EventHandler<KeyEvent> {
 
-    private int counter;
+    private static int counter = 0;
     private boolean walking;
 
     private char direction = '0';
@@ -25,7 +25,21 @@ public class Player extends Entity implements EventHandler<KeyEvent> {
 
     private List<Pokemon> pokemons;
 
-    public Player(String spriteName, double borderX, double borderY, double speed) {
+    private static Player INSTANCE;
+
+    public static Player build(String spriteName, double borderX, double borderY, double speed)
+    {
+        INSTANCE = new Player(spriteName, borderX, borderY, speed);
+
+        return INSTANCE;
+    }
+
+    public static Player getInstance()
+    {
+        return INSTANCE;
+    }
+
+    private Player(String spriteName, double borderX, double borderY, double speed) {
         super("npc/" + spriteName, 32, 32, borderX, borderY, speed / 5);
 
         pokemons = new ArrayList<>();
@@ -40,9 +54,25 @@ public class Player extends Entity implements EventHandler<KeyEvent> {
         }
     }
 
+    public Player(String spriteName, double x, double y, char orientation, boolean walking)
+    {
+        super(spriteName, 32, 32, 512, 512, 0);
+
+        this.x = x;
+        this.y = y;
+        this.lastMove = orientation;
+        this.walking = walking;
+    }
+
     public char getDirection()
     {
         return direction;
+    }
+
+    public static void updateSprites()
+    {
+        counter++;
+        counter %= 31;
     }
 
     @Override
@@ -133,8 +163,6 @@ public class Player extends Entity implements EventHandler<KeyEvent> {
                     yPiece = 0;
                 }
         }
-
-        counter = (counter + 1) % 31;
 
         graphicsContext.drawImage(image, xPiece, yPiece, width, height, x, y, width, height);
     }
@@ -305,5 +333,10 @@ public class Player extends Entity implements EventHandler<KeyEvent> {
     public void givePokemon(Pokemon pokemon)
     {
         pokemons.add(pokemon);
+    }
+
+    public boolean isWalking()
+    {
+        return walking;
     }
 }

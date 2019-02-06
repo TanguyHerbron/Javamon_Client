@@ -1,8 +1,11 @@
 package fr.ensim.lemeeherbron.networking;
 
+import fr.ensim.lemeeherbron.entities.Entity;
+import fr.ensim.lemeeherbron.entities.Player;
 import fr.ensim.lemeeherbron.entities.Pokemon;
 import fr.ensim.lemeeherbron.terrain.Nursery;
 import fr.ensim.lemeeherbron.terrain.Terrain;
+import javafx.application.Platform;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -33,11 +36,17 @@ public class ClientManager {
         System.out.println("My id is " + id);
     }
 
-    public void sendPokemons(List<Pokemon> pokemons)
+    public void sendEntities(List<Pokemon> pokemons)
     {
         JSONObject mainObject = new JSONObject();
+        JSONObject playerObject = new JSONObject();
 
-        mainObject.put("clientId", id);
+        playerObject.put("sprite", Player.getInstance().getSpriteName());
+        playerObject.put("x", Player.getInstance().getX());
+        playerObject.put("y", Player.getInstance().getY());
+        playerObject.put("orientation", String.valueOf(Player.getInstance().getOrientation()));
+        playerObject.put("map", Terrain.getInstance().getValue());
+        playerObject.put("walking", Player.getInstance().isWalking());
 
         JSONArray jsonArray = new JSONArray();
 
@@ -55,26 +64,44 @@ public class ClientManager {
             jsonArray.put(pokemonObject);
         }
 
+        mainObject.put("player", playerObject);
         mainObject.put("pokemon", jsonArray);
 
         pw.println(mainObject.toString());
         pw.flush();
     }
 
-    public List<Pokemon> updatePokemons()
+    public List<Entity> updateData()
     {
-        List<Pokemon> serverPokemons = new ArrayList<>();
+        List<Entity> serverEntities = new ArrayList<>();
 
         try {
             if(br.ready())
             {
                 String str = br.readLine();
 
-                JSONArray jsonArray = new JSONArray(str);
+                JSONObject mainObject = new JSONObject(str);
 
-                for(int i = 0; i < jsonArray.length(); i++)
+                JSONArray entitiesArray = mainObject.getJSONArray("entities");
+
+                for(int i = 0; i < entitiesArray.length(); i++)
                 {
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    JSONObject jsonObject = entitiesArray.getJSONObject(i);
+
+                    Player player = new Player(jsonObject.getString("sprite"),
+                            jsonObject.getDouble("x"),
+                            jsonObject.getDouble("y"),
+                            (char) Integer.parseInt(jsonObject.get("orientation").toString()),
+                            jsonObject.getBoolean("walking"));
+
+                    serverEntities.add(player);
+                }
+
+                JSONArray pokemonArray = mainObject.getJSONArray("pokemon");
+
+                for(int i = 0; i < pokemonArray.length(); i++)
+                {
+                    JSONObject jsonObject = pokemonArray.getJSONObject(i);
 
                     Pokemon pokemon = new Pokemon(jsonObject.getInt("id"),
                             jsonObject.getString("name"),
@@ -84,7 +111,7 @@ public class ClientManager {
 
                     pokemon.setSpeed(jsonObject.getInt("speed"));
 
-                    serverPokemons.add(pokemon);
+                    serverEntities.add(pokemon);
 
                     if(pokemon.getId() == 0)
                     {
@@ -109,6 +136,6 @@ public class ClientManager {
             e.printStackTrace();
         }
 
-        return serverPokemons;
+        return serverEntities;
     }
 }

@@ -4,7 +4,6 @@ import com.sun.javafx.geom.Vec2d;
 import fr.ensim.lemeeherbron.entities.*;
 import fr.ensim.lemeeherbron.terrain.Nursery;
 import fr.ensim.lemeeherbron.terrain.Terrain;
-import javafx.animation.AnimationTimer;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -20,7 +19,7 @@ public class GameCore {
     private List<Sprite> sprites;
     private List<AnimatedSprite> animatedSprites;
     private Player player;
-    private List<Pokemon> serverPokemons;
+    private List<Entity> serverEntities;
 
     public GameCore(GraphicsContext graphicsContext)
     {
@@ -38,16 +37,9 @@ public class GameCore {
 
     private void setupPlayer()
     {
-        player = new Player("scientist",512, 512, 8);
+        player = Player.build("scientist",512, 512, 8);
         Vec2d pos = terrain.getSpawnPointFor("00");
         player.setPosition(pos.x * 16, pos.y * 16);
-
-        sprites.add(player);
-    }
-
-    public Player getPlayer()
-    {
-        return player;
     }
 
     public Terrain getTerrain() { return terrain; }
@@ -89,9 +81,22 @@ public class GameCore {
         renderedSprites.addAll(sprites);
         renderedSprites.addAll(terrain.getObstacleList());
 
-        if(terrain.getValue().equals("nursery") && serverPokemons != null)
+        if(serverEntities != null)
         {
-            renderedSprites.addAll(serverPokemons);
+            if(terrain.getValue().equals("nursery"))
+            {
+                renderedSprites.addAll(serverEntities);
+            }
+            else
+            {
+                for(Entity entity : serverEntities)
+                {
+                    if(entity instanceof Player)
+                    {
+                        renderedSprites.add(entity);
+                    }
+                }
+            }
         }
 
         //With this sort, each sprite are then rendered by Y coordinate order, which mean if a sprite is behind another in 2D
@@ -169,7 +174,6 @@ public class GameCore {
                 switchMap = true;
 
                 sprites.clear();
-                sprites.add(player);
             }
         }
 
@@ -203,8 +207,8 @@ public class GameCore {
         Nursery.addPokemon(pokemon);
     }
 
-    public void updateServerPokemons(List<Pokemon> pokemons)
+    public void updateServerEntities(List<Entity> entities)
     {
-        serverPokemons = pokemons;
+        serverEntities = entities;
     }
 }

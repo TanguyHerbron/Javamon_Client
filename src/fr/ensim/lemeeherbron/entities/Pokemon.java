@@ -237,11 +237,6 @@ public class Pokemon extends Entity {
         return id;
     }
 
-    public char getOrientation()
-    {
-        return lastMove;
-    }
-
     @Override
     public String toString()
     {
