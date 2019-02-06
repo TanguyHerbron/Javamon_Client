@@ -150,25 +150,23 @@ public class GameCore {
             {
                 player.setPosition(-1, -1);
 
-                switch (terrain.getValue())
+                String value = terrain.getValue();
+
+                switch (value)
                 {
                     case "00":
-                        String value = terrain.getValue();
-
                         terrain = Terrain.build("nursery");
-
-                        Vec2d pos = terrain.getSpawnPointFor(value);
-
-                        player.setPosition(pos.x * 16, pos.y * 16);
-
-                        switchMap = true;
                         break;
                     case "nursery":
                         terrain = Terrain.build(0, 0);
-                        player.setPosition(304, 256);
-                        switchMap = true;
                         break;
                 }
+
+                Vec2d pos = terrain.getSpawnPointFor(value);
+
+                player.setPosition(pos.x * 16, pos.y * 16);
+
+                switchMap = true;
 
                 sprites.clear();
                 sprites.add(player);
