@@ -137,7 +137,7 @@ public class Pokemon extends Entity {
 
                     AStarPathFinder aStarPathFinder = new AStarPathFinder(terrain, 100);
 
-                    path = aStarPathFinder.findPath(xp, xy, rand.nextInt(32), rand.nextInt(32));
+                    path = aStarPathFinder.findPath(xp, xy, 3 + rand.nextInt(25), 4 + rand.nextInt(13));
                 }
             }
         }
