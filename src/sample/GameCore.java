@@ -37,7 +37,9 @@ public class GameCore {
 
     private void setupPlayer()
     {
-        player = Player.build("old_man",512, 512, 8);
+        //old_man
+        //glassy
+        player = new Player("scientist",512, 512, 8);
         Vec2d pos = terrain.getSpawnPointFor("00");
         player.setPosition(pos.x * 16, pos.y * 16);
     }
