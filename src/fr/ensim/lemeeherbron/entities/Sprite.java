@@ -20,9 +20,11 @@ public class Sprite {
     private double borderX;
     private double borderY;
 
-    private boolean obstacle;
+    protected boolean obstacle;
 
     private boolean portal;
+
+    public Sprite() {}
 
     public Sprite(String spriteName, double borderX, double borderY)
     {
@@ -88,7 +90,7 @@ public class Sprite {
         {
             while(index < terrain.getObstacleList().size() && !found)
             {
-                if(intersects(terrain.getObstacleList().get(index)) == 1)
+                if(terrain.getObstacleList().get(index).isObstacle() && intersects(terrain.getObstacleList().get(index)) == 1)
                 {
                     found = true;
                 }
@@ -98,6 +100,16 @@ public class Sprite {
         }
 
         return found;
+    }
+
+    public int getTileX()
+    {
+        return (int) Math.floor(x / 16);
+    }
+
+    public int getTileY()
+    {
+        return (int) Math.floor(y / 16);
     }
 
     public double getX()

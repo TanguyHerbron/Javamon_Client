@@ -1,15 +1,22 @@
 package fr.ensim.lemeeherbron.terrain;
 
+import com.sun.javafx.geom.Vec2d;
+import fr.ensim.lemeeherbron.entities.NPC;
+import fr.ensim.lemeeherbron.entities.Nurse;
 import fr.ensim.lemeeherbron.entities.Sprite;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import jdk.nashorn.internal.parser.JSONParser;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Terrain {
@@ -17,46 +24,110 @@ public class Terrain {
     private Tile[][] tileTable;
     private List<Sprite> obstacleList;
     private String value;
+    private HashMap<String, Vec2d> spawnPoints;
 
     private boolean ready;
 
-    public Terrain(int x, int y)
+    private static Terrain INSTANCE;
+
+    public static Terrain getInstance()
+    {
+        return INSTANCE;
+    }
+
+    public static Terrain build(String name)
+    {
+        INSTANCE = new Terrain(name);
+
+        return INSTANCE;
+    }
+
+    public static Terrain build(int x, int y)
+    {
+        INSTANCE = new Terrain(x, y);
+
+        return INSTANCE;
+    }
+
+    private Terrain(int x, int y)
     {
         tileTable = new Tile[32][32];
         obstacleList = new ArrayList<>();
+        spawnPoints = new HashMap<>();
 
         this.value = x + "" + y;
 
-        prepare(x, y);
+        prepare(x + "_" + y);
     }
 
-    public Terrain(String insideName)
+    private Terrain(String insideName)
     {
         tileTable = new Tile[32][32];
         obstacleList = new ArrayList<>();
+        spawnPoints = new HashMap<>();
 
         this.value = insideName;
 
-        prepare(insideName);
+        prepare("inside/" + insideName);
     }
 
-    private void prepare(String insideName)
+    private void prepare(String mapName)
     {
+        String baseUri = "/terrain/" + mapName;
+
         try {
-            File terImg = new File(getClass().getResource("/terrain/inside/" + insideName + ".png").toURI());
+            File terImg = new File(getClass().getResource(baseUri + ".png").toURI());
             generateTerrain(ImageIO.read(terImg));
+
+            File obsFile = new File(getClass().getResource(baseUri + ".json").toURI());
+            loadObjets(obsFile);
         } catch (IOException | URISyntaxException e) {
             e.printStackTrace();
         }
     }
 
-    private void prepare(int x, int y)
+    private void loadObjets(File file) throws IOException
     {
-        try {
-            File terImg = new File(getClass().getResource("/terrain/" + x + "_" + y + ".png").toURI());
-            generateTerrain(ImageIO.read(terImg));
-        } catch (IOException | URISyntaxException e) {
-            e.printStackTrace();
+        FileInputStream fis = new FileInputStream(file);
+        byte[] data = new byte[(int) file.length()];
+        fis.read(data);
+        fis.close();
+
+        JSONObject jsonObject = new JSONObject(new String(data, "UTF-8"));
+
+        JSONArray npcArray = jsonObject.getJSONArray("npc");
+
+        for(int i = 0; i < npcArray.length(); i++)
+        {
+            JSONObject npcObject = npcArray.getJSONObject(i);
+
+            NPC npc = null;
+
+            if(npcObject.getString("sprite").equals("nurse"))
+            {
+                npc = new Nurse("old_man",
+                        npcObject.getString("orientation").charAt(0));
+            }
+            else
+            {
+                npc = new NPC(npcObject.getString("sprite"),
+                        npcObject.getString("orientation").charAt(0));
+            }
+
+            npc.setPosition(npcObject.getDouble("x") * 16
+                    , npcObject.getDouble("y") * 16);
+
+            obstacleList.add(npc);
+        }
+
+        JSONArray spawnArray = jsonObject.getJSONArray("spawnpoint");
+
+        for(int i = 0; i < spawnArray.length(); i++)
+        {
+            JSONObject spawnObject = spawnArray.getJSONObject(i);
+
+            spawnPoints.put(spawnObject.getString("from"),
+                    new Vec2d(spawnObject.getDouble("x"), spawnObject.getDouble("y")));
         }
     }
 
@@ -174,8 +245,13 @@ public class Terrain {
                 sprite.setPortal(true);
                 break;
             case "e5":
-                sprite = new Sprite("carpet", 512, 512);
-                sprite.setPortal(true);
+                sprite = new Sprite("carpet", 512, 512, false);
+                break;
+            case "e2":
+                sprite = new Sprite("bar", 512, 512, false);
+                break;
+            case "de":
+                sprite = new Sprite("bar_r", 512, 512, false);
                 break;
         }
 
@@ -284,11 +360,6 @@ public class Terrain {
                 }
             }
         }
-
-        for(Sprite sprite : obstacleList)
-        {
-            sprite.render(graphicsContext);
-        }
     }
 
     public boolean blocked(int x, int y)
@@ -321,21 +392,18 @@ public class Terrain {
 
     public void drawGrid(GraphicsContext graphicsContext)
     {
-        int height = tileTable[0][0].getHeight();
-        int width = tileTable[0][0].getWidth();
-
         graphicsContext.setLineWidth(1.0);
         graphicsContext.setStroke(Color.WHITE);
         graphicsContext.setGlobalAlpha(0.4);
 
         for(int i = 0; i < tileTable.length; i++)
         {
-            graphicsContext.strokeLine(i * height, 0, i * height, tileTable.length * height);
+            graphicsContext.strokeLine(i * 16, 0, i * 16, tileTable.length * 16);
         }
 
         for(int i = 0; i < tileTable[0].length; i++)
         {
-            graphicsContext.strokeLine(0, i * width, tileTable[0].length * width, i * width);
+            graphicsContext.strokeLine(0, i * 16, tileTable[0].length * 16, i * 16);
         }
 
         graphicsContext.setGlobalAlpha(1);
@@ -349,5 +417,10 @@ public class Terrain {
     public boolean isReady()
     {
         return ready;
+    }
+
+    public Vec2d getSpawnPointFor(String from)
+    {
+        return spawnPoints.get(from);
     }
 }

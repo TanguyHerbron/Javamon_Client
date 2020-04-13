@@ -80,6 +80,7 @@ public class AStarPathFinder {
                         {
                             float nextStepCost = currentNode.getCost() + 1;
                             Node neighbour = nodes[xp][yp];
+
                             //TODO remove line if never used
                             //terrain.pathFinderVisited()
 

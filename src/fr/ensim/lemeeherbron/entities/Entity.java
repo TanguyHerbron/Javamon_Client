@@ -4,17 +4,31 @@ import fr.ensim.lemeeherbron.terrain.Terrain;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 
+import java.util.Random;
+
 public class Entity extends Sprite {
 
     protected double speed;
 
-    private int counter;
     protected char lastMove;
+
+    private static int spriteCounter = 0;
+
+    public Entity() {}
 
     public Entity(String spriteName, double width, double height, double borderX, double borderY, double speed) {
         super(spriteName, width, height, borderX, borderY);
 
         this.speed = speed;
+    }
+
+    public Entity(String spriteName, double x, double y, char orientation)
+    {
+        super(spriteName, 32, 32, 512, 512);
+
+        this.x = x;
+        this.y = y;
+        this.lastMove = orientation;
     }
 
     public void up(Terrain terrain)
@@ -84,10 +98,21 @@ public class Entity extends Sprite {
         }
     }
 
+    public char getOrientation()
+    {
+        return lastMove;
+    }
+
     @Override
     public Rectangle2D getBoundary()
     {
         return new Rectangle2D(x + (width - 16 - (width - 16) / 2), y + (height - 16), 16, 16);
+    }
+
+    public static void updateSprites()
+    {
+        spriteCounter++;
+        spriteCounter %= 31;
     }
 
     @Override
@@ -99,7 +124,7 @@ public class Entity extends Sprite {
         switch (lastMove)
         {
             case 'u':
-                if(counter > 15)
+                if(spriteCounter > 15)
                 {
                     xPiece = 0;
                     yPiece = 0;
@@ -111,7 +136,7 @@ public class Entity extends Sprite {
                 }
                 break;
             case 'd':
-                if(counter > 15)
+                if(spriteCounter > 15)
                 {
                     xPiece = 0;
                     yPiece = 64;
@@ -123,7 +148,7 @@ public class Entity extends Sprite {
                 }
                 break;
             case 'l':
-                if(counter > 15)
+                if(spriteCounter > 15)
                 {
                     xPiece = 32;
                     yPiece = 0;
@@ -135,7 +160,7 @@ public class Entity extends Sprite {
                 }
                 break;
             case 'r':
-                if(counter > 15)
+                if(spriteCounter > 15)
                 {
                     xPiece = 32;
                     yPiece = 64;
@@ -147,8 +172,6 @@ public class Entity extends Sprite {
                 }
                 break;
         }
-
-        counter = (counter + 1) % 31;
 
         graphicsContext.drawImage(image, xPiece, yPiece, width, height, x, y, width, height);
     }

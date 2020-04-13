@@ -2,23 +2,110 @@ package fr.ensim.lemeeherbron.entities;
 
 import com.sun.javafx.geom.Vec2f;
 import fr.ensim.lemeeherbron.terrain.Terrain;
+import fr.ensim.lemeeherbron.terrain.pathfinder.AStarPathFinder;
+import fr.ensim.lemeeherbron.terrain.pathfinder.Path;
+import javafx.scene.image.Image;
+
+import java.util.HashMap;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Pokemon extends Entity {
 
+    private static final int FEMALE = 0;
+    private static final int MALE = 1;
+
+    private static final AtomicInteger count = new AtomicInteger(0);
+    private int id;
     private boolean behavior;
     private Vec2f target;
+    private Path path;
+    private Terrain terrain;
+    private int level;
+    private float xp;
+    private HashMap<Integer, String> evolutions;
+    private int sexe = MALE;
 
     public Pokemon(String spriteName, int width, int height, double borderX, double borderY, int speed, boolean behavior) {
         super("pokemon/" + spriteName, width, height, borderX, borderY, speed);
 
         this.behavior = behavior;
+        id = count.incrementAndGet();
+
+        xp = 0;
+        level = 1;
+    }
+
+    public Pokemon(String spriteName, double borderX, double borderY, int speed, boolean behavior) {
+        this(spriteName, 32, 32, borderX, borderY, speed, behavior);
+    }
+
+    public Pokemon(String spriteName, double borderX, double borderY, int speed, boolean behavior, Terrain terrain, int sexe) {
+        this(spriteName, 32, 32, borderX, borderY, speed, behavior, terrain);
+
+        this.sexe = sexe;
+    }
+
+    public Pokemon(String spriteName, int width, int height, double borderX, double borderY, int speed, boolean behavior, Terrain terrain)
+    {
+        this(spriteName, width, height, borderX, borderY, speed, behavior);
+
+        this.terrain = terrain;
+    }
+
+    public Pokemon(int id, String spriteName, int x, int y, char orientation)
+    {
+        super(spriteName, 32, 32, 512, 512, 5);
+
+        this.id = id;
+        this.x = x;
+        this.y = y;
+        this.lastMove = orientation;
+
+        terrain = Terrain.getInstance();
+        behavior = true;
+
+        xp = 0;
+        level = 1;
+    }
+
+    public void addEvolutions(int level, String spriteName)
+    {
+        if(evolutions == null)
+        {
+            evolutions = new HashMap<>();
+        }
+
+        evolutions.put(level, spriteName);
+    }
+
+    public void setPosX(double x)
+    {
+        this.x = x - 8;
+    }
+
+    public void setPosY(double y)
+    {
+        this.y = y - 16;
     }
 
     @Override
     public void setPosition(double x, double y)
     {
-        this.x = x - 8;
-        this.y = y - 8;
+        setPosX(x);
+        setPosY(y);
+    }
+
+    @Override
+    public double getX()
+    {
+        return getBoundary().getMinX();
+    }
+
+    @Override
+    public double getY()
+    {
+        return getBoundary().getMinY();
     }
 
     public void setBehavior(boolean behavior)
@@ -31,10 +118,58 @@ public class Pokemon extends Entity {
         return behavior;
     }
 
-    public void move(Terrain terrain)
+    public void simulateBehavior()
     {
-        double x = Math.round(this.x);
-        double y = Math.round(this.y);
+        if(path != null)
+        {
+            move();
+        }
+        else
+        {
+            if(hasBehavior())
+            {
+                if(new Random().nextInt(20) == 0)
+                {
+                    Random rand = new Random();
+
+                    int xp = (int) Math.floor(getX() / 16);
+                    int xy = (int) Math.floor(getY() / 16);
+
+                    AStarPathFinder aStarPathFinder = new AStarPathFinder(terrain, 100);
+
+                    path = aStarPathFinder.findPath(xp, xy, 3 + rand.nextInt(25), 4 + rand.nextInt(13));
+                }
+            }
+        }
+    }
+
+    public void move()
+    {
+        if(path != null)
+        {
+            if(getX() == path.getFirstStep().getX() && getY() == path.getFirstStep().getY())
+            {
+                path.completeFistStep();
+
+                if(path.getLength() == 0)
+                {
+                    path = null;
+                }
+            }
+
+            if(!hasTarget() && path != null)
+            {
+                setTarget(path.getFirstStep().getX(), path.getFirstStep().getY());
+            }
+
+            moveToTarget();
+        }
+    }
+
+    private void moveToTarget()
+    {
+        double x = Math.round(getBoundary().getMinX());
+        double y = Math.round(getBoundary().getMinY());
 
         if(target != null && (target.x != x || target.y != y))
         {
@@ -61,17 +196,17 @@ public class Pokemon extends Entity {
                 }
             }
 
-            if(Math.abs(target.x - this.x) < speed)
+            if(Math.abs(target.x - getX()) < speed)
             {
-                this.x = target.x;
+                setPosX(target.x);
             }
 
-            if(Math.abs(target.y - this.y) < speed)
+            if(Math.abs(target.y - getY()) < speed)
             {
-                this.y = target.y;
+                setPosY(target.y);
             }
 
-            if(this.x == target.x && this.y == target.y)
+            if(getX() == target.x && getY() == target.y)
             {
                 target = null;
             }
@@ -88,8 +223,58 @@ public class Pokemon extends Entity {
         return speed;
     }
 
-    public boolean hasTarget()
+    public void setSpeed(double speed)
+    {
+        this.speed = speed;
+    }
+
+    private boolean hasTarget()
     {
         return target != null;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    @Override
+    public String toString()
+    {
+        String str = spriteName.substring(spriteName.lastIndexOf("/") + 1);
+        String sexeSym = "♂";
+
+        if(sexe == FEMALE)
+        {
+            sexeSym = "♀";
+        }
+
+        return sexeSym + " " + str.substring(0, 1).toUpperCase() + str.substring(1);
+    }
+
+    public void pex()
+    {
+        if(level < 100)
+        {
+            xp += new Random().nextInt(10);
+
+            float levelThreshold = (float) (100 + (level * (0.65 * level)));
+
+            if(xp > levelThreshold)
+            {
+                xp = xp % levelThreshold;
+                level++;
+
+                if(evolutions != null && evolutions.containsKey(level))
+                {
+                    spriteName = "pokemon/" + evolutions.get(level);
+                    this.image = new Image("/sprite/" + spriteName + ".png");
+                }
+            }
+        }
+    }
+
+    public int getSexe()
+    {
+        return sexe;
     }
 }

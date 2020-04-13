@@ -2,6 +2,10 @@ package fr.ensim.lemeeherbron.terrain;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.image.PixelReader;
+import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritableImage;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,7 +63,7 @@ public class Tile {
 
     public void render(GraphicsContext graphicsContext)
     {
-        graphicsContext.drawImage(image, orgX, orgY, 16, 16, x, y, 16, 16);
+        graphicsContext.drawImage(image, x, y);
     }
 
     public void construct()
@@ -73,16 +77,16 @@ public class Tile {
                     switch ((int) Math.round(Math.random() * randomTextNumber))
                     {
                         case 0:
-                            orgX = 17;
+                            orgX = 16;
                             orgY = 0;
                             break;
                         case 1:
                             orgX = 0;
-                            orgY = 17;
+                            orgY = 16;
                             break;
                         case 2:
-                            orgX = 17;
-                            orgY = 17;
+                            orgX = 16;
+                            orgY = 16;
                             break;
                         default :
                             orgX = 0;
@@ -101,6 +105,26 @@ public class Tile {
                 selectVariant();
             }
         }
+
+        loadImage();
+    }
+
+    private void loadImage()
+    {
+        WritableImage resampledImage = new WritableImage(16, 16);
+
+        PixelReader reader = image.getPixelReader();
+        PixelWriter writer = resampledImage.getPixelWriter();
+        for (int x = 0; x < 16; x++) {
+            for (int y = 0; y < 16; y++) {
+                Color color = reader.getColor(orgX + x, orgY + y);
+                if (color.isOpaque()) {
+                    writer.setColor(x, y, color);
+                }
+            }
+        }
+
+        image = resampledImage;
     }
 
     private void selectVariant()
@@ -115,7 +139,7 @@ public class Tile {
         {
             if(!bl && !br)
             {
-                orgY = 34;
+                orgY = 32;
 
                 computeOrgX(tl, tr);
             }
@@ -123,21 +147,21 @@ public class Tile {
             {
                 if(Stream.of(tl, tr, bl, br).filter(p -> !p).count() == 1)
                 {
-                    orgY = 51;
+                    orgY = 48;
 
                     if(!br) orgX = 0;
-                    else if(!bl) orgX = 17;
+                    else if(!bl) orgX = 16;
                     else
                     {
-                        orgY = 67;
+                        orgY = 64;
 
                         if(!tr) orgX = 0;
-                        else if(!tl) orgX = 17;
+                        else if(!tl) orgX = 16;
                     }
                 }
                 else
                 {
-                    orgY = 17;
+                    orgY = 16;
 
                     computeOrgX(tl && bl, tr && br);
                 }
@@ -148,8 +172,8 @@ public class Tile {
     private void computeOrgX(boolean b1, boolean b2)
     {
         if(!b1) orgX = 0;
-        else if (!b2) orgX = 34;
-        else orgX = 17;
+        else if (!b2) orgX = 32;
+        else orgX = 16;
     }
 
     public boolean getTl() {

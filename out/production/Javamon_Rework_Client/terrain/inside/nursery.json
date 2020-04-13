@@ -1,0 +1,17 @@
+{
+  "npc": [
+    {
+      "sprite": "nurse",
+      "orientation": "u",
+      "x": "20",
+      "y": "17"
+    }
+  ],
+  "spawnpoint": [
+    {
+      "from": "00",
+      "x": "15",
+      "y": "25"
+    }
+  ]
+}
