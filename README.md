@@ -1,5 +1,7 @@
 # Javamon
 
+![Javamon](https://github.com/TanguyHerbron/Javamon_Client/raw/master/img/javamon.png)
+
 Javamon is a multiplayer game programmed in Java and using the JavaFX framework for rendering. This game has been built as a showcase for different technologies (sprite rendering, pathfinding etc.). The only goal in this game so far is to reproduce as much Pokemons as you can.
 
 ## Graphic engine
