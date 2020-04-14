@@ -1,9 +1,9 @@
 package fr.ensim.lemeeherbron.entities;
 
-import com.sun.javafx.geom.Vec2f;
 import fr.ensim.lemeeherbron.terrain.Terrain;
 import fr.ensim.lemeeherbron.terrain.pathfinder.AStarPathFinder;
 import fr.ensim.lemeeherbron.terrain.pathfinder.Path;
+import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 
 import java.util.HashMap;
@@ -18,7 +18,7 @@ public class Pokemon extends Entity {
     private static final AtomicInteger count = new AtomicInteger(0);
     private int id;
     private boolean behavior;
-    private Vec2f target;
+    private Point2D target;
     private Path path;
     private Terrain terrain;
     private int level;
@@ -171,11 +171,11 @@ public class Pokemon extends Entity {
         double x = Math.round(getBoundary().getMinX());
         double y = Math.round(getBoundary().getMinY());
 
-        if(target != null && (target.x != x || target.y != y))
+        if(target != null && (target.getX() != x || target.getY() != y))
         {
-            if(target.x != x)
+            if(target.getX() != x)
             {
-                if(target.x < x)
+                if(target.getY() < x)
                 {
                     left(terrain);
                 }
@@ -186,7 +186,7 @@ public class Pokemon extends Entity {
             }
             else
             {
-                if(target.y < y)
+                if(target.getY() < y)
                 {
                     up(terrain);
                 }
@@ -196,17 +196,17 @@ public class Pokemon extends Entity {
                 }
             }
 
-            if(Math.abs(target.x - getX()) < speed)
+            if(Math.abs(target.getX() - getX()) < speed)
             {
-                setPosX(target.x);
+                setPosX(target.getX());
             }
 
-            if(Math.abs(target.y - getY()) < speed)
+            if(Math.abs(target.getY() - getY()) < speed)
             {
-                setPosY(target.y);
+                setPosY(target.getY());
             }
 
-            if(getX() == target.x && getY() == target.y)
+            if(getX() == target.getX() && getY() == target.getY())
             {
                 target = null;
             }
@@ -215,7 +215,7 @@ public class Pokemon extends Entity {
 
     public void setTarget(int x, int y)
     {
-        target = new Vec2f(x, y);
+        target = new Point2D(x, y);
     }
 
     public double getSpeed()

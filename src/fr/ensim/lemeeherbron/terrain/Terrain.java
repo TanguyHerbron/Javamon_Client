@@ -1,20 +1,21 @@
 package fr.ensim.lemeeherbron.terrain;
 
-import com.sun.javafx.geom.Vec2d;
 import fr.ensim.lemeeherbron.entities.NPC;
 import fr.ensim.lemeeherbron.entities.Nurse;
 import fr.ensim.lemeeherbron.entities.Sprite;
+import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import jdk.nashorn.internal.parser.JSONParser;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import sample.Main;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +25,8 @@ public class Terrain {
     private Tile[][] tileTable;
     private List<Sprite> obstacleList;
     private String value;
-    private HashMap<String, Vec2d> spawnPoints;
+    //private HashMap<String, Vec2d> spawnPoints;
+    private HashMap<String, Point2D> spawnPoints;
 
     private boolean ready;
 
@@ -73,13 +75,13 @@ public class Terrain {
 
     private void prepare(String mapName)
     {
-        String baseUri = "/terrain/" + mapName;
+        String baseUri = "terrain/" + mapName;
 
         try {
-            File terImg = new File(getClass().getResource(baseUri + ".png").toURI());
+            File terImg = new File(Terrain.class.getClassLoader().getResource(baseUri + ".png").toURI());
             generateTerrain(ImageIO.read(terImg));
 
-            File obsFile = new File(getClass().getResource(baseUri + ".json").toURI());
+            File obsFile = new File(Terrain.class.getClassLoader().getResource(baseUri + ".json").toURI());
             loadObjets(obsFile);
         } catch (IOException | URISyntaxException e) {
             e.printStackTrace();
@@ -127,7 +129,7 @@ public class Terrain {
             JSONObject spawnObject = spawnArray.getJSONObject(i);
 
             spawnPoints.put(spawnObject.getString("from"),
-                    new Vec2d(spawnObject.getDouble("x"), spawnObject.getDouble("y")));
+                    new Point2D(spawnObject.getDouble("x"), spawnObject.getDouble("y")));
         }
     }
 
@@ -419,7 +421,7 @@ public class Terrain {
         return ready;
     }
 
-    public Vec2d getSpawnPointFor(String from)
+    public Point2D getSpawnPointFor(String from)
     {
         return spawnPoints.get(from);
     }

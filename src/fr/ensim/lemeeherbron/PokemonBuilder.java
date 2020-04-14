@@ -2,10 +2,8 @@ package fr.ensim.lemeeherbron;
 
 import fr.ensim.lemeeherbron.entities.Pokemon;
 import fr.ensim.lemeeherbron.terrain.Terrain;
-import jdk.internal.util.xml.impl.Input;
 
 import java.io.*;
-import java.net.URL;
 import java.util.Properties;
 import java.util.Random;
 import java.util.regex.Pattern;

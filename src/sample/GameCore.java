@@ -1,9 +1,9 @@
 package sample;
 
-import com.sun.javafx.geom.Vec2d;
 import fr.ensim.lemeeherbron.entities.*;
 import fr.ensim.lemeeherbron.terrain.Nursery;
 import fr.ensim.lemeeherbron.terrain.Terrain;
+import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -40,8 +40,8 @@ public class GameCore {
         //old_man
         //glassy
         player = Player.build("scientist",512, 512, 8);
-        Vec2d pos = terrain.getSpawnPointFor("00");
-        player.setPosition(pos.x * 16, pos.y * 16);
+        Point2D pos = terrain.getSpawnPointFor("00");
+        player.setPosition(pos.getX() * 16, pos.getY() * 16);
     }
 
     public Terrain getTerrain() { return terrain; }
@@ -101,7 +101,7 @@ public class GameCore {
             }
         }
 
-        //With this sort, each sprite are then rendered by Y coordinate order, which mean if a sprite is behind another in 2D
+        //With this sort, sprites are then rendered by Y coordinate order, which mean if a sprite is behind another in 2D
         //it's well rendered behind the other sprite instead of being drawn on top of it
         renderedSprites.sort(new Comparator<Sprite>() {
             @Override
@@ -169,9 +169,9 @@ public class GameCore {
                         break;
                 }
 
-                Vec2d pos = terrain.getSpawnPointFor(value);
+                Point2D pos = terrain.getSpawnPointFor(value);
 
-                player.setPosition(pos.x * 16, pos.y * 16);
+                player.setPosition(pos.getX() * 16, pos.getY() * 16);
 
                 switchMap = true;
 
